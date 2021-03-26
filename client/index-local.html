@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Game Template</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/picnic@6.5.4/picnic.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/feather-icons/dist/feather.min.js"></script>
+    <!--The following tags need to be kept in sync with the wqebpack entry file-->
+    <link rel="icon" href="./assets/favicon.png" type="image/x-icon">
+    <link rel="stylesheet" href="./styles/main.css">
+    <script type="module">
+        import { openSocket } from "./src/socket.js";
+        import { LobbyManager } from "./src/LobbyManager.js";
+
+        "use strict";
+
+        openSocket().then(() => {
+            LobbyManager.joinLobby();
+        });
+
+        const acknowledgements = document.querySelector("#acknowledgements");
+        acknowledgements.innerHTML = globalThis.feather.icons.award.toSvg({ color: "#e2b007" });
+        acknowledgements.addEventListener("click", (evt) => {
+            window.open("./acknowledgements/third-party-licenses.html", "_blank");
+        }, { passive: true });
+    </script>
+</head>
+<body>
+    <div id="content">
+        <div id="header" class="header">
+            <h1>This is a Node.Js Game Template</h1>
+        </div>
+        <div id="lobby" class="mainContent flexRow">
+            <div class="lobbyColumn">
+                <h2 class="lobbyHeader">Running Games</h2>
+                <div id="lobbyList" class="flexColumn lobbyContent scrollContainer"></div>
+                <div id="createLobbyRow" class="flexRow lobbyFooter">
+                    Create your own Game <input id="lobbyName" type="text" placeholder="Name" maxlength="32">
+                    <button id="createLobby">Create</button>
+                </div>
+            </div>
+            <div id="highscore" class="lobbyColumn">
+                <h2 class="lobbyHeader">Highscores</h2>
+                <div id="highscoreList" class="flexColumn lobbyContent scrollContainer"></div>
+                <div id="userName" class="flexRow">
+                    <div>Your Name:</div>
+                    <label><input type="text" value="unknown" maxlength="20"></label>
+                </div>
+            </div>
+        </div>
+        <div id="game" class="mainContent flexColumn" style="display: none;">
+            <h2 id="back">&lt; Back</h2>
+            <div id="gameArea">
+                <div id="cursor" class="cursor">
+                    <div class="cursorName flexColumn">
+                        <div>You</div>
+                    </div>
+                </div>
+                <div id="gameStats" class="flexColumn">
+                    <h1>Points</h1>
+                    <h3 id="gamePoints">0</h3>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div id="logoff" class="flexColumn" style="display: none;">
+        <div class="flexRow">
+            Your Connection was closed due to Inactivity<br>
+            Please reload the Page
+        </div>
+    </div>
+    <script
+        data-label="Check out the GitHub repository!"
+        data-href="https://github.com/H0rn0chse/node-game-template"
+        data-target="_blank"
+        src="https://unpkg.com/github-corners@latest/dist/embed.min.js">
+    </script>
+    <div id="acknowledgements" title="Acknowledgements"></div>
+</body>
+</html>

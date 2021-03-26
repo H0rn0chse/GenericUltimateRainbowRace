@@ -1,0 +1,51 @@
+#game {
+    background-color: var(--game-bg);
+    align-items: center;
+    justify-content: center;
+    position: relative;
+}
+
+#gameArea {
+    width: 520px;
+    height: 520px;
+    position: relative;
+    background-color: var(--game-area-bg);
+}
+
+#back {
+    position: absolute;
+    top: 0;
+    left: 1em;
+    cursor: pointer;
+}
+
+#cursor {
+    background-color: var(--game-cursor-self);
+    z-index: 2;
+}
+
+.cursor {
+    position: absolute;
+    background-color: var(--game-cursor);
+    border-radius: 100%;
+    width: 30px;
+    height: 30px;
+}
+
+.cursorName {
+    position: relative;
+    top: -1.2em;
+    align-items: center;
+    font-size: 18pt;
+}
+
+#gameStats {
+    position: absolute;
+    top: 0;
+    right: -5em;
+}
+
+#gameStats h1, #gameStats h2, #gameStats h3 {
+    padding: 0;
+    margin: 0;
+}

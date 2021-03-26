@@ -1,0 +1,77 @@
+@import "colors.css";
+@import "fonts.css";
+@import "scrollbar.css";
+
+/*areas*/
+@import "header.css";
+@import "lobby.css";
+@import "game.css";
+@import "logoff.css";
+
+body {
+    margin: 0;
+    padding: 0;
+    overflow: hidden;
+    font-family: 'OlivesFont', Fallback, sans-serif;
+    font-weight: bold;
+    font-size: 20pt;
+    background-image:  url(../assets/gras.png);
+    background-repeat: repeat;
+}
+
+.flexRow {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+}
+
+.flexColumn {
+    display: flex;
+    flex-direction: column;
+}
+
+#content {
+    width: 100vw;
+    height: 100vh;
+    display: grid;
+    grid-template-rows: 5em auto;
+    grid-template-areas:
+    "header"
+    "mainContent";
+}
+
+#acknowledgements {
+    position: absolute;
+    width: 3em;
+    height: 3em;
+    top: 0.5em;
+    right: 4.5em;
+    cursor: pointer;
+}
+
+#acknowledgements > svg{
+    height: 100%;
+    width: 100%;
+}
+
+.header {
+    grid-area: header;
+}
+
+.mainContent {
+    grid-area: mainContent;
+}
+
+/*
+    Picnic.css overrides
+*/
+
+button {
+    padding: 0.1em 0.5em;
+}
+
+input {
+    padding-top: 0px;
+    padding-bottom: 0px;
+    height: 1.8em;
+}
