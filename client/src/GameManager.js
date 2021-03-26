@@ -6,13 +6,6 @@ import { Timer } from "./Timer.js";
 
 class _GameManager {
     constructor () {
-        this.currentPos = {
-            x: 0,
-            y: 0,
-        };
-
-        this.currentPoints = 0;
-
         this.lobbyName = "";
         this.ingame = false;
 
@@ -27,6 +20,15 @@ class _GameManager {
             }
         });
 
+        GameInstance.updateServer = (x, y) => {
+            if (this.ingame) {
+                const data = { pos: { x, y } };
+                send("gamePosition", data);
+            }
+        };
+
+        this.puppets = new Map();
+
         // GameInstance;
     }
 
@@ -40,19 +42,29 @@ class _GameManager {
         addEventListener("gamePosition", this.onGamePosition, this);
         addEventListener("gameLeave", this.onGameLeave, this);
         addEventListener("gameInit", this.onGameInit, this);
-        // send("gamePosition", { pos: this.currentPos });
     }
 
     leave () {
         this.ingame = false;
-        // removeEventListener("gamePosition", this.onGamePosition);
-        // removeEventListener("gameLeave", this.onGameLeave);
-        // removeEventListener("gameInit", this.onGameInit);
+        removeEventListener("gamePosition", this.onGamePosition);
+        removeEventListener("gameLeave", this.onGameLeave);
+        removeEventListener("gameInit", this.onGameInit);
         send("gameLeave", {});
     }
 
     onGamePosition (data) {
-        // todo
+        if (data.id === getId()) {
+            return;
+        }
+
+        let playerId = this.puppets.get(data.id);
+        if (playerId === undefined) {
+            playerId = this.puppets.size;
+            this.puppets.set(data.id, playerId);
+            GameInstance.createPlayer(playerId, data.pos.x, data.pos.y);
+        }
+
+        GameInstance.movePlayer(playerId, data.pos.x, data.pos.y);
     }
 
     onGameLeave (data) {
@@ -60,7 +72,9 @@ class _GameManager {
     }
 
     onGameInit (lobbyData) {
-        // todo
+        lobbyData.forEach((playerData) => {
+            this.onGamePosition(playerData);
+        });
     }
 }
 

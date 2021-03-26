@@ -4,6 +4,7 @@ let ground;
 let cursors;
 let platform;
 let game;
+let puppets;
 let that;
 
 class _GameInstance {
@@ -18,7 +19,7 @@ class _GameInstance {
             physics: {
                 default: "arcade",
                 arcade: {
-                    gravity: { y: 300 },
+                    gravity: { y: 600 },
                     debug: false,
                 },
             },
@@ -90,9 +91,19 @@ class _GameInstance {
             dragY: 0,
         });
 
+        puppets = this.add.group({
+            key: "star",
+            frameQuantity: 12,
+            maxSize: 12,
+            active: false,
+            visible: false,
+        });
+
+        // platfrom collider
         this.physics.add.collider(
             player,
             platform,
+            /*
             (_player, _platform) => {
                 if (_player.body.touching.up && _platform.body.touching.down) {
                     that.createStar(
@@ -102,7 +113,7 @@ class _GameInstance {
                         _player.body.velocity.y * -3,
                     );
                 }
-            },
+            }, */
         );
 
         this.physics.add.collider(player, ground);
@@ -110,6 +121,19 @@ class _GameInstance {
         this.physics.add.collider(stars, platform);
 
         this.physics.add.overlap(player, stars, that.collectStar, null, this);
+    }
+
+    createPlayer (id, x, y) {
+        const puppet = puppets.getChildren()[id];
+
+        if (!puppet) return;
+
+        puppet.visible = true;
+        puppet.setPosition(x, y);
+    }
+
+    movePlayer (id, x, y) {
+        puppets.getChildren()[id].setPosition(x, y);
     }
 
     update () {
@@ -128,8 +152,9 @@ class _GameInstance {
         }
 
         if (cursors.up.isDown && player.body.touching.down) {
-            player.setVelocityY(-360);
+            player.setVelocityY(-500);
         }
+        that.updateServer(player.x, player.y);
     }
 
     collectStar (player, star) {
