@@ -83,8 +83,8 @@ export function startServer () {
             globalThis.console.log("WebSocket closed");
         },
     })
-        .file("/", indexHtml, { lastModified: false })
-        .folder("/", publicPath, { lastModified: false })
+        .file("/", indexHtml, { lastModified: false, watch: local })
+        .folder("/", publicPath, { lastModified: false, watch: local })
         .get("/*", (res, req) => {
             res.writeStatus("404 Not Found").end("");
         })

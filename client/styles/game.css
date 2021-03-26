@@ -12,13 +12,6 @@
     background-color: var(--game-area-bg);
 }
 
-#back {
-    position: absolute;
-    top: 0;
-    left: 1em;
-    cursor: pointer;
-}
-
 #cursor {
     background-color: var(--game-cursor-self);
     z-index: 2;
