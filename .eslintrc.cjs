@@ -28,5 +28,6 @@ module.exports = {
         "no-plusplus": ["error", { allowForLoopAfterthoughts: true }],
         "no-shadow": "warn",
         "max-len": "off",
+        "linebreak-style": "off",
     },
 };
