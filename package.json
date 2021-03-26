@@ -1,5 +1,5 @@
 {
-  "name": "node-game-template",
+  "name": "generic-ultimate-chicken-horse",
   "version": "1.0.0",
   "private": true,
   "type": "module",
@@ -11,15 +11,15 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/H0rn0chse/node-game-template.git"
+    "url": "git+https://github.com/H0rn0chse/GenericUltimateRainbowRace"
   },
   "keywords": [],
   "author": "",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/H0rn0chse/node-game-template/issues"
+    "url": ""
   },
-  "homepage": "https://github.com/H0rn0chse/node-game-template#readme",
+  "homepage": "https://github.com/H0rn0chse/GenericUltimateRainbowRace#readme",
   "dependencies": {
     "@sifrr/server": "0.0.9",
     "dotenv": "^8.2.0",
