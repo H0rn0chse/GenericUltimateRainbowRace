@@ -7,6 +7,7 @@ import { Ground } from "../gameObjects/Ground.js";
 
 // eslint-disable-next-line import/no-cycle
 import { BlockMap } from "../gameObjects/BlockMap.js";
+import { Inventory } from "../gameObjects/Inventory.js";
 
 const { Scene } = globalThis.Phaser;
 
@@ -72,6 +73,8 @@ export class GameScene extends Scene {
         this.addGameObject(new Ground(this.physics.world, this));
         this.addGameObject(new BlockMap(this.physics.world, this));
 
+        let inv = new Inventory();
+        inv.generateUI(this);
         /* puppets = this.add.group({
             key: "star",
             frameQuantity: 12,
