@@ -27,6 +27,8 @@ export class GameScene extends Scene {
 
         this.load.image("sky", "/assets/sky.png");
         this.load.image("star", "/assets/star.png");
+        this.load.spritesheet("flag", "/assets/flag.png", { frameWidth: 42, frameHeight: 42 });
+
     }
 
     addGameObject (gameObject) {
@@ -71,6 +73,8 @@ export class GameScene extends Scene {
         this.map = this.addGameObject(new BlockMap(this.physics.world, this, 0));
         this.player = this.addGameObject(new Player(this.physics.world, this, this.map.getSpawnPoint()));
 
+        this.createFlag();
+
         /* puppets = this.add.group({
             key: "star",
             frameQuantity: 12,
@@ -78,6 +82,25 @@ export class GameScene extends Scene {
             active: false,
             visible: false,
         }); */
+    }
+
+    createFlag() {
+        var endPoint = this.map.getEndPoint();
+        this.flag = this.physics.add.sprite(endPoint.x + 21, endPoint.y - 21, "flag", 0);
+        this.anims.create({
+            key: "flag_wave",
+            frames: this.anims.generateFrameNumbers("flag", { start: 0, end: 2 }),
+            frameRate: 10,
+            repeat: -1,
+        });
+        this.flag.body.allowGravity = false;
+        this.flag.anims.play("flag_wave", true);
+
+        this.physics.add.overlap(this.player, this.flag, this.playerReachedFlag, null, this);
+    }
+
+    playerReachedFlag(player, flag) {
+        console.log("Player Reached Flag");
     }
 
     getCursor () {
