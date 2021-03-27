@@ -8,13 +8,18 @@ var blocks = [];
 let that;
 export class Inventory {
    
-    constructor(){
+    constructor(scene){
         that = this;
-    }
-    generateUI(scene,blockMap,blockTypes)
-    {
         this.generateBackground(scene);
-        this.generateBlockPictures(blockMap,blockTypes);
+    }
+    fillInventoryRandom(blockMap,blockTypes,count){
+        var c = Object.keys(blockTypes).length;
+        var inputTypes = [];
+
+        for(var i=0;i<count;i++) {
+            inputTypes.push(blockTypes[Object.keys(blockTypes)[this.getRandomInt(c)]]);
+        }
+        this.generateBlocks(blockMap,inputTypes);
     }
     generateBackground(scene)
     {
@@ -22,7 +27,7 @@ export class Inventory {
         graphics.fillStyle(0xffff00, 1);
         graphics.fillRoundedRect(0, 50, 60, 280, { tl: 0, tr: 22, bl: 0, br: 22 });
     }
-    generateBlockPictures(blockMap,blockTypes)
+    generateBlocks(blockMap,blockTypes)
     {
         let c = 0;
         blockTypes.forEach(function(type){      
@@ -53,5 +58,7 @@ export class Inventory {
     disableOneBlock(block){
         block.destroy();
     }
-
+    getRandomInt(max) {
+        return Math.floor(Math.random() * Math.floor(max));
+      }
 };
