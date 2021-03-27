@@ -26,9 +26,10 @@ export class GameScene extends Scene {
         });
 
         this.load.image("baqround1", "/assets/baqround1.png");
+        this.load.image("baqround2", "/assets/baqround2.png");
+        this.load.image("baqround3", "/assets/baqround3.png");
         this.load.image("star", "/assets/star.png");
         this.load.spritesheet("flag", "/assets/flag.png", { frameWidth: 42, frameHeight: 42 });
-
     }
 
     addGameObject (gameObject) {
@@ -67,9 +68,9 @@ export class GameScene extends Scene {
     }
 
     create () {
-        var baqround = this.add.image(1280, 578, "baqround1");
-        baqround.x = 1280/2;
-        baqround.y = 578/2;
+        const baqround = this.add.image(1280, 578, "baqround3");
+        baqround.x = 1280 / 2;
+        baqround.y = 578 / 2;
 
         this.cursor = this.input.keyboard.createCursorKeys();
         this.map = this.addGameObject(new BlockMap(this.physics.world, this, 0));
@@ -86,8 +87,8 @@ export class GameScene extends Scene {
         }); */
     }
 
-    createFlag() {
-        var endPoint = this.map.getEndPoint();
+    createFlag () {
+        const endPoint = this.map.getEndPoint();
         this.flag = this.physics.add.sprite(endPoint.x + 21, endPoint.y - 21, "flag", 0);
         this.anims.create({
             key: "flag_wave",
@@ -101,7 +102,7 @@ export class GameScene extends Scene {
         this.physics.add.overlap(this.player, this.flag, this.playerReachedFlag, null, this);
     }
 
-    playerReachedFlag(player, flag) {
+    playerReachedFlag (player, flag) {
         console.log("Player Reached Flag");
     }
 
