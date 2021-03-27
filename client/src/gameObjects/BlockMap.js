@@ -13,12 +13,11 @@ var isDragging = false;
 var draggedBlock;
 
 export class BlockMap extends Physics.Arcade.StaticGroup {
-    constructor (world, scene) {
+    constructor (world, scene, level_id) {
         super(world, scene, [], {});
-
         this.name = "Map";
 
-        const map = scene.make.tilemap({ key: "level_0" });
+        const map = scene.make.tilemap({ key: "level_" + level_id });
         const tileset = map.addTilesetImage("atlas", "atlas");
         const layer = map.createLayer("Terrain", tileset, 0, 0);
 
@@ -26,7 +25,11 @@ export class BlockMap extends Physics.Arcade.StaticGroup {
         scene.addGameObject(layer);
         layer.setCollisionByExclusion(-1, true);
 
-        //this.setDraggingBlock(0, 0, BlockTypes.Breakable);
+        var spawnPointRaw = map.getObjectLayer("Spawn")["objects"];
+        if (spawnPointRaw.length >= 1) {
+            this.spawnPoint = spawnPointRaw[0];
+            console.log(this.spawnPoint);
+        }
 
         inv = new Inventory();
         inv.generateUI(scene,this,[BlockTypes.Default,BlockTypes.Default]);
@@ -34,6 +37,8 @@ export class BlockMap extends Physics.Arcade.StaticGroup {
         scene.input.on(Phaser.Input.Events.POINTER_UP, this.onPointerUp, this);
         scene.input.on(Phaser.Input.Events.POINTER_MOVE, this.onPointerMove, this);
     }
+
+    getSpawnPoint() { return this.spawnPoint; }
 
     setDraggingBlock(x, y, BlockType) {
         isDragging = true;

@@ -2,8 +2,8 @@ const { Physics } = globalThis.Phaser;
 const { Sprite } = Physics.Arcade;
 
 export class Player extends Sprite {
-    constructor (world, scene) {
-        super(scene, 100, 450, "dude");
+    constructor (world, scene, spawnPoint) {
+        super(scene, spawnPoint.x, spawnPoint.y - 30, "dude");
 
         this.name = "Player";
         this.collider = [{
