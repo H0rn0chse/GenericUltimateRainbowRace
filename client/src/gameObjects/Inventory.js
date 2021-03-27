@@ -7,22 +7,7 @@ export class Inventory {
     
     constructor(){
 
-        this.input.on('pointerdown', function (pointer) {
-
-            if (pointer.leftButtonDown() && pointer.rightButtonDown())
-            {
-                this.add.image(pointer.x, pointer.y, 'balls', 0);
-            }
-            else if (pointer.leftButtonDown())
-            {
-                this.add.image(pointer.x, pointer.y, 'balls', 1);
-            }
-            else if (pointer.rightButtonDown())
-            {
-                this.add.image(pointer.x, pointer.y, 'balls', 2);
-            }
-    
-        }, this);
+      
     }
     generateUI(scene,blockMap)
     {
