@@ -67,7 +67,7 @@ export class GameScene extends Scene {
     create () {
         this.add.image(400, 300, "sky");
 
-        this.cursors = this.input.keyboard.createCursorKeys();
+        this.cursor = this.input.keyboard.createCursorKeys();
         this.player = this.addGameObject(new Player(this.physics.world, this));
         this.addGameObject(new Platform(this.physics.world, this));
         this.addGameObject(new Ground(this.physics.world, this));
@@ -84,25 +84,12 @@ export class GameScene extends Scene {
         }); */
     }
 
+    getCursor () {
+        return this.cursor;
+    }
+
     update () {
         this.updateCollider();
-        if (this.cursors.left.isDown) {
-            this.player.body.setVelocityX(-180);
-
-            this.player.anims.play("left", true);
-        } else if (this.cursors.right.isDown) {
-            this.player.body.setVelocityX(180);
-
-            this.player.anims.play("right", true);
-        } else {
-            this.player.body.setVelocityX(0);
-
-            this.player.anims.play("turn");
-        }
-
-        if (this.cursors.up.isDown && this.player.body.touching.down) {
-            this.player.body.setVelocityY(-500);
-        }
         // that.updateServer(player.x, player.y);
     }
 }
