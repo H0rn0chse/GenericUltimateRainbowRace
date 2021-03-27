@@ -17,6 +17,8 @@ export class Player extends Sprite {
             object2: "Map",
         }];
 
+        this.cursor = scene.getCursor();
+
         world.enable([this], 0);
 
         this.setBounce(0.2);
@@ -41,6 +43,26 @@ export class Player extends Sprite {
             frameRate: 10,
             repeat: -1,
         });
+    }
+
+    preUpdate () {
+        if (this.cursor.left.isDown) {
+            this.body.setVelocityX(-180);
+
+            this.anims.play("left", true);
+        } else if (this.cursor.right.isDown) {
+            this.body.setVelocityX(180);
+
+            this.anims.play("right", true);
+        } else {
+            this.body.setVelocityX(0);
+
+            this.anims.play("turn");
+        }
+
+        if (this.cursor.up.isDown && this.body.touching.down) {
+            this.body.setVelocityY(-500);
+        }
     }
 
     registerPreloads () {

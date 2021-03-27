@@ -1,11 +1,10 @@
 import * as Globals from "../Globals.js";
+import { BlockBoring } from "./blocks/BlockBoring.js";
 
 const { Physics } = globalThis.Phaser;
 
-import { BlockBoring } from "./blocks/BlockBoring.js";
-
 const BlockTypes = {
-  Default: BlockBoring
+    Default: BlockBoring,
 };
 
 export class BlockMap extends Physics.Arcade.StaticGroup {
@@ -28,17 +27,17 @@ export class BlockMap extends Physics.Arcade.StaticGroup {
     }
 
     createBlock (x, y, Block = BlockTypes.Default) {
-          var block = new Block({
+        var block = new Block({
                 scene: this.scene,
                 x: x * Globals.BLOCK_SIZE,
                 y: y * Globals.BLOCK_SIZE
-          });
-          this.add(block);
+        });
+        this.add(block);
 
-          block.addToDisplayList(this.scene.sys.displayList);
-          block.addToUpdateList();
-          block.visible = true;
-          block.setActive(true);
+        block.addToDisplayList(this.scene.sys.displayList);
+        block.addToUpdateList();
+        block.visible = true;
+        block.setActive(true);
     }
 
     registerPreloads () {
