@@ -3,7 +3,7 @@ const { Sprite } = Physics.Arcade;
 
 export class Player extends Sprite {
     constructor (world, scene, spawnPoint) {
-        super(scene, spawnPoint.x, spawnPoint.y - 30, "dude");
+        super(scene, spawnPoint.x, spawnPoint.y - 30, "unicorn");
 
         this.name = "Player";
         this.collider = [{
@@ -21,26 +21,43 @@ export class Player extends Sprite {
 
         world.enable([this], 0);
 
+        this.setSize(45, 50);
+        this.setOffset(15, 5);
+
         this.setBounce(0.2);
         this.setCollideWorldBounds(true);
 
         scene.anims.create({
-            key: "playerLeft",
-            frames: scene.anims.generateFrameNumbers("dude", { start: 0, end: 3 }),
+            key: "playerIdle",
+            frames: [{ key: "unicorn", frame: 0 }],
+            frameRate: 20,
+        });
+
+        scene.anims.create({
+            key: "playerWalkLeft",
+            frames: scene.anims.generateFrameNumbers("unicorn", { start: 0, end: 4 }), // 5 frames
             frameRate: 10,
             repeat: -1,
         });
 
         scene.anims.create({
-            key: "playerTurn",
-            frames: [{ key: "dude", frame: 4 }],
-            frameRate: 20,
+            key: "playerWalkRight",
+            frames: scene.anims.generateFrameNumbers("unicorn", { start: 0, end: 4 }), // 5 frames
+            frameRate: 10,
+            repeat: -1,
         });
 
         scene.anims.create({
-            key: "playerRight",
-            frames: scene.anims.generateFrameNumbers("dude", { start: 5, end: 8 }),
-            frameRate: 10,
+            key: "playerJumpLeft",
+            frames: scene.anims.generateFrameNumbers("unicorn", { start: 9, end: 15 }), // 8 frames
+            frameRate: 16,
+            repeat: -1,
+        });
+
+        scene.anims.create({
+            key: "playerJumpRight",
+            frames: scene.anims.generateFrameNumbers("unicorn", { start: 9, end: 15 }), // 8 frames
+            frameRate: 16,
             repeat: -1,
         });
     }
@@ -49,15 +66,31 @@ export class Player extends Sprite {
         //
         if (this.cursor.left.isDown) {
             this.body.setVelocityX(-180);
-            this.anims.play("playerLeft", true);
-        //
+
+            if (!this.body.onFloor()) {
+                this.anims.play("playerJumpLeft", true);
+            } else {
+                this.anims.play("playerWalkLeft", true);
+            }
         } else if (this.cursor.right.isDown) {
             this.body.setVelocityX(180);
-            this.anims.play("playerRight", true);
+
+            if (!this.body.onFloor()) {
+                this.anims.play("playerJumpRight", true);
+            } else {
+                this.anims.play("playerWalkRight", true);
+            }
         //
         } else {
             this.body.setVelocityX(0);
-            this.anims.play("playerTurn");
+            this.anims.play("playerIdle");
+        }
+
+        // should watch right
+        if (this.body.velocity.x > 0) {
+            this.flipX = false;
+        } else if (this.body.velocity.x < 0) {
+            this.flipX = true;
         }
 
         if (this.cursor.up.isDown && this.body.onFloor()) {
@@ -67,5 +100,6 @@ export class Player extends Sprite {
 
     registerPreloads () {
         this.load.spritesheet("dude", "/assets/dude.png", { frameWidth: 32, frameHeight: 48 });
+        this.load.spritesheet("unicorn", "/assets/unicorn.png", { frameWidth: 84, frameHeight: 84 });
     }
 }

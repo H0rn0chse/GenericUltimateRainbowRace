@@ -18,8 +18,8 @@ class _GameInstance {
             physics: {
                 default: "arcade",
                 arcade: {
+                    debug: true,
                     gravity: { y: 600 },
-                    debug: false,
                 },
             },
             scene: null,
