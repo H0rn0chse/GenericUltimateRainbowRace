@@ -9,12 +9,12 @@ export class Player extends Sprite {
         this.collider = [{
             object1: this.name,
             object2: "Map",
-            handler: function(a, b) {
+            handler: (a, b) => {
                 b.onPlayerCollision(a);
-            }
+            },
         }, {
             object1: this.name,
-            object2: "MapLevel"
+            object2: "MapLevel",
         }];
 
         this.cursor = scene.getCursor();
@@ -25,39 +25,39 @@ export class Player extends Sprite {
         this.setCollideWorldBounds(true);
 
         scene.anims.create({
-            key: "left",
+            key: "playerLeft",
             frames: scene.anims.generateFrameNumbers("dude", { start: 0, end: 3 }),
             frameRate: 10,
             repeat: -1,
         });
 
         scene.anims.create({
-            key: "turn",
+            key: "playerTurn",
             frames: [{ key: "dude", frame: 4 }],
             frameRate: 20,
         });
 
         scene.anims.create({
-            key: "right",
+            key: "playerRight",
             frames: scene.anims.generateFrameNumbers("dude", { start: 5, end: 8 }),
             frameRate: 10,
             repeat: -1,
         });
     }
 
-    preUpdate () {
+    update () {
+        //
         if (this.cursor.left.isDown) {
             this.body.setVelocityX(-180);
-
-            this.anims.play("left", true);
+            this.anims.play("playerLeft", true);
+        //
         } else if (this.cursor.right.isDown) {
             this.body.setVelocityX(180);
-
-            this.anims.play("right", true);
+            this.anims.play("playerRight", true);
+        //
         } else {
             this.body.setVelocityX(0);
-
-            this.anims.play("turn");
+            this.anims.play("playerTurn");
         }
 
         if (this.cursor.up.isDown && this.body.onFloor()) {

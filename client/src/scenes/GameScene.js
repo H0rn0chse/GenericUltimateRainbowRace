@@ -110,8 +110,11 @@ export class GameScene extends Scene {
         return this.cursor;
     }
 
-    update () {
+    update (time, delta) {
         this.updateCollider();
+        this._gameObjects.forEach((gameObject, name) => {
+            gameObject.update?.(time, delta);
+        });
         // that.updateServer(player.x, player.y);
     }
 }
