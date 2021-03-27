@@ -1,23 +1,26 @@
-import { GameInstance } from "./GameInstance.js";
+import { GameInstance } from "../GameInstance.js";
 // eslint-disable-next-line import/no-cycle
-import { LobbyManager } from "./LobbyManager.js";
-import { getId, send, addEventListener, removeEventListener } from "./socket.js";
-import { Timer } from "./Timer.js";
+import { ViewManager } from "../ViewManager.js";
+import { getId, send, addEventListener, removeEventListener, ready } from "../socket.js";
+import { Timer } from "../Timer.js";
 
 class _GameManager {
     constructor () {
         this.lobbyName = "";
         this.ingame = false;
 
-        this.game = document.querySelector("#game");
+        this.container = document.querySelector("#game");
         this.points = document.querySelector("#gamePoints");
-
-        this.game.style.display = "none";
 
         document.addEventListener("keydown", (evt) => {
             if (this.ingame) {
                 // todo
             }
+        });
+
+        // initial state
+        ready().then(() => {
+            addEventListener("joinGame", this.onJoinGame, this);
         });
 
         GameInstance.updateServer = (x, y) => {
@@ -28,22 +31,16 @@ class _GameManager {
         };
 
         this.puppets = new Map();
-
-        // GameInstance;
     }
 
-    join (name) {
-        this.lobbyName = name;
-        this.ingame = true;
-        this.game.style.display = "";
+    show () {
+        this.startListen();
+        this.container.style.display = "";
+    }
 
-        GameInstance.createScene();
-
-        send("joinGame", { name });
-
-        addEventListener("gamePosition", this.onGamePosition, this);
-        addEventListener("gameLeave", this.onGameLeave, this);
-        addEventListener("gameInit", this.onGameInit, this);
+    hide () {
+        this.stopListen();
+        this.container.style.display = "none";
     }
 
     leave () {
@@ -77,6 +74,37 @@ class _GameManager {
         lobbyData.forEach((playerData) => {
             this.onGamePosition(playerData);
         });
+    }
+
+    onJoinGame (data) {
+        this.lobbyName = data.name;
+        this.ingame = true;
+
+        GameInstance.createScene();
+        ViewManager.showGame();
+    }
+
+    onPlayerRemoved (data) {
+        console.log("player left the game", data);
+    }
+
+    onCloseGame (data) {
+        console.log("host left the game", data);
+        ViewManager.showOverview();
+    }
+
+    stopListen () {
+        addEventListener("joinGame", this.onJoinGame, this);
+
+        removeEventListener("playerRemoved", this.onPlayerRemoved, this);
+        removeEventListener("closeGame", this.onCloseGame, this);
+    }
+
+    startListen () {
+        removeEventListener("joinGame", this.onJoinGame, this);
+
+        addEventListener("playerRemoved", this.onPlayerRemoved, this);
+        addEventListener("closeGame", this.onCloseGame, this);
     }
 }
 

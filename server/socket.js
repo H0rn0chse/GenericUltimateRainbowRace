@@ -63,6 +63,22 @@ export function send (ws, channel, data) {
     }));
 }
 
+export function subscribe (ws, topic) {
+    try {
+        ws.subscribe(topic);
+    } catch (err) {
+        // console.error(err);
+    }
+}
+
+export function unsubscribe (ws, topic) {
+    try {
+        ws.unsubscribe(topic);
+    } catch (err) {
+        // console.error(err);
+    }
+}
+
 export function startServer () {
     app.ws("/ws", {
         idleTimeout: 55,
