@@ -2,8 +2,10 @@ import { GameInstance } from "./../GameInstance.js";
 import * as Globals from "./../Globals.js";
 const { GameObjects, Physics } = globalThis.Phaser;
 
+import { BlockBoring } from "./blocks/BlockBoring.js";
+
 const BlockTypes = {
-  Default: 1
+  Default: BlockBoring
 };
 
 export class Map extends Physics.Arcade.StaticGroup {
@@ -11,7 +13,6 @@ export class Map extends Physics.Arcade.StaticGroup {
   constructor (world, scene) {
     var config = {
       name: "map"
-      //classType: Phaser.GameObjects.Image
     };
 
     super(world, scene, [], config);
@@ -23,16 +24,18 @@ export class Map extends Physics.Arcade.StaticGroup {
     for (var i = 0; i < 20; i++) {
       this.createBlock(Phaser.Math.RND.between(0, Globals.BLOCKS_X), Phaser.Math.RND.between(0, Globals.BLOCKS_Y));
     }
-
   }
+  createBlock(x, y, Block=BlockTypes.Default) {
+    var block = new Block({
+      scene: this.scene,
+      x: x * Globals.BLOCK_SIZE,
+      y: y * Globals.BLOCK_SIZE
+    });
+    this.add(block);
 
-  createBlock(x, y, type=BlockTypes.Default) {
-    this.create(x * Globals.BLOCK_SIZE, y * Globals.BLOCK_SIZE, "block_stone");
+    block.addToDisplayList(this.scene.sys.displayList);
+    block.addToUpdateList();
+    block.visible = true;
+    block.setActive(true);
   }
-
-  // registerPreloads () {
-  //       this.load.spritesheet("block_stone", "/assets/1_stone.png", { frameWidth: 42, frameHeight: 42 });
-  // }
 }
-
-// GameInstance.registerPreloads("GameScene", Map.prototype.registerPreloads);
