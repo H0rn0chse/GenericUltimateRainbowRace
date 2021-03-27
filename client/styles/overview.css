@@ -59,12 +59,7 @@
     width: 10em;
 }
 
-#userName {
-    position: absolute;
-    top: 1em;
-    right: 2em;
-}
-
-#userName > * {
-    margin-left: 0.5em;
+#overviewUsername {
+    width: 10em;
+    margin-left: 4em;
 }

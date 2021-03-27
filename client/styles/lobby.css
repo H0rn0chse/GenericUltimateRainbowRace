@@ -1,17 +1,23 @@
 #lobby {
     background-color: var(--lobby-bg);
     height: 100%;
-    padding: 2em;
+    padding-left: 2em;
+    padding-right: 2em;
 }
 
 .lobbyRow {
     padding: 0.2em;
     margin: 0.1em 6em;
     margin-left: 0;
-    justify-content: space-between;
+    justify-content: flex-start;
 }
 
 .lobbyRow > *{
     margin-left: 0.5em;
     margin-right: 0.5em;
+}
+
+#lobbyUsername {
+    width: 10em;
+    margin-left: 4em;
 }

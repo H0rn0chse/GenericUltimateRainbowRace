@@ -1,4 +1,4 @@
-import { addEventListener, removeEventListener, ready, send, getId } from "../socket.js";
+import { addEventListener, removeEventListener, ready, send, getId, getName, setName } from "../socket.js";
 // eslint-disable-next-line import/no-cycle
 import { ViewManager } from "../ViewManager.js";
 
@@ -13,7 +13,16 @@ class _LobbyManager {
             this.startLobby();
         });
 
+        this.usernameInput = document.querySelector("#lobbyUsername");
+        this.usernameInput.addEventListener("change", (evt) => {
+            if (this.usernameInput.value) {
+                setName(this.usernameInput.value);
+                send("userNameUpdate", { name: this.usernameInput.value });
+            }
+        });
+
         // initial state
+        this.usernameInput.value = getName();
         ready().then(() => {
             addEventListener("joinLobby", this.onJoinLobby, this);
         });
@@ -22,6 +31,7 @@ class _LobbyManager {
     show () {
         this.startListen();
         this.container.style.display = "";
+        this.usernameInput.value = getName();
     }
 
     hide () {
@@ -39,7 +49,7 @@ class _LobbyManager {
         this.list.innerHTML = "";
     }
 
-    onPlayerAdded (playerData) {
+    onPlayerAdded (playerData, isHost = false) {
         const row = document.createElement("div");
         row.classList.add("flexRow", "lobbyRow");
         row.setAttribute("data-id", playerData.id);
@@ -48,6 +58,18 @@ class _LobbyManager {
         name.innerText = playerData.name;
         row.appendChild(name);
 
+        if (isHost) {
+            const hostText = document.createElement("div");
+            hostText.innerText = "Host";
+            row.appendChild(hostText);
+        }
+
+        if (playerData.id === getId()) {
+            const youText = document.createElement("div");
+            youText.innerText = "(You)";
+            row.appendChild(youText);
+        }
+
         this.list.appendChild(row);
     }
 
@@ -55,6 +77,13 @@ class _LobbyManager {
         const row = this.list.querySelector(`div[data-id="${playerData.id}"]`);
         if (row) {
             row.remove();
+        }
+    }
+
+    onPlayerUpdated (playerData) {
+        const rowText = this.list.querySelector(`div[data-id="${playerData.id}"] > div`);
+        if (rowText) {
+            rowText.innerText = playerData.name;
         }
     }
 
@@ -68,7 +97,8 @@ class _LobbyManager {
             this.startButton.disabled = true;
         }
         Object.values(data.player).forEach((playerData) => {
-            this.onPlayerAdded(playerData);
+            const isHost = playerData.id === data.host;
+            this.onPlayerAdded(playerData, isHost);
         });
         ViewManager.showLobby();
     }
@@ -84,6 +114,7 @@ class _LobbyManager {
     startListen () {
         removeEventListener("joinLobby", this.onJoinLobby, this);
 
+        addEventListener("playerUpdated", this.onPlayerUpdated, this);
         addEventListener("playerAdded", this.onPlayerAdded, this);
         addEventListener("playerRemoved", this.onPlayerRemoved, this);
         addEventListener("closeLobby", this.onCloseLobby, this);
