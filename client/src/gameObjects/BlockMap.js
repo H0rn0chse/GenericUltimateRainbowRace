@@ -1,14 +1,14 @@
 import * as Globals from "../Globals.js";
 import { BlockBoring } from "./blocks/BlockBoring.js";
 import { BlockBreakable } from "./blocks/BlockBreakable.js";
-
+import { Inventory } from "./Inventory.js";
 const { Physics } = globalThis.Phaser;
 
 const BlockTypes = {
     Boring: BlockBoring,
     Breakable: BlockBreakable
 };
-
+var inv;
 var isDragging = false;
 var draggedBlock;
 
@@ -32,7 +32,10 @@ export class BlockMap extends Physics.Arcade.StaticGroup {
             );
         }
 
-        this.setDraggingBlock(0, 0, BlockTypes.Breakable);
+        //this.setDraggingBlock(0, 0, BlockTypes.Breakable);
+
+        inv = new Inventory();
+        inv.generateUI(scene,this,[BlockTypes.Default,BlockTypes.Default]);
 
         scene.input.on(Phaser.Input.Events.POINTER_UP, this.onPointerUp, this);
         scene.input.on(Phaser.Input.Events.POINTER_MOVE, this.onPointerMove, this);
@@ -52,6 +55,7 @@ export class BlockMap extends Physics.Arcade.StaticGroup {
                 draggedBlock.y = Math.round(pointer.worldY, 0);
                 draggedBlock.resetHighlight();
                 draggedBlock.refreshBody();
+                inv.disableInventory();
             } else {
                 draggedBlock.destroy();
             }
