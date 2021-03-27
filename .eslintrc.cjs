@@ -29,5 +29,7 @@ module.exports = {
         "no-shadow": "warn",
         "max-len": "off",
         "linebreak-style": "off",
+        "no-useless-constructor": "off",
+        "no-underscore-dangle": "off",
     },
 };
