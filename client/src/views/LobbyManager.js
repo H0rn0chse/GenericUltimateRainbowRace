@@ -1,15 +1,15 @@
-import { addEventListener, removeEventListener, ready, send } from "../socket.js";
+import { addEventListener, removeEventListener, ready, send, getId } from "../socket.js";
 // eslint-disable-next-line import/no-cycle
 import { ViewManager } from "../ViewManager.js";
 
 class _LobbyManager {
     constructor () {
         this.container = document.querySelector("#lobby");
+        this.title = document.querySelector("#lobbyName");
         this.list = document.querySelector("#lobbyList");
-        this.name = "";
 
-        const startButton = document.querySelector("#lobbyStart");
-        startButton.addEventListener("click", (evt) => {
+        this.startButton = document.querySelector("#lobbyStart");
+        this.startButton.addEventListener("click", (evt) => {
             this.startLobby();
         });
 
@@ -35,16 +35,27 @@ class _LobbyManager {
     }
 
     resetLobby () {
-        this.name = "";
+        this.title.innerText = "";
         this.list.innerHTML = "";
     }
 
-    onPlayerAdded (data) {
-        this.list.innerHTML += `<br>Add:<br> ${JSON.stringify(data)}`;
+    onPlayerAdded (playerData) {
+        const row = document.createElement("div");
+        row.classList.add("flexRow", "lobbyRow");
+        row.setAttribute("data-id", playerData.id);
+
+        const name = document.createElement("div");
+        name.innerText = playerData.name;
+        row.appendChild(name);
+
+        this.list.appendChild(row);
     }
 
-    onPlayerRemoved (data) {
-        this.list.innerHTML += `<br>Remove:<br> ${JSON.stringify(data)}`;
+    onPlayerRemoved (playerData) {
+        const row = this.list.querySelector(`div[data-id="${playerData.id}"]`);
+        if (row) {
+            row.remove();
+        }
     }
 
     onCloseLobby () {
@@ -52,7 +63,13 @@ class _LobbyManager {
     }
 
     onJoinLobby (data) {
-        this.list.innerHTML = JSON.stringify(data.player);
+        this.title.innerText = data.name;
+        if (getId() !== data.host) {
+            this.startButton.disabled = true;
+        }
+        Object.values(data.player).forEach((playerData) => {
+            this.onPlayerAdded(playerData);
+        });
         ViewManager.showLobby();
     }
 
