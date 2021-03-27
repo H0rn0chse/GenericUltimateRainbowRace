@@ -12,10 +12,11 @@
     <!--The following tags need to be kept in sync with the wqebpack entry file-->
     <link rel="icon" href="./assets/favicon.png" type="image/x-icon">
     <link rel="stylesheet" href="./styles/main.css">
+    <link rel="stylesheet" href="styles/ui.css"></linkrel>
     <script type="module">
         import { openSocket } from "./src/socket.js";
         import { LobbyManager } from "./src/LobbyManager.js";
-
+        
         "use strict";
 
         openSocket().then(() => {
@@ -52,7 +53,17 @@
                 </div>
             </div>
         </div>
-        <div id="game" class="mainContent flexColumn" style="display: none;"></div>
+        <div id="game" class="mainContent flexColumn" style="display: none;">
+            <div id="ui">
+                <ul>
+                    <li><a href="#"><img  id="item1" src="assets/1_stone.png"></a></li>
+                    <li><a href="#"><img  id="item2" src="assets/2_Stone.png"></a></li>
+                    <li><a href="#"><img  id="item3" src="assets/3_Stone.png"></a></li>
+                    <li><a href="#"><img  id="item4" src="assets/4_Stone.png"></a></li>
+                    <li style = "float:right"> 1/4</li>
+                </ul>
+            </div>
+        </div>  
     </div>
     <div id="logoff" class="flexColumn" style="display: none;">
         <div class="flexRow">
