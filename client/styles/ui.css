@@ -2,10 +2,9 @@
     list-style-type: none;
     margin: 0;
     padding: 0;
-    align
-
+    /*align*/
 }
-  
+
  #ui > ul > li {
     display: inline;
     padding-left: 20px;
