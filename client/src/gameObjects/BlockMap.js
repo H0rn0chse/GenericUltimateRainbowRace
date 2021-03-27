@@ -34,8 +34,8 @@ export class BlockMap extends Physics.Arcade.StaticGroup {
             this.endPoint = endPointRaw[0];
         }
 
-        inv = new Inventory();
-        inv.generateUI(scene,this,[BlockTypes.Default,BlockTypes.Default]);
+        inv = new Inventory(scene);
+        inv.fillInventoryRandom(this,BlockTypes,3);
 
 
 
