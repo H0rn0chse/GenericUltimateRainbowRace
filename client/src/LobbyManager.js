@@ -1,6 +1,5 @@
 // eslint-disable-next-line import/no-cycle
 import { GameManager } from "./GameManager.js";
-import { HighscoreManager } from "./HighscoreManager.js";
 import { addEventListener, removeEventListener, send } from "./socket.js";
 
 class _LobbyManager {
@@ -73,13 +72,11 @@ class _LobbyManager {
     }
 
     stopListen () {
-        HighscoreManager.stopListen();
         removeEventListener("lobbyAdded", this.onLobbyAdded, this);
         removeEventListener("lobbyRemoved", this.onLobbyRemoved, this);
     }
 
     startListen () {
-        HighscoreManager.startListen();
         this.resetLobbyList();
         addEventListener("lobbyList", this.onLobbyList, this);
         addEventListener("lobbyAdded", this.onLobbyAdded, this);

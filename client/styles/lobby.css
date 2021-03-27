@@ -59,27 +59,6 @@
     width: 10em;
 }
 
-/*================= highscore column ======================*/
-
-#highscore {
-    position: relative;
-}
-
-.highscoreEntry {
-    margin: 0em;
-    position: relative;
-}
-
-.highscorePoints {
-    position: absolute;
-    right: 5em;
-}
-
-.highscorePlacement {
-    padding: 0;
-    margin-right: 1.5em;
-}
-
 #userName {
     position: absolute;
     top: 1em;

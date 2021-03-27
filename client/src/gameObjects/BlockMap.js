@@ -1,11 +1,10 @@
 import * as Globals from "../Globals.js";
+import { BlockBoring } from "./blocks/BlockBoring.js";
 
 const { Physics } = globalThis.Phaser;
 
-import { BlockBoring } from "./blocks/BlockBoring.js";
-
 const BlockTypes = {
-  Default: BlockBoring
+    Default: BlockBoring
 };
 
 var isDragging = false;
