@@ -15,6 +15,9 @@ export class Player extends Sprite {
         }, {
             object1: this.name,
             object2: "Map",
+            handler: function(a, b) {
+                b.onPlayerCollision(a);
+            }
         }];
 
         this.cursor = scene.getCursor();

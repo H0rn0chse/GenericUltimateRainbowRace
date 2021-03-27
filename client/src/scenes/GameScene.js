@@ -57,7 +57,7 @@ export class GameScene extends Scene {
             const object2 = this._gameObjects.get(collisionConfig.object2);
 
             if (object1 && object2) {
-                this.physics.add.collider(object1, object2);
+                this.physics.add.collider(object1, object2, collisionConfig.handler || (() => {}));
                 map.delete(collisionConfig);
             }
         });

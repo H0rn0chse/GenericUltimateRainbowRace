@@ -1,10 +1,12 @@
 import * as Globals from "../Globals.js";
 import { BlockBoring } from "./blocks/BlockBoring.js";
+import { BlockBreakable } from "./blocks/BlockBreakable.js";
 
 const { Physics } = globalThis.Phaser;
 
 const BlockTypes = {
-    Default: BlockBoring
+    Boring: BlockBoring,
+    Breakable: BlockBreakable
 };
 
 var isDragging = false;
@@ -30,7 +32,7 @@ export class BlockMap extends Physics.Arcade.StaticGroup {
             );
         }
 
-        this.setDraggingBlock(BlockTypes.Default);
+        this.setDraggingBlock(0, 0, BlockTypes.Breakable);
 
         scene.input.on(Phaser.Input.Events.POINTER_UP, this.onPointerUp, this);
         scene.input.on(Phaser.Input.Events.POINTER_MOVE, this.onPointerMove, this);
@@ -46,7 +48,10 @@ export class BlockMap extends Physics.Arcade.StaticGroup {
         if (isDragging) {
             if (this.canPlaceBlockAt(pointer.worldX, pointer.worldY)) {
                 draggedBlock.setIsPreview(false);
+                draggedBlock.x = Math.round(pointer.worldX, 0);
+                draggedBlock.y = Math.round(pointer.worldY, 0);
                 draggedBlock.resetHighlight();
+                draggedBlock.refreshBody();
             } else {
                 draggedBlock.destroy();
             }
@@ -82,7 +87,7 @@ export class BlockMap extends Physics.Arcade.StaticGroup {
         return !collision;
     }
 
-    createBlock (x, y, Block = BlockTypes.Default) {
+    createBlock (x, y, Block = BlockTypes.Boring) {
         var block = new Block({
             scene: this.scene,
             x: x,
@@ -100,5 +105,6 @@ export class BlockMap extends Physics.Arcade.StaticGroup {
 
     registerPreloads () {
         this.load.spritesheet("block_stone", "/assets/1_stone.png", { frameWidth: 42, frameHeight: 42 });
+        this.load.spritesheet("block_grass", "/assets/2_stone.png", { frameWidth: 42, frameHeight: 42 });
     }
 }

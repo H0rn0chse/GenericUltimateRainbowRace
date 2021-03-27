@@ -6,6 +6,10 @@ export class Block extends Physics.Arcade.Image {
     this._isPreview = false;
   }
 
+  onPlayerCollision(player) {
+
+  }
+
   setIsPreview(isPreview) {
       this._isPreview = isPreview
   }
