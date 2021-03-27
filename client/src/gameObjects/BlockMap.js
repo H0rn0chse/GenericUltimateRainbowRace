@@ -28,17 +28,23 @@ export class BlockMap extends Physics.Arcade.StaticGroup {
         var spawnPointRaw = map.getObjectLayer("Spawn")["objects"];
         if (spawnPointRaw.length >= 1) {
             this.spawnPoint = spawnPointRaw[0];
-            console.log(this.spawnPoint);
+        }
+        var endPointRaw = map.getObjectLayer("Goal")["objects"];
+        if (endPointRaw.length >= 1) {
+            this.endPoint = endPointRaw[0];
         }
 
         inv = new Inventory();
         inv.generateUI(scene,this,[BlockTypes.Default,BlockTypes.Default]);
+
+
 
         scene.input.on(Phaser.Input.Events.POINTER_UP, this.onPointerUp, this);
         scene.input.on(Phaser.Input.Events.POINTER_MOVE, this.onPointerMove, this);
     }
 
     getSpawnPoint() { return this.spawnPoint; }
+    getEndPoint() { return this.endPoint; }
 
     setDraggingBlock(x, y, BlockType) {
         isDragging = true;
