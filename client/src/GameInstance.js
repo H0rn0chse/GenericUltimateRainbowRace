@@ -7,14 +7,15 @@ let game;
 let puppets;
 let that;
 
+import * as Globals from "./Globals.js";
 class _GameInstance {
     constructor () {
         that = this;
 
         const config = {
             type: globalThis.Phaser.AUTO,
-            width: 800,
-            height: 600,
+            width: Globals.BLOCKS_X * Globals.BLOCK_SIZE,
+            height: Globals.BLOCKS_Y * Globals.BLOCK_SIZE,
             parent: document.querySelector("#game"),
             physics: {
                 default: "arcade",
