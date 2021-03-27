@@ -16,18 +16,24 @@
         <div id="header" class="header">
             <h1>Generic Ultimate Rainbow Race</h1>
         </div>
-        <div id="lobby" class="mainContent flexRow">
-            <div class="lobbyColumn">
-                <h2 class="lobbyHeader">Running Games</h2>
-                <div id="lobbyList" class="flexColumn lobbyContent scrollContainer"></div>
-                <div id="createLobbyRow" class="flexRow lobbyFooter">
-                    Create your own Game <input id="lobbyName" type="text" placeholder="Name" maxlength="32">
-                    <button id="createLobby">Create</button>
+        <div id="overview" class="mainContent flexRow">
+            <div class="overviewColumn">
+                <h2 class="overviewHeader">Running Games</h2>
+                <div id="overviewList" class="flexColumn overviewContent scrollContainer"></div>
+                <div id="createOverviewRow" class="flexRow overviewFooter">
+                    Create your own Game <input id="overviewName" type="text" placeholder="Name" maxlength="32">
+                    <button id="createOverview">Create</button>
                 </div>
             </div>
-            <div class="lobbyColumn">
+            <div class="overviewColumn flexColumn" style="align-items: center;justify-content: center;">
                 <!--We might add other stuff here-->
+                <button id="debugGame">Join Debug Game (Solo)</button>
             </div>
+        </div>
+        <div id="lobby" class="mainContent" style="display: none;">
+            <p>Stuff</p>
+            <button id="lobbyStart">start Game</button>
+            <div id="lobbyList"></div>
         </div>
         <div id="game" class="mainContent flexColumn" style="display: none;">
             <div id="ui">
@@ -49,7 +55,7 @@
     </div>
     <script
         data-label="Check out the GitHub repository!"
-        data-href="https://github.com/H0rn0chse/node-game-template"
+        data-href="https://github.com/H0rn0chse/GenericUltimateRainbowRace"
         data-target="_blank"
         src="https://unpkg.com/github-corners@latest/dist/embed.min.js">
     </script>

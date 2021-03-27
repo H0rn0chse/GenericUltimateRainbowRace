@@ -69,12 +69,8 @@ export class GameScene extends Scene {
 
         this.cursor = this.input.keyboard.createCursorKeys();
         this.player = this.addGameObject(new Player(this.physics.world, this));
+        this.addGameObject(new BlockMap(this.physics.world, this));
 
-        var blockMap = new BlockMap(this.physics.world, this);
-        this.addGameObject(blockMap);
-
-        let inv = new Inventory();
-        inv.generateUI(this, blockMap);
         /* puppets = this.add.group({
             key: "star",
             frameQuantity: 12,

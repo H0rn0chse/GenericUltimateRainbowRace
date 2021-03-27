@@ -31,5 +31,6 @@ module.exports = {
         "linebreak-style": "off",
         "no-useless-constructor": "off",
         "no-underscore-dangle": "off",
+        "consistent-return": "off",
     },
 };
