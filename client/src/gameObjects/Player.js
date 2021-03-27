@@ -8,16 +8,13 @@ export class Player extends Sprite {
         this.name = "Player";
         this.collider = [{
             object1: this.name,
-            object2: "Platform",
-        }, {
-            object1: this.name,
-            object2: "Ground",
-        }, {
-            object1: this.name,
             object2: "Map",
             handler: function(a, b) {
                 b.onPlayerCollision(a);
             }
+        }, {
+            object1: this.name,
+            object2: "MapLevel"
         }];
 
         this.cursor = scene.getCursor();
@@ -63,7 +60,7 @@ export class Player extends Sprite {
             this.anims.play("turn");
         }
 
-        if (this.cursor.up.isDown && this.body.touching.down) {
+        if (this.cursor.up.isDown && this.body.onFloor()) {
             this.body.setVelocityY(-500);
         }
     }
