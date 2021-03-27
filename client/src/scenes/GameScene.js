@@ -68,13 +68,9 @@ export class GameScene extends Scene {
         this.add.image(400, 300, "sky");
 
         this.cursor = this.input.keyboard.createCursorKeys();
-        this.player = this.addGameObject(new Player(this.physics.world, this));
-        this.addGameObject(new Platform(this.physics.world, this));
-        this.addGameObject(new Ground(this.physics.world, this));
-        this.addGameObject(new BlockMap(this.physics.world, this));
+        this.map = this.addGameObject(new BlockMap(this.physics.world, this, 0));
+        this.player = this.addGameObject(new Player(this.physics.world, this, this.map.getSpawnPoint()));
 
-        let inv = new Inventory();
-        inv.generateUI(this);
         /* puppets = this.add.group({
             key: "star",
             frameQuantity: 12,

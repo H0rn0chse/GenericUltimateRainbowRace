@@ -13,26 +13,23 @@ var isDragging = false;
 var draggedBlock;
 
 export class BlockMap extends Physics.Arcade.StaticGroup {
-    constructor (world, scene) {
-        const config = {
-            name: "map",
-        };
-
-        super(world, scene, [], config);
+    constructor (world, scene, level_id) {
+        super(world, scene, [], {});
         this.name = "Map";
 
-        for (let x = 0; x < Globals.BLOCKS_X; x++) {
-            this.createBlock(x * Globals.BLOCK_SIZE, Globals.BLOCKS_Y * Globals.BLOCK_SIZE);
-        }
+        const map = scene.make.tilemap({ key: "level_" + level_id });
+        const tileset = map.addTilesetImage("atlas", "atlas");
+        const layer = map.createLayer("Terrain", tileset, 0, 0);
 
-        for (let i = 0; i < 20; i++) {
-            this.createBlock(
-                Phaser.Math.RND.between(0, Globals.BLOCKS_X) * Globals.BLOCK_SIZE,
-                Phaser.Math.RND.between(0, Globals.BLOCKS_Y) * Globals.BLOCK_SIZE
-            );
-        }
+        layer.name = "MapLevel";
+        scene.addGameObject(layer);
+        layer.setCollisionByExclusion(-1, true);
 
-        //this.setDraggingBlock(0, 0, BlockTypes.Breakable);
+        var spawnPointRaw = map.getObjectLayer("Spawn")["objects"];
+        if (spawnPointRaw.length >= 1) {
+            this.spawnPoint = spawnPointRaw[0];
+            console.log(this.spawnPoint);
+        }
 
         inv = new Inventory();
         inv.generateUI(scene,this,[BlockTypes.Default,BlockTypes.Default]);
@@ -40,6 +37,8 @@ export class BlockMap extends Physics.Arcade.StaticGroup {
         scene.input.on(Phaser.Input.Events.POINTER_UP, this.onPointerUp, this);
         scene.input.on(Phaser.Input.Events.POINTER_MOVE, this.onPointerMove, this);
     }
+
+    getSpawnPoint() { return this.spawnPoint; }
 
     setDraggingBlock(x, y, BlockType) {
         isDragging = true;
@@ -110,5 +109,8 @@ export class BlockMap extends Physics.Arcade.StaticGroup {
     registerPreloads () {
         this.load.spritesheet("block_stone", "/assets/1_stone.png", { frameWidth: 42, frameHeight: 42 });
         this.load.spritesheet("block_grass", "/assets/2_stone.png", { frameWidth: 42, frameHeight: 42 });
+
+        this.load.image("atlas", "/assets/tilemap/atlas.png");
+        this.load.tilemapTiledJSON("level_0", "assets/tilemap/level_0.json");
     }
 }

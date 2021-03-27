@@ -2,22 +2,19 @@ const { Physics } = globalThis.Phaser;
 const { Sprite } = Physics.Arcade;
 
 export class Player extends Sprite {
-    constructor (world, scene) {
-        super(scene, 100, 450, "dude");
+    constructor (world, scene, spawnPoint) {
+        super(scene, spawnPoint.x, spawnPoint.y - 30, "dude");
 
         this.name = "Player";
         this.collider = [{
-            object1: this.name,
-            object2: "Platform",
-        }, {
-            object1: this.name,
-            object2: "Ground",
-        }, {
             object1: this.name,
             object2: "Map",
             handler: function(a, b) {
                 b.onPlayerCollision(a);
             }
+        }, {
+            object1: this.name,
+            object2: "MapLevel"
         }];
 
         this.cursor = scene.getCursor();
@@ -63,7 +60,7 @@ export class Player extends Sprite {
             this.anims.play("turn");
         }
 
-        if (this.cursor.up.isDown && this.body.touching.down) {
+        if (this.cursor.up.isDown && this.body.onFloor()) {
             this.body.setVelocityY(-500);
         }
     }
