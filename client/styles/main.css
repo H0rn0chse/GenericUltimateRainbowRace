@@ -14,7 +14,7 @@ body {
     margin: 0;
     padding: 0;
     overflow: hidden;
-    font-family: 'OlivesFont', Fallback, sans-serif;
+    font-family: 'Comic Sans MS', Fallback, sans-serif;
     font-weight: bold;
     font-size: 20pt;
     background: var(--header-bg);
