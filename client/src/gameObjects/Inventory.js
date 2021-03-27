@@ -5,10 +5,11 @@ const { Group, Image } = GameObjects;
 import { BlockBoring } from "./blocks/BlockBoring.js";
 
 var blocks = [];
+let that;
 export class Inventory {
    
     constructor(){
-        
+        that = this;
     }
     generateUI(scene,blockMap,blockTypes)
     {
@@ -33,13 +34,24 @@ export class Inventory {
             newBlock.setInteractive();
             newBlock.on('pointerdown', function (pointer) {
                 blockMap.setDraggingBlock(x,y,type);
+                that.selectOneBlock(newBlock);
          });
         });
     }
     disableInventory(){
         blocks.forEach(function(block){
-            block.setVisible(false);
+            block.destroy();
         });
+    }
+    selectOneBlock(blockChoice){   
+        blocks.forEach(function(block){
+            if(blockChoice != block){
+            block.destroy();
+            }
+        });
+    }
+    disableOneBlock(block){
+        block.destroy();
     }
 
 };
