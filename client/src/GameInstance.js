@@ -1,19 +1,15 @@
-let player;
-let stars;
-let ground;
-let cursors;
-let platform;
-let game;
-let puppets;
-let that;
-
 import * as Globals from "./Globals.js";
-import { Map } from "./gameObjects/Map.js";
+
+// eslint-disable-next-line import/no-cycle
+import { GameScene } from "./scenes/GameScene.js";
+
+import { Player } from "./gameObjects/Player.js";
+import { Platform } from "./gameObjects/Platform.js";
+import { Ground } from "./gameObjects/Ground.js";
+import { BlockMap } from "./gameObjects/BlockMap.js";
 
 class _GameInstance {
     constructor () {
-        that = this;
-
         const config = {
             type: globalThis.Phaser.AUTO,
             width: Globals.BLOCKS_X * Globals.BLOCK_SIZE,
@@ -26,159 +22,43 @@ class _GameInstance {
                     debug: false,
                 },
             },
-            scene: {
-                preload: this.preload,
-                create: this.create,
-                update: this.update,
-            },
+            scene: null,
         };
 
-        game = new globalThis.Phaser.Game(config);
+        this.game = new globalThis.Phaser.Game(config);
+        this.preloads = {
+            GameScene: [],
+        };
+        this.scenes = {};
     }
 
-    preload () {
-        this.load.image("sky", "/assets/sky.png");
-        this.load.image("ground", "/assets/platform.png");
-        this.load.image("star", "/assets/star.png");
-        this.load.spritesheet("dude", "/assets/dude.png", { frameWidth: 32, frameHeight: 48 });
-        // TODO move to map
-        this.load.image("block_stone", "/assets/1_stone.png", { frameWidth: Globals.BLOCK_SIZE, frameHeight: Globals.BLOCK_SIZE });
+    registerPreloads (sceneName, preloadHandler) {
+        this.preloads[sceneName].push(preloadHandler);
     }
 
-    create () {
-        this.add.image(400, 300, "sky");
-
-        // ground = this.physics.add.staticImage(400, 568, "ground").setScale(2).refreshBody();
-        //
-        // platform = this.physics.add.image(400, 400, "ground");
-        //
-        // platform.setImmovable(true);
-        // platform.body.allowGravity = false;
-
-        var map = new Map(this.physics.world, this);
-
-        player = this.physics.add.sprite(100, 450, "dude");
-
-        player.setBounce(0.2);
-        player.setCollideWorldBounds(true);
-
-        this.anims.create({
-            key: "left",
-            frames: this.anims.generateFrameNumbers("dude", { start: 0, end: 3 }),
-            frameRate: 10,
-            repeat: -1,
-        });
-
-        this.anims.create({
-            key: "turn",
-            frames: [{ key: "dude", frame: 4 }],
-            frameRate: 20,
-        });
-
-        this.anims.create({
-            key: "right",
-            frames: this.anims.generateFrameNumbers("dude", { start: 5, end: 8 }),
-            frameRate: 10,
-            repeat: -1,
-        });
-
-        cursors = this.input.keyboard.createCursorKeys();
-
-        stars = this.physics.add.group({
-            key: "star",
-            frameQuantity: 12,
-            maxSize: 12,
-            active: false,
-            visible: false,
-            enable: false,
-            collideWorldBounds: true,
-            bounceX: 0.5,
-            bounceY: 0.5,
-            dragX: 30,
-            dragY: 0,
-        });
-
-        puppets = this.add.group({
-            key: "star",
-            frameQuantity: 12,
-            maxSize: 12,
-            active: false,
-            visible: false,
-        });
-
-        // platfrom collider
-        this.physics.add.collider(
-            player,
-            platform,
-            /*
-            (_player, _platform) => {
-                if (_player.body.touching.up && _platform.body.touching.down) {
-                    that.createStar(
-                        _player.body.center.x,
-                        _platform.body.top - 16,
-                        _player.body.velocity.x,
-                        _player.body.velocity.y * -3,
-                    );
-                }
-            }, */
-        );
-
-        this.physics.add.collider(player, map);
-
-        this.physics.add.collider(player, ground);
-        this.physics.add.collider(stars, ground);
-        this.physics.add.collider(stars, platform);
-
-        this.physics.add.overlap(player, stars, that.collectStar, null, this);
+    createScene () {
+        this.scenes.GameScene = new GameScene(this.preloads.GameScene);
+        this.game.scene.add("GameScene", this.scenes.GameScene, true);
     }
 
     createPlayer (id, x, y) {
-        const puppet = puppets.getChildren()[id];
+        /* const puppet = puppets.getChildren()[id];
 
         if (!puppet) return;
 
         puppet.visible = true;
-        puppet.setPosition(x, y);
+        puppet.setPosition(x, y); */
     }
 
     movePlayer (id, x, y) {
-        puppets.getChildren()[id].setPosition(x, y);
-    }
-
-    update () {
-        if (cursors.left.isDown) {
-            player.setVelocityX(-180);
-
-            player.anims.play("left", true);
-        } else if (cursors.right.isDown) {
-            player.setVelocityX(180);
-
-            player.anims.play("right", true);
-        } else {
-            player.setVelocityX(0);
-
-            player.anims.play("turn");
-        }
-
-        if (cursors.up.isDown && player.body.touching.down) {
-            player.setVelocityY(-500);
-        }
-        that.updateServer(player.x, player.y);
-    }
-
-    collectStar (player, star) {
-        star.disableBody(true, true);
-    }
-
-    createStar (x, y, vx, vy) {
-        const star = stars.get();
-
-        if (!star) return;
-
-        star
-            .enableBody(true, x, y, true, true)
-            .setVelocity(vx, vy);
+        // puppets.getChildren()[id].setPosition(x, y);
     }
 }
 
 export const GameInstance = new _GameInstance();
+globalThis.GameInstance = GameInstance;
+
+GameInstance.registerPreloads("GameScene", Player.prototype.registerPreloads);
+GameInstance.registerPreloads("GameScene", Platform.prototype.registerPreloads);
+GameInstance.registerPreloads("GameScene", Ground.prototype.registerPreloads);
+GameInstance.registerPreloads("GameScene", BlockMap.prototype.registerPreloads);

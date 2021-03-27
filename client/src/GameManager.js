@@ -37,6 +37,8 @@ class _GameManager {
         this.ingame = true;
         this.game.style.display = "";
 
+        GameInstance.createScene();
+
         send("joinGame", { name });
 
         addEventListener("gamePosition", this.onGamePosition, this);
