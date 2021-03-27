@@ -4,12 +4,14 @@
     --scroll-track: #F5F5F5;
     --scroll-thumb: #555;
 
-    --overview-bg: #90ee90; /*lightgreen*/;
-    --overview-border: #137C13;
+    --header-bg: #78A1BB;
 
-    --lobby-bg: #ffc0cb; /*pink*/;
+    --overview-bg: #3E637A;
+    --overview-border: #223744;
 
-    --game-bg: #78A1BB;
+    --lobby-bg: #3E637A;
+
+    --game-bg: #3E637A;
     --game-area-bg: #e0ffff; /*lightcyan*/;
     --game-cursor: #00ff00; /* lime */
     --game-cursor-self: #000000; /* black */

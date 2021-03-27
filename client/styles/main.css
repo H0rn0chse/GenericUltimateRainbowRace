@@ -17,8 +17,7 @@ body {
     font-family: 'OlivesFont', Fallback, sans-serif;
     font-weight: bold;
     font-size: 20pt;
-    background-image:  url(../assets/gras.png);
-    background-repeat: repeat;
+    background: var(--header-bg);
 }
 
 .flexRow {
