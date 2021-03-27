@@ -8,6 +8,8 @@ let puppets;
 let that;
 
 import * as Globals from "./Globals.js";
+import { Map } from "./gameObjects/Map.js";
+
 class _GameInstance {
     constructor () {
         that = this;
@@ -39,17 +41,21 @@ class _GameInstance {
         this.load.image("ground", "/assets/platform.png");
         this.load.image("star", "/assets/star.png");
         this.load.spritesheet("dude", "/assets/dude.png", { frameWidth: 32, frameHeight: 48 });
+        // TODO move to map
+        this.load.image("block_stone", "/assets/1_stone.png", { frameWidth: Globals.BLOCK_SIZE, frameHeight: Globals.BLOCK_SIZE });
     }
 
     create () {
         this.add.image(400, 300, "sky");
 
-        ground = this.physics.add.staticImage(400, 568, "ground").setScale(2).refreshBody();
+        // ground = this.physics.add.staticImage(400, 568, "ground").setScale(2).refreshBody();
+        //
+        // platform = this.physics.add.image(400, 400, "ground");
+        //
+        // platform.setImmovable(true);
+        // platform.body.allowGravity = false;
 
-        platform = this.physics.add.image(400, 400, "ground");
-
-        platform.setImmovable(true);
-        platform.body.allowGravity = false;
+        var map = new Map(this);
 
         player = this.physics.add.sprite(100, 450, "dude");
 
