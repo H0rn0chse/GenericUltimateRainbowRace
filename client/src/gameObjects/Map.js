@@ -1,35 +1,34 @@
 import { GameInstance } from "./../GameInstance.js";
 import * as Globals from "./../Globals.js";
-const { GameObjects } = globalThis.Phaser;
-const { Group, Image } = GameObjects;
+const { GameObjects, Physics } = globalThis.Phaser;
 
-export class Map extends Group {
-  constructor (scene) {
-      var config = {
-        name: "map",
-      };
+const BlockTypes = {
+  Default: 1
+};
 
-      super(scene, [], config);
+export class Map extends Physics.Arcade.StaticGroup {
 
-      for (var i = 0; i < Globals.BLOCKS_X; i++) {
-        console.log(i);
-        var b = this.create(
-          i * Globals.BLOCK_SIZE,
-          Globals.BLOCKS_Y * Globals.BLOCK_SIZE,
-          "block_stone"
-        );
-        this.add(b);
-      }
-      for (var i = 0; i < 20; i++) {
-        console.log(i);
-        var b = this.create(
-          Phaser.Math.RND.between(0, Globals.BLOCKS_X) * Globals.BLOCK_SIZE,
-          Phaser.Math.RND.between(0, Globals.BLOCKS_Y) * Globals.BLOCK_SIZE,
-          "block_stone"
-        );
-        this.add(b);
-      }
+  constructor (world, scene) {
+    var config = {
+      name: "map"
+      //classType: Phaser.GameObjects.Image
+    };
+
+    super(world, scene, [], config);
+
+    for (var x = 0; x < Globals.BLOCKS_X; x++) {
+      this.createBlock(x, Globals.BLOCKS_Y);
     }
+
+    for (var i = 0; i < 20; i++) {
+      this.createBlock(Phaser.Math.RND.between(0, Globals.BLOCKS_X), Phaser.Math.RND.between(0, Globals.BLOCKS_Y));
+    }
+
+  }
+
+  createBlock(x, y, type=BlockTypes.Default) {
+    this.create(x * Globals.BLOCK_SIZE, y * Globals.BLOCK_SIZE, "block_stone");
+  }
 
   // registerPreloads () {
   //       this.load.spritesheet("block_stone", "/assets/1_stone.png", { frameWidth: 42, frameHeight: 42 });

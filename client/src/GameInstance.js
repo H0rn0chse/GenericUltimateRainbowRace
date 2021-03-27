@@ -55,7 +55,7 @@ class _GameInstance {
         // platform.setImmovable(true);
         // platform.body.allowGravity = false;
 
-        var map = new Map(this);
+        var map = new Map(this.physics.world, this);
 
         player = this.physics.add.sprite(100, 450, "dude");
 
@@ -122,6 +122,8 @@ class _GameInstance {
                 }
             }, */
         );
+
+        this.physics.add.collider(player, map);
 
         this.physics.add.collider(player, ground);
         this.physics.add.collider(stars, ground);
