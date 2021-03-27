@@ -13,6 +13,8 @@ class _LobbyHandler {
         registerMessageHandler("leaveLobby", this.onLeaveLobby, this);
         // leave by disconnect
         registerMessageHandler("close", this.onLeaveLobby, this);
+
+        registerMessageHandler("userNameUpdate", this.onUserNameUpdate, this);
     }
 
     onCreateLobby (ws, data, playerId) {
@@ -30,6 +32,10 @@ class _LobbyHandler {
     onJoinLobby (ws, data, playerId) {
         const lobbyName = data.name;
         const lobbyData = LobbyManager.getLobbyData(lobbyName);
+
+        if (!lobbyData) {
+            return;
+        }
 
         // save player to lobby
         const playerData = {
@@ -76,6 +82,7 @@ class _LobbyHandler {
             publish(topic, "closeLobby", { name: lobbyName });
             LobbyManager.removeLobby(lobbyName);
         }
+        OverviewHandler.onLobbyRemove(lobbyData);
     }
 
     onStartLobby (ws, data, playerId) {
@@ -88,6 +95,31 @@ class _LobbyHandler {
         lobbyData.running = true;
         OverviewHandler.onLobbyRemove(lobbyData);
         GameHandler.onJoinGame(ws, data, playerId);
+    }
+
+    onUserNameUpdate (ws, data, playerId) {
+        const lobbyName = PlayerManager.getProperty(playerId, "lobby");
+        const lobbyData = LobbyManager.getLobbyData(lobbyName);
+
+        // lobby was already destroyed
+        if (!lobbyData) {
+            return;
+        }
+
+        // only handle open lobbies
+        if (lobbyData.running) {
+            return;
+        }
+
+        // update lobbyData
+        lobbyData.player[playerId].name = data.name;
+
+        const playerData = {
+            id: playerId,
+            name: data.name,
+        };
+        const topic = `lobby-${lobbyName}`;
+        publish(topic, "playerUpdated", playerData);
     }
 }
 

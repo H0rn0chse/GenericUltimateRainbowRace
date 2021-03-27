@@ -12,6 +12,7 @@ const timer = new Timer(PING_TIMEOUT, ping);
 
 const handler = new Map();
 let playerId = null;
+let playerName = "";
 
 function handleMessage (evt) {
     const message = JSON.parse(evt.data);
@@ -57,6 +58,14 @@ export function send (channel, data) {
 
 export function getId () {
     return playerId;
+}
+
+export function getName () {
+    return playerName;
+}
+
+export function setName (name) {
+    playerName = name;
 }
 
 export function ping (wasReset) {

@@ -1,4 +1,4 @@
-import { addEventListener, removeEventListener, send, ready } from "../socket.js";
+import { addEventListener, removeEventListener, send, ready, getName, setName } from "../socket.js";
 // eslint-disable-next-line import/no-cycle
 import { LobbyManager } from "./LobbyManager.js";
 
@@ -20,7 +20,16 @@ class _OverviewManager {
             LobbyManager.startLobby();
         });
 
+        this.usernameInput = document.querySelector("#overviewUsername");
+        this.usernameInput.addEventListener("change", (evt) => {
+            if (this.usernameInput.value) {
+                setName(this.usernameInput.value);
+                send("userNameUpdate", { name: this.usernameInput.value });
+            }
+        });
+
         // initial state
+        this.usernameInput.value = getName();
         ready().then(() => {
             this.startListen();
         });
@@ -29,6 +38,7 @@ class _OverviewManager {
     show () {
         this.startListen();
         this.container.style.display = "";
+        this.usernameInput.value = getName();
     }
 
     hide () {
