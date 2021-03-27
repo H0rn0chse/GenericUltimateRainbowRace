@@ -25,7 +25,7 @@ export class GameScene extends Scene {
             load.apply(this);
         });
 
-        this.load.image("sky", "/assets/sky.png");
+        this.load.image("baqround1", "/assets/baqround1.png");
         this.load.image("star", "/assets/star.png");
         this.load.spritesheet("flag", "/assets/flag.png", { frameWidth: 42, frameHeight: 42 });
 
@@ -67,7 +67,9 @@ export class GameScene extends Scene {
     }
 
     create () {
-        this.add.image(400, 300, "sky");
+        var baqround = this.add.image(1280, 578, "baqround1");
+        baqround.x = 1280/2;
+        baqround.y = 578/2;
 
         this.cursor = this.input.keyboard.createCursorKeys();
         this.map = this.addGameObject(new BlockMap(this.physics.world, this, 0));
