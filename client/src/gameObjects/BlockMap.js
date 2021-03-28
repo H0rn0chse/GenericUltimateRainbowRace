@@ -46,7 +46,7 @@ export class BlockMap extends Physics.Arcade.StaticGroup {
         }
 
         inv = new Inventory(scene);
-        inv.fillInventoryRandom(this, BlockTypes, 3);
+        //
 
         scene.input.on(Input.Events.POINTER_UP, this.onPointerUp, this);
         scene.input.on(Input.Events.POINTER_MOVE, this.onPointerMove, this);
@@ -56,7 +56,15 @@ export class BlockMap extends Physics.Arcade.StaticGroup {
     getSpawnPoint () {
         return this.spawnPoint;
     }
-
+    fillInv(blockTypes){
+        inv.generateBlocks(this,blockTypes);
+    }
+    sendInv(types){
+        GameManager.sendInv(types);
+    }
+    generateInventory(count){
+        inv.fillInventoryRandom(this, BlockTypes, count);
+    }
     getEndPoint () {
         return this.endPoint;
     }
@@ -85,7 +93,12 @@ export class BlockMap extends Physics.Arcade.StaticGroup {
             draggedBlock = undefined;
         }
     }
-
+    sendBlockChoice(block){
+        GameManager.sendBlockChoice(block);
+    }
+    removeInventoryBlock(block) {
+        inv.disableOneBlock(block);
+    }
     onPointerMove (pointer) {
         if (isDragging) {
             if (this.canPlaceBlockAt(pointer.worldX, pointer.worldY)) {

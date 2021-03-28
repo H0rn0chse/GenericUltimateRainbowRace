@@ -95,8 +95,13 @@ class _PhaseManager {
         if (!this.isHost) {
             return;
         }
+<<<<<<< HEAD
+    
+        this._startPhaseCountdown(4, Phases.PreRun);
+=======
 
         this._startPhaseCountdown(10, Phases.PreRun);
+>>>>>>> 4aaaee006d554adc272a1cfae65ee827ffb4cd83
     }
 
     onPreRun () {
