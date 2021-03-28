@@ -9,13 +9,10 @@ class _GameHandler {
         registerMessageHandler("setBlock", this.onSetBlock, this);
         registerMessageHandler("setPhase", this.onSetPhase, this);
         registerMessageHandler("setCountdown", this.onSetCountdown, this);
-<<<<<<< HEAD
         registerMessageHandler("pickBlock", this.onPickBlock, this);
         registerMessageHandler("fillInv", this.onFillInv, this);
-=======
         registerMessageHandler("resetRun", this.onResetRun, this);
         registerMessageHandler("runEnd", this.onRunEnd, this);
->>>>>>> 4aaaee006d554adc272a1cfae65ee827ffb4cd83
     }
 
     _getLobbyData (playerId) {
