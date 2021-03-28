@@ -1,5 +1,4 @@
 import { GameInstance } from "../GameInstance.js";
-// eslint-disable-next-line import/no-cycle
 import { ViewManager } from "../ViewManager.js";
 import { getId, send, addEventListener, removeEventListener, ready } from "../socket.js";
 import { Timer } from "../Timer.js";

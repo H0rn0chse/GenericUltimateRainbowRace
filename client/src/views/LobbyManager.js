@@ -1,5 +1,4 @@
 import { addEventListener, removeEventListener, ready, send, getId, getName, setName } from "../socket.js";
-// eslint-disable-next-line import/no-cycle
 import { ViewManager } from "../ViewManager.js";
 
 class _LobbyManager {

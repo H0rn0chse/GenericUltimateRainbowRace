@@ -34,5 +34,6 @@ module.exports = {
         "consistent-return": "off",
         "prefer-arrow-callback": "off",
         "prefer-destructuring": "warn",
+        "import/no-cycle": "warn",
     },
 };

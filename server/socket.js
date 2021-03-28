@@ -1,7 +1,6 @@
 import path from "path";
 import { App } from "@sifrr/server";
 import { __root } from "./globals.js";
-// eslint-disable-next-line import/no-cycle
 import { PlayerManager } from "./PlayerManager.js";
 
 const app = new App();

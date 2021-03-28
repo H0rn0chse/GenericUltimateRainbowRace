@@ -1,5 +1,4 @@
 import { Deferred } from "./Deferred.js";
-// eslint-disable-next-line import/no-cycle
 import { logoff, shouldCloseConnection } from "./logoff.js";
 import { Timer } from "./Timer.js";
 

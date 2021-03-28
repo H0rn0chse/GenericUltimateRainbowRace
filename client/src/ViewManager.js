@@ -1,8 +1,5 @@
-// eslint-disable-next-line import/no-cycle
 import { OverviewManager } from "./views/OverviewManager.js";
-// eslint-disable-next-line import/no-cycle
 import { GameManager } from "./views/GameManager.js";
-// eslint-disable-next-line import/no-cycle
 import { LobbyManager } from "./views/LobbyManager.js";
 
 class _ViewManager {

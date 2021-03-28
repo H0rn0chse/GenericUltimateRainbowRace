@@ -1,11 +1,4 @@
-// eslint-disable-next-line import/no-cycle
 import { Player } from "../gameObjects/Player.js";
-// eslint-disable-next-line import/no-cycle
-import { Platform } from "../gameObjects/Platform.js";
-// eslint-disable-next-line import/no-cycle
-import { Ground } from "../gameObjects/Ground.js";
-
-// eslint-disable-next-line import/no-cycle
 import { BlockMap } from "../gameObjects/BlockMap.js";
 import { Inventory } from "../gameObjects/Inventory.js";
 import { GameManager } from "../views/GameManager.js";

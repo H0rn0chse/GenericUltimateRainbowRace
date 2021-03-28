@@ -1,11 +1,6 @@
 import * as Globals from "./Globals.js";
-
-// eslint-disable-next-line import/no-cycle
 import { GameScene } from "./scenes/GameScene.js";
-
 import { Player } from "./gameObjects/Player.js";
-import { Platform } from "./gameObjects/Platform.js";
-import { Ground } from "./gameObjects/Ground.js";
 import { BlockMap } from "./gameObjects/BlockMap.js";
 import { Deferred } from "./Deferred.js";
 
@@ -68,6 +63,4 @@ export const GameInstance = new _GameInstance();
 globalThis.GameInstance = GameInstance;
 
 GameInstance.registerPreloads("GameScene", Player.prototype.registerPreloads);
-GameInstance.registerPreloads("GameScene", Platform.prototype.registerPreloads);
-GameInstance.registerPreloads("GameScene", Ground.prototype.registerPreloads);
 GameInstance.registerPreloads("GameScene", BlockMap.prototype.registerPreloads);
