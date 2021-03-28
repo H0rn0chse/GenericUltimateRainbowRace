@@ -8,6 +8,7 @@ class _GameHandler {
         registerMessageHandler("playerUpdate", this.onPlayerUpdate, this);
         registerMessageHandler("setBlock", this.onSetBlock, this);
         registerMessageHandler("setPhase", this.onSetPhase, this);
+        registerMessageHandler("setCountdown", this.onSetCountdown, this);
     }
 
     _getLobbyData (playerId) {
@@ -88,6 +89,16 @@ class _GameHandler {
         }
 
         publish(lobby.topic, "setPhase", data);
+    }
+
+    onSetCountdown (ws, data, playerId) {
+        const lobby = this._getLobbyData(playerId);
+
+        if (!lobby && !lobby.isHost) {
+            return;
+        }
+
+        publish(lobby.topic, "setCountdown", data);
     }
 
     // ================= not bound to events ==================================================

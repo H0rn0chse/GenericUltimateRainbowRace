@@ -1,5 +1,6 @@
 import { GameInstance } from "../GameInstance.js";
 import * as Globals from "../Globals.js";
+import { Phases, PhaseManager } from "../PhaseManager.js";
 import { BlockBoring } from "./blocks/BlockBoring.js";
 
 const { GameObjects } = globalThis.Phaser;
@@ -42,8 +43,10 @@ export class Inventory {
             c += 1;
             newBlock.setInteractive();
             newBlock.on("pointerdown", function (pointer) {
-                blockMap.setDraggingBlock(x, y, type);
-                that.selectOneBlock(newBlock);
+                if (PhaseManager.isPhase(Phases.Build)) {
+                    blockMap.setDraggingBlock(x, y, type);
+                    that.selectOneBlock(newBlock);
+                }
             });
         });
     }
