@@ -33,9 +33,14 @@ function handleMessage (ws, ab) {
 
     if (message.channel) {
         const handlerMap = messageHandler.get(message.channel) || new Map();
-        handlerMap.forEach((scope, callback) => {
-            callback.call(scope, ws, message.data, ws.id);
-        });
+
+        try {
+            handlerMap.forEach((scope, callback) => {
+                callback.call(scope, ws, message.data, ws.id);
+            });
+        } catch (err) {
+            console.error(err);
+        }
     }
 }
 
@@ -101,8 +106,6 @@ export function startServer () {
         .file("/", indexHtml, { lastModified: false, watch: local })
         .folder("/", publicPath, { lastModified: false, watch: local })
         .get("/*", (res, req) => {
-            console.error("did not find sth");
-            res.onError(console.error);
             res.writeStatus("404 Not Found").end("");
         })
         .listen(host, port, (token) => {
