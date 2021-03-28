@@ -20,6 +20,7 @@ export class BlockMap extends Physics.Arcade.StaticGroup {
     constructor (world, scene, levelId) {
         super(world, scene, [], {});
         this.name = "Map";
+        this.runChildUpdate = true;
 
         const map = scene.make.tilemap({ key: `level_${levelId}` });
         const tileset = map.addTilesetImage("atlas", "atlas");

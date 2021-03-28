@@ -1,6 +1,6 @@
 const { Physics } = globalThis.Phaser;
 
-export class Block extends Physics.Arcade.Image {
+export class Block extends Physics.Arcade.Sprite {
     constructor (config, sprite) {
         super(config.scene, config.x, config.y, sprite);
         this._isPreview = false;
