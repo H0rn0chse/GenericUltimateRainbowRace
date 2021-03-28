@@ -1,4 +1,4 @@
-import { startServer } from "./server/socket.js";
+import { startServer } from "./server/socket2.js";
 import { OverviewHandler } from "./server/handler/OverviewHandler.js";
 import { LobbyHandler } from "./server/handler/LobbyHandler.js";
 import { GameHandler } from "./server/handler/GameHandler.js";

@@ -39,7 +39,6 @@ function handleMessage (ws, ab) {
                 callback.call(scope, ws, message.data, ws.id);
             });
         } catch (err) {
-            debugger;
             console.error(err);
         }
     }
@@ -120,7 +119,6 @@ export function startServer () {
                 }
             });
     } catch (err) {
-        debugger;
         console.error(err);
     }
 }

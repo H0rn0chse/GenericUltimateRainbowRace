@@ -1,6 +1,6 @@
 import { LobbyManager } from "../LobbyManager.js";
 import { PlayerManager } from "../PlayerManager.js";
-import { publish, registerMessageHandler, send, unsubscribe } from "../socket.js";
+import { publish, registerMessageHandler, send, unsubscribe } from "../socket2.js";
 
 class _GameHandler {
     init () {
