@@ -90,6 +90,8 @@ export class Player extends Sprite {
         this.isDead = false;
         this.body.setVelocityX(0);
         this.anims.play("playerIdle");
+        this.impulse.x = 0;
+        this.impulse.y = 0;
     }
 
     update () {
