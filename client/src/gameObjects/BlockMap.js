@@ -2,22 +2,23 @@ import * as Globals from "../Globals.js";
 import { BlockBoring } from "./blocks/BlockBoring.js";
 import { BlockBreakable } from "./blocks/BlockBreakable.js";
 import { Inventory } from "./Inventory.js";
-const { Physics } = globalThis.Phaser;
+
+const { Physics, Input } = globalThis.Phaser;
 
 const BlockTypes = {
     Boring: BlockBoring,
-    Breakable: BlockBreakable
+    Breakable: BlockBreakable,
 };
-var inv;
-var isDragging = false;
-var draggedBlock;
+let inv;
+let isDragging = false;
+let draggedBlock;
 
 export class BlockMap extends Physics.Arcade.StaticGroup {
-    constructor (world, scene, level_id) {
+    constructor (world, scene, levelId) {
         super(world, scene, [], {});
         this.name = "Map";
 
-        const map = scene.make.tilemap({ key: "level_" + level_id });
+        const map = scene.make.tilemap({ key: `level_${levelId}` });
         const tileset = map.addTilesetImage("atlas", "atlas");
         const layer = map.createLayer("Terrain", tileset, 0, 0);
 
@@ -25,28 +26,32 @@ export class BlockMap extends Physics.Arcade.StaticGroup {
         scene.addGameObject(layer);
         layer.setCollisionByExclusion(-1, true);
 
-        var spawnPointRaw = map.getObjectLayer("Spawn")["objects"];
+        const spawnPointRaw = map.getObjectLayer("Spawn").objects;
         if (spawnPointRaw.length >= 1) {
             this.spawnPoint = spawnPointRaw[0];
         }
-        var endPointRaw = map.getObjectLayer("Goal")["objects"];
+
+        const endPointRaw = map.getObjectLayer("Goal").objects;
         if (endPointRaw.length >= 1) {
             this.endPoint = endPointRaw[0];
         }
 
         inv = new Inventory(scene);
-        inv.fillInventoryRandom(this,BlockTypes,3);
+        inv.fillInventoryRandom(this, BlockTypes, 3);
 
-
-
-        scene.input.on(Phaser.Input.Events.POINTER_UP, this.onPointerUp, this);
-        scene.input.on(Phaser.Input.Events.POINTER_MOVE, this.onPointerMove, this);
+        scene.input.on(Input.Events.POINTER_UP, this.onPointerUp, this);
+        scene.input.on(Input.Events.POINTER_MOVE, this.onPointerMove, this);
     }
 
-    getSpawnPoint() { return this.spawnPoint; }
-    getEndPoint() { return this.endPoint; }
+    getSpawnPoint () {
+        return this.spawnPoint;
+    }
 
-    setDraggingBlock(x, y, BlockType) {
+    getEndPoint () {
+        return this.endPoint;
+    }
+
+    setDraggingBlock (x, y, BlockType) {
         isDragging = true;
         draggedBlock = this.createBlock(x, y, BlockType);
         draggedBlock.setIsPreview(true);
@@ -68,7 +73,6 @@ export class BlockMap extends Physics.Arcade.StaticGroup {
             isDragging = false;
             draggedBlock = undefined;
         }
-
     }
 
     onPointerMove (pointer) {
@@ -83,11 +87,11 @@ export class BlockMap extends Physics.Arcade.StaticGroup {
         }
     }
 
-    canPlaceBlockAt(x, y) {
-        var blocks = this.children.entries;
+    canPlaceBlockAt (x, y) {
+        const blocks = this.children.entries;
 
-        var collision = false;
-        blocks.forEach(block => {
+        let collision = false;
+        blocks.forEach((block) => {
             if (!block.isPreview() && Math.abs(block.x - x) <= Globals.BLOCK_SIZE && Math.abs(block.y - y) <= Globals.BLOCK_SIZE) {
                 collision = true;
             }
@@ -97,10 +101,10 @@ export class BlockMap extends Physics.Arcade.StaticGroup {
     }
 
     createBlock (x, y, Block = BlockTypes.Boring) {
-        var block = new Block({
+        const block = new Block({
             scene: this.scene,
-            x: x,
-            y: y
+            x,
+            y,
         });
         this.add(block);
 

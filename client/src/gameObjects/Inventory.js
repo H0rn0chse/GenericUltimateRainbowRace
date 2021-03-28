@@ -1,11 +1,13 @@
 import { GameInstance } from "../GameInstance.js";
 import * as Globals from "../Globals.js";
+import { BlockBoring } from "./blocks/BlockBoring.js";
+
 const { GameObjects } = globalThis.Phaser;
 const { Group, Image } = GameObjects;
-import { BlockBoring } from "./blocks/BlockBoring.js";
 
 const blocks = [];
 let that;
+
 export class Inventory {
     constructor (scene) {
         that = this;

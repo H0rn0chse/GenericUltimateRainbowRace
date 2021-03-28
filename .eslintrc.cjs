@@ -33,5 +33,6 @@ module.exports = {
         "no-underscore-dangle": "off",
         "consistent-return": "off",
         "prefer-arrow-callback": "off",
+        "prefer-destructuring": "warn",
     },
 };

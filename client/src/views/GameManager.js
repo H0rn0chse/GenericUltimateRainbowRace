@@ -71,7 +71,7 @@ class _GameManager {
             }
 
             GameInstance.updatePlayer(playerId, data.pos.x, data.pos.y, data.anim, data.flipX);
-        })
+        });
     }
 
     onJoinGame (data) {
