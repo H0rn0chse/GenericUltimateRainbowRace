@@ -26,6 +26,7 @@ export class Block extends Physics.Arcade.Sprite {
 
     setIsPreview (isPreview) {
         this._isPreview = isPreview;
+        this.setActive(!isPreview);
     }
 
     isPreview () {
