@@ -97,6 +97,7 @@ class _PhaseManager {
         }
 
         this._startPhaseCountdown(10, Phases.PreRun);
+
     }
 
     onPreRun () {
