@@ -1,5 +1,6 @@
 import { Block } from "./Block.js";
 import { BulletBig, BulletSmall } from "./../Bullet.js";
+import { Phases, PhaseManager } from "./../../PhaseManager.js";
 
 const State = {
     Idle: 1,
@@ -40,6 +41,10 @@ class BlockGun extends Block {
     getFireTimeDelta() { return 1000; }
 
     update(time, delta) {
+        if (this.isPreview() || !PhaseManager.isPhase(Phases.Run)) {
+            return;
+        }
+
         this.timer += delta;
 
         if (this.state == State.Idle && this.timer >= this.getIdleTime()) {

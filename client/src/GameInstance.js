@@ -14,7 +14,7 @@ class _GameInstance {
             physics: {
                 default: "arcade",
                 arcade: {
-                    debug: true,
+                    debug: false,
                     gravity: { y: 600 },
                 },
             },
@@ -60,6 +60,15 @@ class _GameInstance {
 
     setBlock (x, y, blockType, flipX) {
         this.scenes.GameScene.setBlock(x, y, blockType, flipX);
+    }
+    removeInventoryBlock(block) {
+        this.scenes.GameScene.removeInventoryBlock(block);
+    }
+    fillInv(blockTypes) {
+        this.scenes.GameScene.fillInv(blockTypes);
+    }
+    generateInventory(count) {
+        this.scenes.GameScene.generateInventory(count);
     }
 }
 

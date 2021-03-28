@@ -1,6 +1,7 @@
 import * as Globals from "../Globals.js";
 import { GameManager } from "../views/GameManager.js";
 import { BlockBoring } from "./blocks/BlockBoring.js";
+import { BlockBox } from "./blocks/BlockBox.js";
 import { BlockBreakable } from "./blocks/BlockBreakable.js";
 import { BlockGunSlow, BlockGunFast } from "./blocks/BlockGun.js";
 import { Inventory } from "./Inventory.js";
@@ -9,6 +10,7 @@ const { Physics, Input } = globalThis.Phaser;
 
 const BlockTypes = {
     Boring: BlockBoring,
+    Box: BlockBox,
     Breakable: BlockBreakable,
     GunSlow: BlockGunSlow,
     GunFast: BlockGunFast
@@ -42,7 +44,7 @@ export class BlockMap extends Physics.Arcade.StaticGroup {
         }
 
         inv = new Inventory(scene);
-        inv.fillInventoryRandom(this, BlockTypes, 3);
+        //
 
         scene.input.on(Input.Events.POINTER_UP, this.onPointerUp, this);
         scene.input.on(Input.Events.POINTER_MOVE, this.onPointerMove, this);
@@ -52,7 +54,15 @@ export class BlockMap extends Physics.Arcade.StaticGroup {
     getSpawnPoint () {
         return this.spawnPoint;
     }
-
+    fillInv(blockTypes){
+        inv.generateBlocks(this,blockTypes);
+    }
+    sendInv(types){
+        GameManager.sendInv(types);
+    }
+    generateInventory(count){
+        inv.fillInventoryRandom(this, BlockTypes, count);
+    }
     getEndPoint () {
         return this.endPoint;
     }
@@ -81,7 +91,12 @@ export class BlockMap extends Physics.Arcade.StaticGroup {
             draggedBlock = undefined;
         }
     }
-
+    sendBlockChoice(block){
+        GameManager.sendBlockChoice(block);
+    }
+    removeInventoryBlock(block) {
+        inv.disableOneBlock(block);
+    }
     onPointerMove (pointer) {
         if (isDragging) {
             if (this.canPlaceBlockAt(pointer.worldX, pointer.worldY)) {
@@ -146,6 +161,7 @@ export class BlockMap extends Physics.Arcade.StaticGroup {
     registerPreloads () {
         this.load.spritesheet("block_stone", "/assets/1_stone.png", { frameWidth: 42, frameHeight: 42 });
         this.load.spritesheet("block_grass", "/assets/2_stone.png", { frameWidth: 42, frameHeight: 42 });
+        this.load.spritesheet("block_box", "/assets/block_box.png", { frameWidth: 42, frameHeight: 42 });
         this.load.spritesheet("gun_slow", "/assets/gun_slow.png", { frameWidth: 42, frameHeight: 42 });
         this.load.spritesheet("gun_fast", "/assets/gun_fast.png", { frameWidth: 42, frameHeight: 42 });
         this.load.spritesheet("bullet_big", "/assets/bullet_big.png", { frameWidth: 10, frameHeight: 6 });

@@ -15,7 +15,7 @@ export class GameScene extends Scene {
         this._collider = new Map();
         this._colliderWasUpdated = false;
         this.createDeferred = createDeferred;
-
+        PhaseManager.listen(Phases.Build,this.generateInventory.bind(this, 4));
         globalThis.GameScene = this;
     }
 
@@ -133,7 +133,18 @@ export class GameScene extends Scene {
     setBlock (x, y, blockType, flipX = false) {
         this.map.createBlock(x, y, blockType, flipX);
     }
-
+    removeInventoryBlock(block) {
+        this.map.removeInventoryBlock(block);
+    }
+    fillInv(blockTypes) {
+        this.map.fillInv(blockTypes);
+    }
+    generateInventory(count) {
+        if(PhaseManager.isHost) {
+          this.map.generateInventory(count);  
+        }
+        
+    }
     getCursor () {
         return this.cursor;
     }
