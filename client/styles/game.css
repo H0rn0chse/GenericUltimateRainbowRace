@@ -21,6 +21,6 @@
 }
 
 
-.resultRow {
+.resultRow > div {
     margin-right: 1em;
 }

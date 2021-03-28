@@ -49,9 +49,9 @@ class _GameManager {
             { channel: "playerUpdate", handler: this.onPlayerUpdate },
             { channel: "playerRemoved", handler: this.onPlayerRemoved },
             { channel: "closeGame", handler: this.onCloseGame },
-            { channel: "pickBlock", handler: this.onPickBlock},
-            { channel: "fillInv", handler: this.onFillInv},
-            { channel: "resetRun", handler: this.onResetRun }
+            { channel: "pickBlock", handler: this.onPickBlock },
+            { channel: "fillInv", handler: this.onFillInv },
+            { channel: "resetRun", handler: this.onResetRun },
         ];
 
         this.runEnded = true;
@@ -100,39 +100,41 @@ class _GameManager {
                 y,
             },
             blockType,
-            flipX
+            flipX,
         };
         send("setBlock", data);
     }
-    sendInv(types) {
-       
+
+    sendInv (types) {
         const data = {
-            types
-        }
+            types,
+        };
         send("fillInv", data);
     }
-    onFillInv(data)
-    {
+
+    onFillInv (data) {
         if (data.playerId === getId()) {
             return;
         }
         GameInstance.fillInv(data.types);
     }
-    sendBlockChoice(block){
+
+    sendBlockChoice (block) {
         const data = {
-            block
-        }
-        console.log("send"+ block);
+            block,
+        };
+        console.log(`send${block}`);
         send("pickBlock", data);
     }
-    onPickBlock(data)
-    {
+
+    onPickBlock (data) {
         if (data.playerId === getId()) {
             return;
         }
         console.log(data.block);
         GameInstance.removeInventoryBlock(data.block);
     }
+
     onPlayerUpdate (data) {
         if (data.id === getId()) {
             return;
@@ -218,7 +220,7 @@ class _GameManager {
             row.classList.add("flexRow", "resultRow");
 
             const place = document.createElement("div");
-            place.innerText = "-";
+            place.innerText = "(dead)";
             row.appendChild(place);
 
             const name = document.createElement("div");
