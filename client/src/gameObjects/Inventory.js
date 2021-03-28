@@ -39,6 +39,7 @@ export class Inventory {
             const x = 30;
             const y = 100 + c * 60;
             const newBlock = blockMap.createBlock(x, y, type);
+            newBlock.setIsPreview(true);
             blocks.push(newBlock);
             c += 1;
             newBlock.setInteractive();
