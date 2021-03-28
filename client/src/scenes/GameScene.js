@@ -78,6 +78,7 @@ export class GameScene extends Scene {
         this.playerPuppets = this.add.group();
 
         this.player = this.addGameObject(new Player(this.physics.world, this, this.map.getSpawnPoint()));
+        this.map.onPlayerCreated(this.player);
 
         this.createFlag();
 
