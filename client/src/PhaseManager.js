@@ -124,9 +124,9 @@ class _PhaseManager {
             return;
         }
 
-        console.log(data);
+        data.phase = Phases.Results;
 
-        send("setPhase", { phase: Phases.Results });
+        send("setPhase", data);
     }
 
     onJoinGame (data) {
