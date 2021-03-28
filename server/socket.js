@@ -39,6 +39,7 @@ function handleMessage (ws, ab) {
                 callback.call(scope, ws, message.data, ws.id);
             });
         } catch (err) {
+            debugger;
             console.error(err);
         }
     }
@@ -71,7 +72,8 @@ export function subscribe (ws, topic) {
     try {
         ws.subscribe(topic);
     } catch (err) {
-        console.error(err);
+        console.error(`subscribe failed: ${topic}`);
+        // console.error(err);
     }
 }
 
@@ -79,7 +81,8 @@ export function unsubscribe (ws, topic) {
     try {
         ws.unsubscribe(topic);
     } catch (err) {
-        console.error(err);
+        console.error(`unsubscribe failed: ${topic}`);
+        // console.error(err);
     }
 }
 
@@ -117,6 +120,7 @@ export function startServer () {
                 }
             });
     } catch (err) {
+        debugger;
         console.error(err);
     }
 }

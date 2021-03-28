@@ -4,7 +4,7 @@
   "private": true,
   "type": "module",
   "scripts": {
-    "start": "node main.js --trace-uncaught",
+    "start": "node main.js",
     "startLocal": "npm run start --debug",
     "build": "webpack",
     "lint": "eslint */**.js"
