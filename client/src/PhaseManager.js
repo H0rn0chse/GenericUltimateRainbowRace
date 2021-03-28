@@ -26,6 +26,8 @@ class _PhaseManager {
         addEventListener("joinGame", this.onJoinGame, this);
         addEventListener("setPhase", this.onSetPhase, this);
         addEventListener("setCountdown", this.onSetCountdown, this);
+        addEventListener("runProgress", this.onRunProgress, this);
+        addEventListener("runEnd", this.onRunEnd, this);
 
         this.currentPhase = Phases.Initial;
 
@@ -45,6 +47,7 @@ class _PhaseManager {
         this.listen(Phases.Colors, this.onColors.bind(this));
         this.listen(Phases.Build, this.onBuild.bind(this));
         this.listen(Phases.PreRun, this.onPreRun.bind(this));
+        this.listen(Phases.Run, this.onRun.bind(this));
     }
 
     listen (phase, handler) {
@@ -59,16 +62,6 @@ class _PhaseManager {
 
     isPhase (phase) {
         return this.currentPhase === phase;
-    }
-
-    onColors () {
-        if (!this.isHost) {
-            return;
-        }
-
-        setTimeout(() => {
-            send("setPhase", { phase: Phases.Build });
-        }, 1000);
     }
 
     _startPhaseCountdown (seconds, phase) {
@@ -88,12 +81,22 @@ class _PhaseManager {
         send("setCountdown", { seconds: this.remainingSeconds + 1 });
     }
 
+    onColors () {
+        if (!this.isHost) {
+            return;
+        }
+
+        setTimeout(() => {
+            send("setPhase", { phase: Phases.Build });
+        }, 1000);
+    }
+
     onBuild () {
         if (!this.isHost) {
             return;
         }
 
-        this._startPhaseCountdown(4, Phases.PreRun);
+        this._startPhaseCountdown(1, Phases.PreRun);
     }
 
     onPreRun () {
@@ -101,11 +104,37 @@ class _PhaseManager {
             return;
         }
 
-        this._startPhaseCountdown(4, Phases.Run);
+        this._startPhaseCountdown(1, Phases.Run);
+    }
+
+    onRun () {
+        if (!this.isHost) {
+            return;
+        }
+
+        send("resetRun", {});
+    }
+
+    onRunProgress (data) {
+        console.log(data);
+    }
+
+    onRunEnd (data) {
+        if (!this.isHost) {
+            return;
+        }
+
+        console.log(data);
+
+        send("setPhase", { phase: Phases.Results });
     }
 
     onJoinGame (data) {
         this.isHost = data.host === getId();
+
+        if (!this.isHost) {
+            return;
+        }
         send("setPhase", { phase: Phases.Colors });
     }
 

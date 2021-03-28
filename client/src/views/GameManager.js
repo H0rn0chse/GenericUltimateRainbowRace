@@ -1,10 +1,11 @@
 import { GameInstance } from "../GameInstance.js";
 import { ViewManager } from "../ViewManager.js";
 import { getId, send, addEventListener, removeEventListener, ready } from "../socket.js";
-import { Timer } from "../Timer.js";
 
-// require to start attach listener
-// import { PhaseManager } from "../PhaseManager.js";
+export const Status = {
+    Alive: "Alive",
+    Dead: "Dead",
+};
 
 class _GameManager {
     constructor () {
@@ -39,7 +40,10 @@ class _GameManager {
             { channel: "playerUpdate", handler: this.onPlayerUpdate },
             { channel: "playerRemoved", handler: this.onPlayerRemoved },
             { channel: "closeGame", handler: this.onCloseGame },
+            { channel: "resetRun", handler: this.onResetRun },
         ];
+
+        this.runEnded = true;
     }
 
     show () {
@@ -52,6 +56,16 @@ class _GameManager {
         this.stopListen();
         this.container.style.display = "none";
         GameInstance.destroyScenes();
+    }
+
+    endRun (status) {
+        if (!this.runEnded) {
+            const data = {
+                status,
+            };
+            send("runEnd", data);
+            this.runEnded = true;
+        }
     }
 
     updatePlayer (x, y, anim, flipX) {
@@ -119,6 +133,10 @@ class _GameManager {
         ViewManager.showOverview();
     }
 
+    onResetRun () {
+        this.runEnded = false;
+    }
+
     stopListen () {
         addEventListener("joinGame", this.onJoinGame, this);
 
@@ -137,3 +155,4 @@ class _GameManager {
 }
 
 export const GameManager = new _GameManager();
+globalThis.GameManager = GameManager;
