@@ -220,7 +220,7 @@ class _GameManager {
             row.classList.add("flexRow", "resultRow");
 
             const place = document.createElement("div");
-            place.innerText = "-";
+            place.innerText = "(dead)";
             row.appendChild(place);
 
             const name = document.createElement("div");
