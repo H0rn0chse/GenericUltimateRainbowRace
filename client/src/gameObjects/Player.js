@@ -2,30 +2,33 @@ const { Physics } = globalThis.Phaser;
 const { Sprite } = Physics.Arcade;
 
 export class Player extends Sprite {
-    constructor (world, scene, spawnPoint) {
+    constructor (world, scene, spawnPoint, isPuppet = false) {
         super(scene, spawnPoint.x, spawnPoint.y - 30, "unicorn");
 
-        this.name = "Player";
-        this.collider = [{
-            object1: this.name,
-            object2: "Map",
-            handler: (a, b) => {
-                b.onPlayerCollision(a);
-            },
-        }, {
-            object1: this.name,
-            object2: "MapLevel",
-        }];
-
         this.cursor = scene.getCursor();
+        this.isPuppet = isPuppet;
 
-        world.enable([this], 0);
+        if (!isPuppet) {
+            this.name = "Player";
+            this.collider = [{
+                object1: this.name,
+                object2: "Map",
+                handler: (a, b) => {
+                    b.onPlayerCollision(a);
+                },
+            }, {
+                object1: this.name,
+                object2: "MapLevel",
+            }];
 
-        this.setSize(45, 50);
-        this.setOffset(15, 5);
+            world.enable([this], 0);
 
-        this.setBounce(0.2);
-        this.setCollideWorldBounds(true);
+            this.setSize(45, 50);
+            this.setOffset(15, 5);
+
+            this.setBounce(0.2);
+            this.setCollideWorldBounds(true);
+        }
 
         scene.anims.create({
             key: "playerIdle",
@@ -63,7 +66,11 @@ export class Player extends Sprite {
     }
 
     update () {
-        //
+        // only handle the real player
+        if (this.isPuppet) {
+            return;
+        }
+
         if (this.cursor.left.isDown) {
             this.body.setVelocityX(-180);
 
@@ -80,7 +87,6 @@ export class Player extends Sprite {
             } else {
                 this.anims.play("playerWalkRight", true);
             }
-        //
         } else {
             this.body.setVelocityX(0);
             this.anims.play("playerIdle");

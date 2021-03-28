@@ -8,16 +8,18 @@ import { Ground } from "../gameObjects/Ground.js";
 // eslint-disable-next-line import/no-cycle
 import { BlockMap } from "../gameObjects/BlockMap.js";
 import { Inventory } from "../gameObjects/Inventory.js";
+import { GameManager } from "../views/GameManager.js";
 
 const { Scene } = globalThis.Phaser;
 
 export class GameScene extends Scene {
-    constructor (preloads) {
+    constructor (preloads, createDeferred) {
         super();
         this._preloads = preloads;
         this._gameObjects = new Map();
         this._collider = new Map();
         this._colliderWasUpdated = false;
+        this.createDeferred = createDeferred;
     }
 
     preload () {
@@ -78,13 +80,8 @@ export class GameScene extends Scene {
 
         this.createFlag();
 
-        /* puppets = this.add.group({
-            key: "star",
-            frameQuantity: 12,
-            maxSize: 12,
-            active: false,
-            visible: false,
-        }); */
+        this.playerPuppets = this.add.group();
+        this.createDeferred.resolve();
     }
 
     createFlag () {
@@ -106,6 +103,25 @@ export class GameScene extends Scene {
         console.log("Player Reached Flag");
     }
 
+    createPlayer (id, x, y) {
+        const puppet = new Player(this.physics.world, this, { x, y }, true);
+        puppet.id = id;
+
+        this.add.existing(puppet);
+
+        this.playerPuppets.children.set(puppet);
+
+        // puppet.visible = true;
+        // puppet.setPosition(x, y);
+    }
+
+    updatePlayer (id, x, y, animation, flipX = false) {
+        const puppet = this.playerPuppets.children.get("id", id);
+        puppet.setPosition(x, y);
+        puppet.anims.play(animation, true);
+        puppet.flipX = flipX;
+    }
+
     getCursor () {
         return this.cursor;
     }
@@ -115,6 +131,7 @@ export class GameScene extends Scene {
         this._gameObjects.forEach((gameObject, name) => {
             gameObject.update?.(time, delta);
         });
-        // that.updateServer(player.x, player.y);
+
+        GameManager.updatePlayer(this.player.x, this.player.y, this.player.anims.currentAnim.key, this.player.flipX);
     }
 }

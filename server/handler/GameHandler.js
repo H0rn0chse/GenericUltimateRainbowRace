@@ -5,11 +5,17 @@ import { publish, registerMessageHandler, send, unsubscribe } from "../socket.js
 class _GameHandler {
     init () {
         registerMessageHandler("close", this.onLeaveGame, this);
+        registerMessageHandler("playerUpdate", this.onPlayerUpdate, this);
     }
 
     onLeaveGame (ws, data, playerId) {
         const lobbyName = PlayerManager.getProperty(playerId, "lobby");
         const lobbyData = LobbyManager.getLobbyData(lobbyName);
+
+        // lobby was already closed
+        if (!lobbyData) {
+            return;
+        }
 
         // only handle running lobbies
         if (!lobbyData?.running) {
@@ -32,13 +38,37 @@ class _GameHandler {
         }
     }
 
+    onPlayerUpdate (ws, data, playerId) {
+        const lobbyName = PlayerManager.getProperty(playerId, "lobby");
+        const lobbyData = LobbyManager.getLobbyData(lobbyName);
+
+        // lobby was already closed
+        if (!lobbyData) {
+            return;
+        }
+
+        // only handle running lobbies
+        if (!lobbyData?.running) {
+            return;
+        }
+
+        const playerData = lobbyData.player[playerId];
+        playerData.pos = data.pos;
+        playerData.anim = data.anim;
+        playerData.flipX = data.flipX;
+
+        const topic = `lobby-${lobbyName}`;
+        publish(topic, "playerUpdate", playerData);
+    }
+
     // ================= not bound to events ==================================================
 
     onJoinGame (ws, data, playerId) {
         const lobbyName = PlayerManager.getProperty(playerId, "lobby");
+        const lobbyData = LobbyManager.getLobbyData(lobbyName);
 
         const topic = `lobby-${lobbyName}`;
-        publish(topic, "joinGame", {});
+        publish(topic, "joinGame", lobbyData);
     }
 }
 

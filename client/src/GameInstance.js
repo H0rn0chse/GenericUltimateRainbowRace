@@ -7,6 +7,7 @@ import { Player } from "./gameObjects/Player.js";
 import { Platform } from "./gameObjects/Platform.js";
 import { Ground } from "./gameObjects/Ground.js";
 import { BlockMap } from "./gameObjects/BlockMap.js";
+import { Deferred } from "./Deferred.js";
 
 class _GameInstance {
     constructor () {
@@ -30,6 +31,8 @@ class _GameInstance {
             GameScene: [],
         };
         this.scenes = {};
+
+        this.sceneDeferred = new Deferred();
     }
 
     registerPreloads (sceneName, preloadHandler) {
@@ -37,21 +40,23 @@ class _GameInstance {
     }
 
     createScene () {
-        this.scenes.GameScene = new GameScene(this.preloads.GameScene);
+        this.scenes.GameScene = new GameScene(this.preloads.GameScene, this.sceneDeferred);
         this.game.scene.add("GameScene", this.scenes.GameScene, true);
+
+        return this.sceneDeferred.promise;
     }
 
     createPlayer (id, x, y) {
-        /* const puppet = puppets.getChildren()[id];
-
-        if (!puppet) return;
-
-        puppet.visible = true;
-        puppet.setPosition(x, y); */
+        this.scenes.GameScene.createPlayer(id, x, y);
     }
 
-    movePlayer (id, x, y) {
-        // puppets.getChildren()[id].setPosition(x, y);
+    updatePlayer (id, x, y, animation, flipX) {
+        this.scenes.GameScene.updatePlayer(id, x, y, animation, flipX);
+    }
+
+    destroyScenes () {
+        this.scenes.GameScene.scene.remove("");
+        this.scenes = {};
     }
 }
 

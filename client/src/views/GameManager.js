@@ -30,7 +30,7 @@ class _GameManager {
             }
         };
 
-        this.puppets = new Map();
+        this.playerPuppets = new Map();
     }
 
     show () {
@@ -39,41 +39,39 @@ class _GameManager {
     }
 
     hide () {
+        this.ingame = false;
         this.stopListen();
         this.container.style.display = "none";
+        GameInstance.destroyScenes();
     }
 
-    leave () {
-        this.ingame = false;
-        removeEventListener("gamePosition", this.onGamePosition);
-        removeEventListener("gameLeave", this.onGameLeave);
-        removeEventListener("gameInit", this.onGameInit);
-        send("gameLeave", {});
+    updatePlayer (x, y, anim, flipX) {
+        const data = {
+            pos: {
+                x,
+                y,
+            },
+            flipX,
+            anim,
+        };
+        send("playerUpdate", data);
     }
 
-    onGamePosition (data) {
+    onPlayerUpdate (data) {
         if (data.id === getId()) {
             return;
         }
 
-        let playerId = this.puppets.get(data.id);
-        if (playerId === undefined) {
-            playerId = this.puppets.size;
-            this.puppets.set(data.id, playerId);
-            GameInstance.createPlayer(playerId, data.pos.x, data.pos.y);
-        }
+        GameInstance.sceneDeferred.promise.then(() => {
+            let playerId = this.playerPuppets.get(data.id);
+            if (playerId === undefined) {
+                playerId = this.playerPuppets.size;
+                this.playerPuppets.set(data.id, playerId);
+                GameInstance.createPlayer(playerId, data.pos.x, data.pos.y);
+            }
 
-        GameInstance.movePlayer(playerId, data.pos.x, data.pos.y);
-    }
-
-    onGameLeave (data) {
-        // todo
-    }
-
-    onGameInit (lobbyData) {
-        lobbyData.forEach((playerData) => {
-            this.onGamePosition(playerData);
-        });
+            GameInstance.updatePlayer(playerId, data.pos.x, data.pos.y, data.anim, data.flipX);
+        })
     }
 
     onJoinGame (data) {
@@ -96,6 +94,7 @@ class _GameManager {
     stopListen () {
         addEventListener("joinGame", this.onJoinGame, this);
 
+        removeEventListener("playerUpdate", this.onPlayerUpdate, this);
         removeEventListener("playerRemoved", this.onPlayerRemoved, this);
         removeEventListener("closeGame", this.onCloseGame, this);
     }
@@ -103,6 +102,7 @@ class _GameManager {
     startListen () {
         removeEventListener("joinGame", this.onJoinGame, this);
 
+        addEventListener("playerUpdate", this.onPlayerUpdate, this);
         addEventListener("playerRemoved", this.onPlayerRemoved, this);
         addEventListener("closeGame", this.onCloseGame, this);
     }
