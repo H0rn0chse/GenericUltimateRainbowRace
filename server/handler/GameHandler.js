@@ -6,59 +6,76 @@ class _GameHandler {
     init () {
         registerMessageHandler("close", this.onLeaveGame, this);
         registerMessageHandler("playerUpdate", this.onPlayerUpdate, this);
+        registerMessageHandler("setBlock", this.onSetBlock, this);
     }
 
-    onLeaveGame (ws, data, playerId) {
-        const lobbyName = PlayerManager.getProperty(playerId, "lobby");
-        const lobbyData = LobbyManager.getLobbyData(lobbyName);
+    _getLobbyData (playerId) {
+        const name = PlayerManager.getProperty(playerId, "lobby");
+        const data = LobbyManager.getLobbyData(name);
 
         // lobby was already closed
-        if (!lobbyData) {
+        if (!data) {
             return;
         }
 
         // only handle running lobbies
-        if (!lobbyData?.running) {
+        if (!data?.running) {
+            return;
+        }
+        return {
+            name,
+            data,
+            topic: `lobby-${name}`,
+        };
+    }
+
+    onLeaveGame (ws, data, playerId) {
+        const lobby = this._getLobbyData(playerId);
+
+        if (!lobby) {
             return;
         }
 
         // remove reference player/ lobby
         PlayerManager.removeProperty("lobby");
-        delete lobbyData.player[playerId];
+        delete lobby.data.player[playerId];
 
         // unsubscribe from lobby
-        const topic = `lobby-${lobbyName}`;
-        unsubscribe(ws, topic);
+        unsubscribe(ws, lobby.topic);
 
-        if (lobbyData.host !== playerId) {
-            publish(topic, "playerRemoved", { id: playerId });
+        if (lobby.data.host !== playerId) {
+            publish(lobby.topic, "playerRemoved", { id: playerId });
         } else {
-            publish(topic, "closeGame", { name: lobbyName });
-            LobbyManager.removeLobby(lobbyName);
+            publish(lobby.topic, "closeGame", { name: lobby.name });
+            LobbyManager.removeLobby(lobby.name);
         }
     }
 
     onPlayerUpdate (ws, data, playerId) {
-        const lobbyName = PlayerManager.getProperty(playerId, "lobby");
-        const lobbyData = LobbyManager.getLobbyData(lobbyName);
+        const lobby = this._getLobbyData(playerId);
 
-        // lobby was already closed
-        if (!lobbyData) {
+        if (!lobby) {
             return;
         }
 
-        // only handle running lobbies
-        if (!lobbyData?.running) {
-            return;
-        }
-
-        const playerData = lobbyData.player[playerId];
+        const playerData = lobby.data.player[playerId];
         playerData.pos = data.pos;
         playerData.anim = data.anim;
         playerData.flipX = data.flipX;
 
-        const topic = `lobby-${lobbyName}`;
-        publish(topic, "playerUpdate", playerData);
+        publish(lobby.topic, "playerUpdate", playerData);
+    }
+
+    onSetBlock (ws, data, playerId) {
+        const lobby = this._getLobbyData(playerId);
+
+        if (!lobby) {
+            return;
+        }
+
+        data.playerId = playerId;
+
+        publish(lobby.topic, "setBlock", data);
     }
 
     // ================= not bound to events ==================================================

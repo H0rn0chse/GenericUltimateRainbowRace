@@ -46,6 +46,11 @@ class _GameInstance {
         return this.sceneDeferred.promise;
     }
 
+    destroyScenes () {
+        this.scenes.GameScene.scene.remove("");
+        this.scenes = {};
+    }
+
     createPlayer (id, x, y) {
         this.scenes.GameScene.createPlayer(id, x, y);
     }
@@ -54,9 +59,8 @@ class _GameInstance {
         this.scenes.GameScene.updatePlayer(id, x, y, animation, flipX);
     }
 
-    destroyScenes () {
-        this.scenes.GameScene.scene.remove("");
-        this.scenes = {};
+    setBlock (x, y, blockType) {
+        this.scenes.GameScene.setBlock(x, y, blockType);
     }
 }
 

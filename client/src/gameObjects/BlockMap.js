@@ -1,4 +1,5 @@
 import * as Globals from "../Globals.js";
+import { GameManager } from "../views/GameManager.js";
 import { BlockBoring } from "./blocks/BlockBoring.js";
 import { BlockBreakable } from "./blocks/BlockBreakable.js";
 import { Inventory } from "./Inventory.js";
@@ -66,6 +67,8 @@ export class BlockMap extends Physics.Arcade.StaticGroup {
                 draggedBlock.resetHighlight();
                 draggedBlock.refreshBody();
                 inv.disableInventory();
+
+                GameManager.setBlock(draggedBlock.x, draggedBlock.y, draggedBlock.type);
             } else {
                 draggedBlock.destroy();
             }
@@ -100,12 +103,15 @@ export class BlockMap extends Physics.Arcade.StaticGroup {
         return !collision;
     }
 
-    createBlock (x, y, Block = BlockTypes.Boring) {
-        const block = new Block({
+    createBlock (x, y, blockType = "Boring") {
+        const BlockConstructor = BlockTypes[blockType];
+
+        const block = new BlockConstructor({
             scene: this.scene,
             x,
             y,
         });
+        block.type = blockType;
         this.add(block);
 
         block.addToDisplayList(this.scene.sys.displayList);

@@ -15,11 +15,13 @@ export class Inventory {
     }
 
     fillInventoryRandom (blockMap, blockTypes, count) {
-        const c = Object.keys(blockTypes).length;
+        const blockIds = Object.keys(blockTypes);
+        const blockCount = blockIds.length;
         const inputTypes = [];
 
         for (let i = 0; i < count; i++) {
-            inputTypes.push(blockTypes[Object.keys(blockTypes)[this.getRandomInt(c)]]);
+            const randomBlockId = blockIds[this.getRandomInt(blockCount)];
+            inputTypes.push(randomBlockId);
         }
         this.generateBlocks(blockMap, inputTypes);
     }

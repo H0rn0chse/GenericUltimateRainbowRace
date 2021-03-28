@@ -122,6 +122,10 @@ export class GameScene extends Scene {
         puppet.flipX = flipX;
     }
 
+    setBlock (x, y, blockType) {
+        this.map.createBlock(x, y, blockType);
+    }
+
     getCursor () {
         return this.cursor;
     }

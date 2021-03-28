@@ -31,6 +31,13 @@ class _GameManager {
         };
 
         this.playerPuppets = new Map();
+
+        this.gameHandler = [
+            { channel: "setBlock", handler: this.onSetBlock },
+            { channel: "playerUpdate", handler: this.onPlayerUpdate },
+            { channel: "playerRemoved", handler: this.onPlayerRemoved },
+            { channel: "closeGame", handler: this.onCloseGame },
+        ];
     }
 
     show () {
@@ -57,6 +64,17 @@ class _GameManager {
         send("playerUpdate", data);
     }
 
+    setBlock (x, y, blockType) {
+        const data = {
+            pos: {
+                x,
+                y,
+            },
+            blockType,
+        };
+        send("setBlock", data);
+    }
+
     onPlayerUpdate (data) {
         if (data.id === getId()) {
             return;
@@ -72,6 +90,13 @@ class _GameManager {
 
             GameInstance.updatePlayer(playerId, data.pos.x, data.pos.y, data.anim, data.flipX);
         });
+    }
+
+    onSetBlock (data) {
+        if (data.playerId === getId()) {
+            return;
+        }
+        GameInstance.setBlock(data.pos.x, data.pos.y, data.blockType);
     }
 
     onJoinGame (data) {
@@ -94,17 +119,17 @@ class _GameManager {
     stopListen () {
         addEventListener("joinGame", this.onJoinGame, this);
 
-        removeEventListener("playerUpdate", this.onPlayerUpdate, this);
-        removeEventListener("playerRemoved", this.onPlayerRemoved, this);
-        removeEventListener("closeGame", this.onCloseGame, this);
+        this.gameHandler.forEach((data) => {
+            removeEventListener(data.channel, data.handler, this);
+        });
     }
 
     startListen () {
         removeEventListener("joinGame", this.onJoinGame, this);
 
-        addEventListener("playerUpdate", this.onPlayerUpdate, this);
-        addEventListener("playerRemoved", this.onPlayerRemoved, this);
-        addEventListener("closeGame", this.onCloseGame, this);
+        this.gameHandler.forEach((data) => {
+            addEventListener(data.channel, data.handler, this);
+        });
     }
 }
 
