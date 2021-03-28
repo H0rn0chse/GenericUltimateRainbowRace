@@ -1,4 +1,5 @@
 import { Phases, PhaseManager } from "../PhaseManager.js";
+import { Status, GameManager } from "../views/GameManager.js";
 
 const { Physics } = globalThis.Phaser;
 const { Sprite } = Physics.Arcade;
@@ -65,11 +66,27 @@ export class Player extends Sprite {
             frameRate: 16,
             repeat: -1,
         });
+
+        scene.anims.create({
+            key: "playerDied",
+            frames: scene.anims.generateFrameNumbers("unicorn", { start: 16, end: 19 }),
+            frameRate: 16,
+            repeat: -1,
+        });
+    }
+
+    die() {
+        if (PhaseManager.isPhase(Phases.Run)) {
+            console.log("Player died!");
+            GameManager.endRun(Status.Dead);
+            this.isDead = true;
+            this.anims.play("playerDied", true);
+        }
     }
 
     update () {
         // only handle the real player
-        if (this.isPuppet) {
+        if (this.isPuppet || this.isDead) {
             return;
         }
 

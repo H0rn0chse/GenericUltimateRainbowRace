@@ -1,10 +1,12 @@
 import { GameInstance } from "../GameInstance.js";
 import { ViewManager } from "../ViewManager.js";
 import { getId, send, addEventListener, removeEventListener, ready } from "../socket.js";
-import { Timer } from "../Timer.js";
+import { Phases, PhaseManager } from "../PhaseManager.js";
 
-// require to start attach listener
-// import { PhaseManager } from "../PhaseManager.js";
+export const Status = {
+    Alive: "Alive",
+    Dead: "Dead",
+};
 
 class _GameManager {
     constructor () {
@@ -13,11 +15,19 @@ class _GameManager {
 
         this.container = document.querySelector("#game");
         this.points = document.querySelector("#gamePoints");
+        this.results = document.querySelector("#gameResults");
+        this.results.style.display = "none";
+        this.resultsList = document.querySelector("#gameResultsList");
+        this.resultsNextButton = document.querySelector("#gameResultsNext");
 
         document.addEventListener("keydown", (evt) => {
             if (this.ingame) {
                 // todo
             }
+        });
+
+        this.resultsNextButton.addEventListener("click", (evt) => {
+            this.nextGame();
         });
 
         // initial state
@@ -39,9 +49,17 @@ class _GameManager {
             { channel: "playerUpdate", handler: this.onPlayerUpdate },
             { channel: "playerRemoved", handler: this.onPlayerRemoved },
             { channel: "closeGame", handler: this.onCloseGame },
+<<<<<<< HEAD
             { channel: "pickBlock", handler: this.onPickBlock},
             { channel: "fillInv", handler: this.onFillInv},
+=======
+            { channel: "resetRun", handler: this.onResetRun },
+>>>>>>> 4aaaee006d554adc272a1cfae65ee827ffb4cd83
         ];
+
+        this.runEnded = true;
+        PhaseManager.listen(Phases.Results, this.onResults.bind(this));
+        PhaseManager.listen(Phases.Colors, this.onColors.bind(this));
     }
 
     show () {
@@ -54,6 +72,16 @@ class _GameManager {
         this.stopListen();
         this.container.style.display = "none";
         GameInstance.destroyScenes();
+    }
+
+    endRun (status) {
+        if (!this.runEnded) {
+            const data = {
+                status,
+            };
+            send("runEnd", data);
+            this.runEnded = true;
+        }
     }
 
     updatePlayer (x, y, anim, flipX) {
@@ -149,6 +177,74 @@ class _GameManager {
         ViewManager.showOverview();
     }
 
+    onResetRun () {
+        this.runEnded = false;
+    }
+
+    onResults (data) {
+        this.resultsList.innerHTML = "";
+
+        const alivePlayer = [];
+        const deadPlayer = [];
+
+        Object.keys(data.run)
+            .map((key) => {
+                data.run[key].id = key;
+                return data.run[key];
+            })
+            .sort((a, b) => a.count - b.count)
+            .forEach((player) => {
+                if (player.status === Status.Alive) {
+                    alivePlayer.push(player.id);
+                } else {
+                    deadPlayer.push(player.id);
+                }
+            });
+
+        alivePlayer.forEach((playerId, index) => {
+            const row = document.createElement("div");
+            row.classList.add("flexRow", "resultRow");
+
+            const place = document.createElement("div");
+            place.innerText = index + 1;
+            row.appendChild(place);
+
+            const name = document.createElement("div");
+            name.innerText = data.player[playerId].name;
+            row.appendChild(name);
+
+            this.resultsList.appendChild(row);
+        });
+
+        deadPlayer.forEach((playerId) => {
+            const row = document.createElement("div");
+            row.classList.add("flexRow", "resultRow");
+
+            const place = document.createElement("div");
+            place.innerText = "-";
+            row.appendChild(place);
+
+            const name = document.createElement("div");
+            name.innerText = data.player[playerId].name;
+            row.appendChild(name);
+
+            this.resultsList.appendChild(row);
+        });
+
+        this.results.style.display = "";
+
+        this.resultsNextButton.disabled = data.host !== getId();
+    }
+
+    onColors () {
+        this.results.style.display = "none";
+        GameInstance.resetPlayer();
+    }
+
+    nextGame () {
+        send("setPhase", { phase: Phases.Colors });
+    }
+
     stopListen () {
         addEventListener("joinGame", this.onJoinGame, this);
 
@@ -167,3 +263,4 @@ class _GameManager {
 }
 
 export const GameManager = new _GameManager();
+globalThis.GameManager = GameManager;

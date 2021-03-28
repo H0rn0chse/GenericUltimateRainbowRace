@@ -1,10 +1,9 @@
 import { Player } from "../gameObjects/Player.js";
 import { BlockMap } from "../gameObjects/BlockMap.js";
 import { Inventory } from "../gameObjects/Inventory.js";
-import { GameManager } from "../views/GameManager.js";
+import { Status, GameManager } from "../views/GameManager.js";
 import { Rainbow } from "../gameObjects/Rainbow.js";
 import { PhaseManager, Phases } from "../PhaseManager.js";
-
 
 const { Scene } = globalThis.Phaser;
 
@@ -79,6 +78,7 @@ export class GameScene extends Scene {
         this.playerPuppets = this.add.group();
 
         this.player = this.addGameObject(new Player(this.physics.world, this, this.map.getSpawnPoint()));
+        this.map.onPlayerCreated(this.player);
 
         this.createFlag();
 
@@ -101,7 +101,9 @@ export class GameScene extends Scene {
     }
 
     playerReachedFlag (player, flag) {
-        console.log("Player Reached Flag");
+        if (PhaseManager.isPhase(Phases.Run)) {
+            GameManager.endRun(Status.Alive);
+        }
     }
 
     createPlayer (id, x, y) {
@@ -121,6 +123,11 @@ export class GameScene extends Scene {
         puppet.setPosition(x, y);
         puppet.anims.play(animation, true);
         puppet.flipX = flipX;
+    }
+
+    resetPlayer () {
+        const spawnPoint = this.map.getSpawnPoint()
+        this.player.setPosition(spawnPoint.x, spawnPoint.y);
     }
 
     setBlock (x, y, blockType, flipX = false) {

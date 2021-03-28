@@ -9,8 +9,13 @@ class _GameHandler {
         registerMessageHandler("setBlock", this.onSetBlock, this);
         registerMessageHandler("setPhase", this.onSetPhase, this);
         registerMessageHandler("setCountdown", this.onSetCountdown, this);
+<<<<<<< HEAD
         registerMessageHandler("pickBlock", this.onPickBlock, this);
         registerMessageHandler("fillInv", this.onFillInv, this);
+=======
+        registerMessageHandler("resetRun", this.onResetRun, this);
+        registerMessageHandler("runEnd", this.onRunEnd, this);
+>>>>>>> 4aaaee006d554adc272a1cfae65ee827ffb4cd83
     }
 
     _getLobbyData (playerId) {
@@ -124,6 +129,37 @@ class _GameHandler {
         }
 
         publish(lobby.topic, "setCountdown", data);
+    }
+
+    onResetRun (ws, data, playerId) {
+        const lobby = this._getLobbyData(playerId);
+
+        if (!lobby && !lobby.isHost) {
+            return;
+        }
+
+        lobby.data.run = {};
+        publish(lobby.topic, "resetRun", {});
+    }
+
+    onRunEnd (ws, data, playerId) {
+        const lobby = this._getLobbyData(playerId);
+
+        if (!lobby || !lobby.data.run) {
+            return;
+        }
+
+        const count = Object.keys(lobby.data.run).length + 1;
+        lobby.data.run[playerId] = {
+            status: data.status,
+            count,
+        };
+
+        if (Object.keys(lobby.data.player).length === count) {
+            publish(lobby.topic, "runEnd", lobby.data);
+        } else {
+            publish(lobby.topic, "runProgress", lobby.data);
+        }
     }
 
     // ================= not bound to events ==================================================

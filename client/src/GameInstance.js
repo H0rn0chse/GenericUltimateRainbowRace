@@ -14,7 +14,7 @@ class _GameInstance {
             physics: {
                 default: "arcade",
                 arcade: {
-                    debug: true,
+                    debug: false,
                     gravity: { y: 600 },
                 },
             },
@@ -39,6 +39,10 @@ class _GameInstance {
         this.game.scene.add("GameScene", this.scenes.GameScene, true);
 
         return this.sceneDeferred.promise;
+    }
+
+    resetPlayer () {
+        this.scenes.GameScene.resetPlayer();
     }
 
     destroyScenes () {
