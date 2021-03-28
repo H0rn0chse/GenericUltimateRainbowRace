@@ -1,5 +1,6 @@
 import { getId, send, addEventListener, removeEventListener } from "./socket.js";
 import { GameManager } from "./views/GameManager.js";
+import { GameInstance } from "./GameInstance.js";
 
 export const Phases = {
     Initial: "Intial",
@@ -12,6 +13,7 @@ export const Phases = {
 class _PhaseManager {
     constructor () {
         addEventListener("joinGame", this.onJoinGame, this);
+        addEventListener("setPhase", this.onSetPhase, this);
 
         this.isHost = false;
 
@@ -43,8 +45,10 @@ class _PhaseManager {
             return;
         }
 
-        this.currentPhase = data.phase;
-        this.dispatch(data.phase, data);
+        GameInstance.sceneDeferred.promise.then(() => {
+            this.currentPhase = data.phase;
+            this.dispatch(data.phase, data);
+        });
     }
 }
 
