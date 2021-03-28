@@ -32,5 +32,6 @@ module.exports = {
         "no-useless-constructor": "off",
         "no-underscore-dangle": "off",
         "consistent-return": "off",
+        "prefer-arrow-callback": "off",
     },
 };
