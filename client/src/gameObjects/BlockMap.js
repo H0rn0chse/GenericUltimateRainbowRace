@@ -70,8 +70,7 @@ export class BlockMap extends Physics.Arcade.StaticGroup {
                 draggedBlock.resetHighlight();
                 draggedBlock.refreshBody();
                 inv.disableInventory();
-
-                GameManager.setBlock(draggedBlock.x, draggedBlock.y, draggedBlock.type);
+                GameManager.setBlock(draggedBlock.x, draggedBlock.y, draggedBlock.type, draggedBlock.isFlipped());
             } else {
                 draggedBlock.destroy();
             }
@@ -112,13 +111,14 @@ export class BlockMap extends Physics.Arcade.StaticGroup {
         return !collision;
     }
 
-    createBlock (x, y, blockType = "Boring") {
+    createBlock (x, y, blockType = "Boring", flipX = false) {
         const BlockConstructor = BlockTypes[blockType];
 
         const block = new BlockConstructor({
             scene: this.scene,
             x,
             y,
+            flipped: flipX
         });
         block.type = blockType;
         this.add(block);
