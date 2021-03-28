@@ -1,3 +1,5 @@
+import { Phases, PhaseManager } from "../PhaseManager.js";
+
 const { Physics } = globalThis.Phaser;
 const { Sprite } = Physics.Arcade;
 
@@ -68,6 +70,12 @@ export class Player extends Sprite {
     update () {
         // only handle the real player
         if (this.isPuppet) {
+            return;
+        }
+
+        // only allow user input during run phase
+        if (!PhaseManager.isPhase(Phases.Run)) {
+            this.anims.play("playerIdle");
             return;
         }
 
