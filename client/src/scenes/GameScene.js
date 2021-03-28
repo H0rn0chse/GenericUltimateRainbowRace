@@ -121,8 +121,8 @@ export class GameScene extends Scene {
         puppet.flipX = flipX;
     }
 
-    setBlock (x, y, blockType) {
-        this.map.createBlock(x, y, blockType);
+    setBlock (x, y, blockType, flipX = false) {
+        this.map.createBlock(x, y, blockType, flipX);
     }
 
     getCursor () {

@@ -54,8 +54,8 @@ class _GameInstance {
         this.scenes.GameScene.updatePlayer(id, x, y, animation, flipX);
     }
 
-    setBlock (x, y, blockType) {
-        this.scenes.GameScene.setBlock(x, y, blockType);
+    setBlock (x, y, blockType, flipX) {
+        this.scenes.GameScene.setBlock(x, y, blockType, flipX);
     }
 }
 

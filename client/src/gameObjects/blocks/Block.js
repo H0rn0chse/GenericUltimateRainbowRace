@@ -4,12 +4,18 @@ export class Block extends Physics.Arcade.Image {
     constructor (config, sprite) {
         super(config.scene, config.x, config.y, sprite);
         this._isPreview = false;
-        this._isFlipped = false;
+        if (config.flipped) {
+            this.flipBlock();
+        }
+
     }
 
     flipBlock() {
         this._isFlipped = !this._isFlipped;
         this.flipX = this._isFlipped;
+    }
+    isFlipped() {
+        return this._isFlipped;
     }
 
     onPlayerCollision (player) {
