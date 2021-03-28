@@ -2,7 +2,7 @@ import * as Globals from "../Globals.js";
 import { GameManager } from "../views/GameManager.js";
 import { BlockBoring } from "./blocks/BlockBoring.js";
 import { BlockBreakable } from "./blocks/BlockBreakable.js";
-import { BlockGunSlow } from "./blocks/BlockGunSlow.js";
+import { BlockGunSlow, BlockGunFast } from "./blocks/BlockGun.js";
 import { Inventory } from "./Inventory.js";
 
 const { Physics, Input } = globalThis.Phaser;
@@ -10,7 +10,8 @@ const { Physics, Input } = globalThis.Phaser;
 const BlockTypes = {
     Boring: BlockBoring,
     Breakable: BlockBreakable,
-    GunSlow: BlockGunSlow
+    GunSlow: BlockGunSlow,
+    GunFast: BlockGunFast
 };
 let inv;
 let isDragging = false;
@@ -136,7 +137,9 @@ export class BlockMap extends Physics.Arcade.StaticGroup {
         this.load.spritesheet("block_stone", "/assets/1_stone.png", { frameWidth: 42, frameHeight: 42 });
         this.load.spritesheet("block_grass", "/assets/2_stone.png", { frameWidth: 42, frameHeight: 42 });
         this.load.spritesheet("gun_slow", "/assets/gun_slow.png", { frameWidth: 42, frameHeight: 42 });
+        this.load.spritesheet("gun_fast", "/assets/gun_fast.png", { frameWidth: 42, frameHeight: 42 });
         this.load.spritesheet("bullet_big", "/assets/bullet_big.png", { frameWidth: 10, frameHeight: 6 });
+        this.load.spritesheet("bullet_small", "/assets/bullet_small.png", { frameWidth: 10, frameHeight: 6 });
 
         this.load.image("atlas", "/assets/tilemap/atlas.png");
         this.load.tilemapTiledJSON("level_0", "assets/tilemap/level_0.json");
