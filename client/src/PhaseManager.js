@@ -96,7 +96,7 @@ class _PhaseManager {
             return;
         }
 
-        this._startPhaseCountdown(1, Phases.PreRun);
+        this._startPhaseCountdown(10, Phases.PreRun);
     }
 
     onPreRun () {
@@ -104,7 +104,7 @@ class _PhaseManager {
             return;
         }
 
-        this._startPhaseCountdown(1, Phases.Run);
+        this._startPhaseCountdown(3, Phases.Run);
     }
 
     onRun () {
