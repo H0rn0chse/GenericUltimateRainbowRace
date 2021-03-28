@@ -108,14 +108,18 @@ export function startServer () {
 
     wss.on("connection", (ws) => {
         globalThis.console.log("WebSocket opens");
-        ws.id = PlayerManager.addPlayer();
+        const playerId = PlayerManager.addPlayer();
+        ws.id = playerId;
         send(ws, "playerId", {
             id: ws.id,
         });
 
         ws.on("message", handleMessage.bind(null, ws));
 
-        ws.on("close", (ws) => {
+        ws.on("close", () => {
+            const ws = {
+                id: playerId,
+            };
             TopicManager.unsubscribeAll(ws);
             handleMessage(ws, {
                 channel: "close",

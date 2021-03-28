@@ -32,7 +32,7 @@ class _TopicManager {
     unsubscribeAll (ws) {
         const userTopics = this.users.get(ws.id);
         if (userTopics) {
-            userTopics.forEach((topic, topicUsers) => {
+            userTopics.forEach((topicUsers, topic) => {
                 topicUsers.delete(ws.id);
             });
             this.users.delete(ws.id);
