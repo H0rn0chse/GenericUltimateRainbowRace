@@ -71,7 +71,7 @@ export function subscribe (ws, topic) {
     try {
         ws.subscribe(topic);
     } catch (err) {
-        // console.error(err);
+        console.error(err);
     }
 }
 
@@ -79,40 +79,44 @@ export function unsubscribe (ws, topic) {
     try {
         ws.unsubscribe(topic);
     } catch (err) {
-        // console.error(err);
+        console.error(err);
     }
 }
 
 export function startServer () {
-    app.ws("/ws", {
-        idleTimeout: 55,
-        open: (ws) => {
-            globalThis.console.log("WebSocket opens");
-            ws.id = PlayerManager.addPlayer();
-            send(ws, "playerId", {
-                id: ws.id,
-            });
-        },
-        message: handleMessage,
-        close: (ws, code, message) => {
-            handleMessage(ws, {
-                channel: "close",
-                data: {},
-            });
-            PlayerManager.removePlayer(ws.id);
-            globalThis.console.log("WebSocket closed");
-        },
-    })
-        .file("/", indexHtml, { lastModified: false, watch: local })
-        .folder("/", publicPath, { lastModified: false, watch: local })
-        .get("/*", (res, req) => {
-            res.writeStatus("404 Not Found").end("");
+    try {
+        app.ws("/ws", {
+            idleTimeout: 55,
+            open: (ws) => {
+                globalThis.console.log("WebSocket opens");
+                ws.id = PlayerManager.addPlayer();
+                send(ws, "playerId", {
+                    id: ws.id,
+                });
+            },
+            message: handleMessage,
+            close: (ws, code, message) => {
+                handleMessage(ws, {
+                    channel: "close",
+                    data: {},
+                });
+                PlayerManager.removePlayer(ws.id);
+                globalThis.console.log("WebSocket closed");
+            },
         })
-        .listen(host, port, (token) => {
-            if (token) {
-                globalThis.console.log(`Listening to http://${host}:${port}`);
-            } else {
-                globalThis.console.log(`Failed to listen to http://${host}:${port}`);
-            }
-        });
+            .file("/", indexHtml, { lastModified: false, watch: local })
+            .folder("/", publicPath, { lastModified: false, watch: local })
+            .get("/*", (res, req) => {
+                res.writeStatus("404 Not Found").end("");
+            })
+            .listen(host, port, (token) => {
+                if (token) {
+                    globalThis.console.log(`Listening to http://${host}:${port}`);
+                } else {
+                    globalThis.console.log(`Failed to listen to http://${host}:${port}`);
+                }
+            });
+    } catch (err) {
+        console.error(err);
+    }
 }
