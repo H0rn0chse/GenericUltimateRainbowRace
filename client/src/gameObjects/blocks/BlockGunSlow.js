@@ -1,4 +1,5 @@
 import { Block } from "./Block.js";
+import { Bullet } from "./../Bullet.js";
 
 const State = {
     Idle: 1,
@@ -11,6 +12,12 @@ const IDLE_TIME = 3000;
 export class BlockGunSlow extends Block {
     constructor(config) {
         super(config, "gun_slow");
+
+        this.bullets = config.scene.add.group({
+            classType: Bullet,
+            maxSize: 5,
+            runChildUpdate: true
+        });
 
         config.scene.anims.create({
             key: "gun_slow_idle",
@@ -58,11 +65,16 @@ export class BlockGunSlow extends Block {
             this.anims.play("gun_slow_warmup");
         } else if (this.state == State.Shooting) {
             this.anims.play("gun_slow_shooting");
+            this.fire()
         }
 
     }
 
-    onPlayerCollision(player) {
-
+    fire() {
+        var bullet = this.bullets.get();
+        if (bullet) {
+            bullet.fire(this.x, this.y, this.isFlipped());
+        }
     }
+
 }
