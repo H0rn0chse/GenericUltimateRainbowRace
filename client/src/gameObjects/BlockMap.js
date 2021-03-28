@@ -54,15 +54,19 @@ export class BlockMap extends Physics.Arcade.StaticGroup {
     getSpawnPoint () {
         return this.spawnPoint;
     }
-    fillInv(blockTypes){
-        inv.generateBlocks(this,blockTypes);
+
+    fillInv (blockTypes) {
+        inv.generateBlocks(this, blockTypes);
     }
-    sendInv(types){
+
+    sendInv (types) {
         GameManager.sendInv(types);
     }
-    generateInventory(count){
+
+    generateInventory (count) {
         inv.fillInventoryRandom(this, BlockTypes, count);
     }
+
     getEndPoint () {
         return this.endPoint;
     }
@@ -91,12 +95,15 @@ export class BlockMap extends Physics.Arcade.StaticGroup {
             draggedBlock = undefined;
         }
     }
-    sendBlockChoice(block){
+
+    sendBlockChoice (block) {
         GameManager.sendBlockChoice(block);
     }
-    removeInventoryBlock(block) {
+
+    removeInventoryBlock (block) {
         inv.disableOneBlock(block);
     }
+
     onPointerMove (pointer) {
         if (isDragging) {
             if (this.canPlaceBlockAt(pointer.worldX, pointer.worldY)) {
@@ -152,7 +159,7 @@ export class BlockMap extends Physics.Arcade.StaticGroup {
         return block;
     }
 
-    onPlayerCreated(player) {
+    onPlayerCreated (player) {
         this.children.entries.forEach((block) => {
             block.onPlayerCreated(player);
         });

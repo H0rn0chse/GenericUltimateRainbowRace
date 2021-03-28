@@ -9,13 +9,14 @@ export class Block extends Physics.Arcade.Sprite {
         }
     }
 
-    onPlayerCreated(player) {}
+    onPlayerCreated (player) {}
 
-    flipBlock() {
+    flipBlock () {
         this._isFlipped = !this._isFlipped;
         this.flipX = this._isFlipped;
     }
-    isFlipped() {
+
+    isFlipped () {
         return this._isFlipped;
     }
 

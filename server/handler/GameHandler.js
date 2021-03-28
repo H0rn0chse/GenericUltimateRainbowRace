@@ -35,8 +35,8 @@ class _GameHandler {
             isHost: data.host === playerId,
         };
     }
-    onFillInv(ws,data,playerId)
-    {
+
+    onFillInv (ws, data, playerId) {
         const lobby = this._getLobbyData(playerId);
 
         if (!lobby) {
@@ -47,8 +47,8 @@ class _GameHandler {
 
         publish(lobby.topic, "fillInv", data);
     }
-    onPickBlock(ws,data,playerId)
-    {
+
+    onPickBlock (ws, data, playerId) {
         const lobby = this._getLobbyData(playerId);
 
         if (!lobby) {
@@ -59,6 +59,7 @@ class _GameHandler {
 
         publish(lobby.topic, "pickBlock", data);
     }
+
     onLeaveGame (ws, data, playerId) {
         const lobby = this._getLobbyData(playerId);
 

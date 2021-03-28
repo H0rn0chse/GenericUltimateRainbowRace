@@ -75,7 +75,7 @@ export class Player extends Sprite {
         });
     }
 
-    die() {
+    die () {
         if (PhaseManager.isPhase(Phases.Run)) {
             console.log("Player died!");
             GameManager.endRun(Status.Dead);
@@ -84,9 +84,16 @@ export class Player extends Sprite {
         }
     }
 
+    reset (position) {
+        this.setPosition(position.x, position.y);
+        this.isDead = false;
+        this.body.setVelocityX(0);
+        this.anims.play("playerIdle");
+    }
+
     update () {
         // only handle the real player
-        if (this.isPuppet || this.isDead) {
+        if (this.isPuppet || this.isDead) {
             return;
         }
 

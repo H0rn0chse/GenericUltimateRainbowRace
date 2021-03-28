@@ -49,12 +49,9 @@ class _GameManager {
             { channel: "playerUpdate", handler: this.onPlayerUpdate },
             { channel: "playerRemoved", handler: this.onPlayerRemoved },
             { channel: "closeGame", handler: this.onCloseGame },
-<<<<<<< HEAD
-            { channel: "pickBlock", handler: this.onPickBlock},
-            { channel: "fillInv", handler: this.onFillInv},
-=======
+            { channel: "pickBlock", handler: this.onPickBlock },
+            { channel: "fillInv", handler: this.onFillInv },
             { channel: "resetRun", handler: this.onResetRun },
->>>>>>> 4aaaee006d554adc272a1cfae65ee827ffb4cd83
         ];
 
         this.runEnded = true;
@@ -107,35 +104,37 @@ class _GameManager {
         };
         send("setBlock", data);
     }
-    sendInv(types) {
-       
+
+    sendInv (types) {
         const data = {
-            types
-        }
+            types,
+        };
         send("fillInv", data);
     }
-    onFillInv(data)
-    {
+
+    onFillInv (data) {
         if (data.playerId === getId()) {
             return;
         }
         GameInstance.fillInv(data.types);
     }
-    sendBlockChoice(block){
+
+    sendBlockChoice (block) {
         const data = {
-            block
-        }
-        console.log("send"+ block);
+            block,
+        };
+        console.log(`send ${block}`);
         send("pickBlock", data);
     }
-    onPickBlock(data)
-    {
+
+    onPickBlock (data) {
         if (data.playerId === getId()) {
             return;
         }
         console.log(data.block);
         GameInstance.removeInventoryBlock(data.block);
     }
+
     onPlayerUpdate (data) {
         if (data.id === getId()) {
             return;
