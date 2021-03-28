@@ -28,7 +28,7 @@ class _GameHandler {
             name,
             data,
             topic: `lobby-${name}`,
-            isHost: data.host !== playerId,
+            isHost: data.host === playerId,
         };
     }
 
