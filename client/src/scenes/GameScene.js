@@ -13,6 +13,8 @@ export class GameScene extends Scene {
         this._collider = new Map();
         this._colliderWasUpdated = false;
         this.createDeferred = createDeferred;
+
+        globalThis.GameScene = this;
     }
 
     preload () {
