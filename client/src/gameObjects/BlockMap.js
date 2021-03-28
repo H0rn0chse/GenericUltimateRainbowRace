@@ -130,7 +130,17 @@ export class BlockMap extends Physics.Arcade.StaticGroup {
         block.visible = true;
         block.setActive(true);
 
+        if (this.scene.player) {
+            block.onPlayerCreated(this.scene.player);
+        }
+
         return block;
+    }
+
+    onPlayerCreated(player) {
+        this.children.entries.forEach((block) => {
+            block.onPlayerCreated(player);
+        });
     }
 
     registerPreloads () {

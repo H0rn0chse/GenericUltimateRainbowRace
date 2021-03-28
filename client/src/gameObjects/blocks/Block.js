@@ -7,8 +7,9 @@ export class Block extends Physics.Arcade.Sprite {
         if (config.flipped) {
             this.flipBlock();
         }
-
     }
+
+    onPlayerCreated(player) {}
 
     flipBlock() {
         this._isFlipped = !this._isFlipped;

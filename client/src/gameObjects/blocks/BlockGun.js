@@ -12,15 +12,24 @@ class BlockGun extends Block {
         super(config, "");
         this.texture = this.getSpriteName();
 
-        this.bullets = config.scene.add.group({
+        this.bullets = config.scene.physics.add.group({
             classType: this.getBullet(),
             maxSize: 10,
-            runChildUpdate: true
+            runChildUpdate: true,
+            allowGravity: false
         });
 
         this.createAnimations(config.scene);
 
         this.enterState(State.Idle);
+    }
+
+    onPlayerCreated(player) {
+        this.scene.physics.add.overlap(player, this.bullets, this.onPlayerBulletHit, null, this.scene);
+    }
+
+    onPlayerBulletHit(player, bullet) {
+        player.die();
     }
 
     getBullet() { return null; }
