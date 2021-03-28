@@ -13,7 +13,7 @@ module.exports = {
     },
     rules: {
         indent: ["error", 4, { SwitchCase: 1 }],
-        quotes: ["error", "double"],
+        quotes: ["warn", "double"],
         "space-before-function-paren": ["error", "always"],
         allowEmptyReject: "off",
         "import/extensions": "off",
@@ -35,5 +35,6 @@ module.exports = {
         "prefer-arrow-callback": "off",
         "prefer-destructuring": "warn",
         "import/no-cycle": "warn",
+        "comma-dangle": "warn",
     },
 };
