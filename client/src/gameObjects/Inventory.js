@@ -24,7 +24,7 @@ export class Inventory {
             const randomBlockId = blockIds[this.getRandomInt(blockCount)];
             inputTypes.push(randomBlockId);
         }
-
+        
         blockMap.sendInv(inputTypes);
         this.generateBlocks(blockMap, inputTypes);
     }
@@ -41,14 +41,13 @@ export class Inventory {
             const x = 30;
             const y = 100 + c * 60;
             const newBlock = blockMap.createBlock(x, y, type);
-            newBlock.setIsPreview(true);
             blocks.push(newBlock);
             c += 1;
             newBlock.setInteractive();
             newBlock.on("pointerdown", function (pointer) {
                 if (PhaseManager.isPhase(Phases.Build)) {
                     blockMap.setDraggingBlock(x, y, type);
-                    that.selectOneBlock(newBlock, blockMap);
+                    that.selectOneBlock(newBlock,blockMap);
                 }
             });
         });
@@ -60,26 +59,28 @@ export class Inventory {
         });
     }
 
-    selectOneBlock (blockChoice, blockMap) {
-        let c = 0;
+    selectOneBlock (blockChoice,blockMap) {
+        var c = 0;
         blocks.forEach(function (block) {
             if (blockChoice !== block) {
                 block.destroy();
-            } else {
+            }
+            else {
                 blockMap.sendBlockChoice(c);
             }
-            c += 1;
+            c = c+1;
         });
+        
     }
 
     disableOneBlock (blockNr) {
-        let c = 0;
+        var c = 0;
         console.log(blockNr);
         blocks.forEach(function (block) {
-            if (c === blockNr) {
+            if (c == blockNr) {
                 block.destroy();
             }
-            c += 1;
+            c = c+1;
         });
     }
 
