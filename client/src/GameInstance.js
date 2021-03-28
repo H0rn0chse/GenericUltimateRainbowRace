@@ -41,6 +41,10 @@ class _GameInstance {
         return this.sceneDeferred.promise;
     }
 
+    resetPlayer () {
+        this.scenes.GameScene.resetPlayer();
+    }
+
     destroyScenes () {
         this.scenes.GameScene.scene.remove("");
         this.scenes = {};

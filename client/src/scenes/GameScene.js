@@ -125,6 +125,11 @@ export class GameScene extends Scene {
         puppet.flipX = flipX;
     }
 
+    resetPlayer () {
+        const spawnPoint = this.map.getSpawnPoint()
+        this.player.setPosition(spawnPoint.x, spawnPoint.y);
+    }
+
     setBlock (x, y, blockType, flipX = false) {
         this.map.createBlock(x, y, blockType, flipX);
     }
