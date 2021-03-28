@@ -7,6 +7,7 @@ class _GameHandler {
         registerMessageHandler("close", this.onLeaveGame, this);
         registerMessageHandler("playerUpdate", this.onPlayerUpdate, this);
         registerMessageHandler("setBlock", this.onSetBlock, this);
+        registerMessageHandler("setPhase", this.onSetPhase, this);
     }
 
     _getLobbyData (playerId) {
@@ -26,6 +27,7 @@ class _GameHandler {
             name,
             data,
             topic: `lobby-${name}`,
+            isHost: data.host !== playerId,
         };
     }
 
@@ -43,7 +45,7 @@ class _GameHandler {
         // unsubscribe from lobby
         unsubscribe(ws, lobby.topic);
 
-        if (lobby.data.host !== playerId) {
+        if (!lobby.isHost) {
             publish(lobby.topic, "playerRemoved", { id: playerId });
         } else {
             publish(lobby.topic, "closeGame", { name: lobby.name });
@@ -76,6 +78,16 @@ class _GameHandler {
         data.playerId = playerId;
 
         publish(lobby.topic, "setBlock", data);
+    }
+
+    onSetPhase (ws, data, playerId) {
+        const lobby = this._getLobbyData(playerId);
+
+        if (!lobby && !lobby.isHost) {
+            return;
+        }
+
+        publish(lobby.topic, "setPhase", data);
     }
 
     // ================= not bound to events ==================================================

@@ -2,6 +2,7 @@ import { Player } from "../gameObjects/Player.js";
 import { BlockMap } from "../gameObjects/BlockMap.js";
 import { Inventory } from "../gameObjects/Inventory.js";
 import { GameManager } from "../views/GameManager.js";
+import { Rainbow } from "../gameObjects/Rainbow.js";
 
 const { Scene } = globalThis.Phaser;
 
@@ -65,17 +66,20 @@ export class GameScene extends Scene {
     }
 
     create () {
+        this.cursor = this.input.keyboard.createCursorKeys();
+
         const baqround = this.add.image(1280, 578, "baqround3");
         baqround.x = 1280 / 2;
         baqround.y = 578 / 2;
 
-        this.cursor = this.input.keyboard.createCursorKeys();
+        this.rainbow = this.addGameObject(new Rainbow(this.physics.world, this));
         this.map = this.addGameObject(new BlockMap(this.physics.world, this, 0));
+        this.playerPuppets = this.add.group();
+
         this.player = this.addGameObject(new Player(this.physics.world, this, this.map.getSpawnPoint()));
 
         this.createFlag();
 
-        this.playerPuppets = this.add.group();
         this.createDeferred.resolve();
     }
 

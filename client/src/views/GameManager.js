@@ -3,6 +3,9 @@ import { ViewManager } from "../ViewManager.js";
 import { getId, send, addEventListener, removeEventListener, ready } from "../socket.js";
 import { Timer } from "../Timer.js";
 
+// require to start attach listener
+// import { PhaseManager } from "../PhaseManager.js";
+
 class _GameManager {
     constructor () {
         this.lobbyName = "";
