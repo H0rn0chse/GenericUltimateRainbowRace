@@ -2,6 +2,7 @@ import * as Globals from "../Globals.js";
 import { GameManager } from "../views/GameManager.js";
 import { BlockBoring } from "./blocks/BlockBoring.js";
 import { BlockBox } from "./blocks/BlockBox.js";
+import { BlockSpeed } from "./blocks/BlockSpeed.js";
 import { BlockBreakable } from "./blocks/BlockBreakable.js";
 import { BlockGunSlow, BlockGunFast } from "./blocks/BlockGun.js";
 import { Inventory } from "./Inventory.js";
@@ -13,7 +14,8 @@ const BlockTypes = {
     Box: BlockBox,
     Breakable: BlockBreakable,
     GunSlow: BlockGunSlow,
-    GunFast: BlockGunFast
+    GunFast: BlockGunFast,
+    Speed: BlockSpeed
 };
 let inv;
 let isDragging = false;
@@ -149,6 +151,8 @@ export class BlockMap extends Physics.Arcade.StaticGroup {
         this.load.spritesheet("block_stone", "/assets/1_stone.png", { frameWidth: 42, frameHeight: 42 });
         this.load.spritesheet("block_grass", "/assets/2_stone.png", { frameWidth: 42, frameHeight: 42 });
         this.load.spritesheet("block_box", "/assets/block_box.png", { frameWidth: 42, frameHeight: 42 });
+        this.load.spritesheet("block_speed", "/assets/block_speed.png", { frameWidth: 42, frameHeight: 42 });
+
         this.load.spritesheet("gun_slow", "/assets/gun_slow.png", { frameWidth: 42, frameHeight: 42 });
         this.load.spritesheet("gun_fast", "/assets/gun_fast.png", { frameWidth: 42, frameHeight: 42 });
         this.load.spritesheet("bullet_big", "/assets/bullet_big.png", { frameWidth: 10, frameHeight: 6 });
