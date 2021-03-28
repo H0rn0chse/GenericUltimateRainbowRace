@@ -1,7 +1,7 @@
 import { Block } from "./Block.js";
 
 export class BlockBoring extends Block {
-    constructor(config) {
+    constructor (config) {
         super(config, "block_grass");
     }
 }
