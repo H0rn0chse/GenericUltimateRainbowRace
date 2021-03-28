@@ -92,7 +92,7 @@ class _PhaseManager {
         if (!this.isHost) {
             return;
         }
-
+    
         this._startPhaseCountdown(4, Phases.PreRun);
     }
 

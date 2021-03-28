@@ -57,6 +57,15 @@ class _GameInstance {
     setBlock (x, y, blockType, flipX) {
         this.scenes.GameScene.setBlock(x, y, blockType, flipX);
     }
+    removeInventoryBlock(block) {
+        this.scenes.GameScene.removeInventoryBlock(block);
+    }
+    fillInv(blockTypes) {
+        this.scenes.GameScene.fillInv(blockTypes);
+    }
+    generateInventory(count) {
+        this.scenes.GameScene.generateInventory(count);
+    }
 }
 
 export const GameInstance = new _GameInstance();

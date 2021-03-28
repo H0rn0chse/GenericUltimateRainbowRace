@@ -9,6 +9,8 @@ class _GameHandler {
         registerMessageHandler("setBlock", this.onSetBlock, this);
         registerMessageHandler("setPhase", this.onSetPhase, this);
         registerMessageHandler("setCountdown", this.onSetCountdown, this);
+        registerMessageHandler("pickBlock", this.onPickBlock, this);
+        registerMessageHandler("fillInv", this.onFillInv, this);
     }
 
     _getLobbyData (playerId) {
@@ -31,7 +33,30 @@ class _GameHandler {
             isHost: data.host === playerId,
         };
     }
+    onFillInv(ws,data,playerId)
+    {
+        const lobby = this._getLobbyData(playerId);
 
+        if (!lobby) {
+            return;
+        }
+
+        data.playerId = playerId;
+
+        publish(lobby.topic, "fillInv", data);
+    }
+    onPickBlock(ws,data,playerId)
+    {
+        const lobby = this._getLobbyData(playerId);
+
+        if (!lobby) {
+            return;
+        }
+
+        data.playerId = playerId;
+
+        publish(lobby.topic, "pickBlock", data);
+    }
     onLeaveGame (ws, data, playerId) {
         const lobby = this._getLobbyData(playerId);
 

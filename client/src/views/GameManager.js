@@ -39,6 +39,8 @@ class _GameManager {
             { channel: "playerUpdate", handler: this.onPlayerUpdate },
             { channel: "playerRemoved", handler: this.onPlayerRemoved },
             { channel: "closeGame", handler: this.onCloseGame },
+            { channel: "pickBlock", handler: this.onPickBlock},
+            { channel: "fillInv", handler: this.onFillInv},
         ];
     }
 
@@ -77,7 +79,35 @@ class _GameManager {
         };
         send("setBlock", data);
     }
-
+    sendInv(types) {
+       
+        const data = {
+            types
+        }
+        send("fillInv", data);
+    }
+    onFillInv(data)
+    {
+        if (data.playerId === getId()) {
+            return;
+        }
+        GameInstance.fillInv(data.types);
+    }
+    sendBlockChoice(block){
+        const data = {
+            block
+        }
+        console.log("send"+ block);
+        send("pickBlock", data);
+    }
+    onPickBlock(data)
+    {
+        if (data.playerId === getId()) {
+            return;
+        }
+        console.log(data.block);
+        GameInstance.removeInventoryBlock(data.block);
+    }
     onPlayerUpdate (data) {
         if (data.id === getId()) {
             return;
