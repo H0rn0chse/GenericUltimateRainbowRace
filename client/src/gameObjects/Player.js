@@ -10,6 +10,7 @@ export class Player extends Sprite {
 
         this.cursor = scene.getCursor();
         this.isPuppet = isPuppet;
+        this.impulse = new Phaser.Math.Vector2(0, 0);
 
         if (!isPuppet) {
             this.name = "Player";
@@ -124,6 +125,8 @@ export class Player extends Sprite {
             this.anims.play("playerIdle");
         }
 
+
+
         // should watch right
         if (this.body.velocity.x > 0) {
             this.flipX = false;
@@ -134,6 +137,11 @@ export class Player extends Sprite {
         if (this.cursor.up.isDown && this.body.onFloor()) {
             this.body.setVelocityY(-500);
         }
+
+        this.body.velocity.x += this.impulse.x;
+        this.body.velocity.y += this.impulse.y;
+        this.impulse.x *= 0.95;
+        this.impulse.y *= 0.95;
     }
 
     registerPreloads () {
