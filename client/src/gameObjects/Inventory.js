@@ -1,10 +1,4 @@
-import { GameInstance } from "../GameInstance.js";
-import * as Globals from "../Globals.js";
 import { Phases, PhaseManager } from "../PhaseManager.js";
-import { BlockBoring } from "./blocks/BlockBoring.js";
-
-const { GameObjects } = globalThis.Phaser;
-const { Group, Image } = GameObjects;
 
 const blocks = [];
 let that;

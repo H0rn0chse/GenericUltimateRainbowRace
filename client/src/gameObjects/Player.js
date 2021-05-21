@@ -1,10 +1,8 @@
+import { Phaser } from "../Globals.js";
 import { Phases, PhaseManager } from "../PhaseManager.js";
 import { Status, GameManager } from "../views/GameManager.js";
 
-const { Physics } = globalThis.Phaser;
-const { Sprite } = Physics.Arcade;
-
-export class Player extends Sprite {
+export class Player extends Phaser.Physics.Arcade.Sprite {
     constructor (world, scene, spawnPoint, isPuppet = false) {
         super(scene, spawnPoint.x, spawnPoint.y - 30, "unicorn");
 
@@ -139,10 +137,5 @@ export class Player extends Sprite {
         this.body.velocity.y += this.impulse.y;
         this.impulse.x *= 0.95;
         this.impulse.y *= 0.95;
-    }
-
-    registerPreloads () {
-        this.load.spritesheet("dude", "/assets/dude.png", { frameWidth: 32, frameHeight: 48 });
-        this.load.spritesheet("unicorn", "/assets/unicorn.png", { frameWidth: 84, frameHeight: 84 });
     }
 }

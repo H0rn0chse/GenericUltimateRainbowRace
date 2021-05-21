@@ -1,3 +1,5 @@
+import { Phaser } from "../Globals.js";
+
 class Bullet extends Phaser.Physics.Arcade.Sprite {
     constructor (scene) {
         super(scene, 0, 0, "");

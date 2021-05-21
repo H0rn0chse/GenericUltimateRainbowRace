@@ -1,6 +1,5 @@
 import { Player } from "../gameObjects/Player.js";
 import { BlockMap } from "../gameObjects/BlockMap.js";
-import { Inventory } from "../gameObjects/Inventory.js";
 import { Status, GameManager } from "../views/GameManager.js";
 import { Rainbow } from "../gameObjects/Rainbow.js";
 import { PhaseManager, Phases } from "../PhaseManager.js";
@@ -8,9 +7,8 @@ import { PhaseManager, Phases } from "../PhaseManager.js";
 const { Scene } = globalThis.Phaser;
 
 export class GameScene extends Scene {
-    constructor (preloads, createDeferred) {
+    constructor (createDeferred) {
         super();
-        this._preloads = preloads;
         this._gameObjects = new Map();
         this._collider = new Map();
         this._colliderWasUpdated = false;
@@ -20,15 +18,28 @@ export class GameScene extends Scene {
     }
 
     preload () {
-        this._preloads.forEach((load) => {
-            load.apply(this);
-        });
+        this.load.setPath("assets/baqrounds");
+        this.load.image("baqround1", "baqround1.png");
+        this.load.image("baqround2", "baqround2.png");
+        this.load.image("baqround3", "baqround3.png");
 
-        this.load.image("baqround1", "/assets/baqround1.png");
-        this.load.image("baqround2", "/assets/baqround2.png");
-        this.load.image("baqround3", "/assets/baqround3.png");
-        this.load.image("star", "/assets/star.png");
-        this.load.spritesheet("flag", "/assets/flag.png", { frameWidth: 42, frameHeight: 42 });
+        this.load.setPath("assets/blocks");
+        this.load.spritesheet("flag", "flag.png", { frameWidth: 42, frameHeight: 42 });
+        this.load.spritesheet("gun_slow", "gun_slow.png", { frameWidth: 42, frameHeight: 42 });
+        this.load.spritesheet("gun_fast", "gun_fast.png", { frameWidth: 42, frameHeight: 42 });
+        this.load.spritesheet("bullet_big", "bullet_big.png", { frameWidth: 10, frameHeight: 6 });
+        this.load.spritesheet("bullet_small", "bullet_small.png", { frameWidth: 10, frameHeight: 6 });
+        this.load.spritesheet("block_stone", "1_stone.png", { frameWidth: 42, frameHeight: 42 });
+        this.load.spritesheet("block_grass", "2_stone.png", { frameWidth: 42, frameHeight: 42 });
+        this.load.spritesheet("block_box", "block_box.png", { frameWidth: 42, frameHeight: 42 });
+        this.load.spritesheet("block_speed", "block_speed.png", { frameWidth: 42, frameHeight: 42 });
+
+        this.load.setPath("assets/tilemap");
+        this.load.image("atlas", "atlas.png");
+        this.load.tilemapTiledJSON("level_0", "level_0.json");
+
+        this.load.setPath("assets/unicorn");
+        this.load.spritesheet("unicorn", "unicorn.png", { frameWidth: 84, frameHeight: 84 });
     }
 
     addGameObject (gameObject) {

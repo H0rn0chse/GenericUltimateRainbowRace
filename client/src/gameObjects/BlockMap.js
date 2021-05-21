@@ -1,4 +1,3 @@
-import * as Globals from "../Globals.js";
 import { GameManager } from "../views/GameManager.js";
 import { BlockBoring } from "./blocks/BlockBoring.js";
 import { BlockBox } from "./blocks/BlockBox.js";
@@ -6,8 +5,7 @@ import { BlockSpeed } from "./blocks/BlockSpeed.js";
 import { BlockBreakable } from "./blocks/BlockBreakable.js";
 import { BlockGunSlow, BlockGunFast } from "./blocks/BlockGun.js";
 import { Inventory } from "./Inventory.js";
-
-const { Physics, Input } = globalThis.Phaser;
+import { BLOCK_SIZE, Phaser } from "../Globals.js";
 
 const BlockTypes = {
     Boring: BlockBoring,
@@ -21,7 +19,7 @@ let inv;
 let isDragging = false;
 let draggedBlock;
 
-export class BlockMap extends Physics.Arcade.StaticGroup {
+export class BlockMap extends Phaser.Physics.Arcade.StaticGroup {
     constructor (world, scene, levelId) {
         super(world, scene, [], {});
         this.name = "Map";
@@ -48,8 +46,8 @@ export class BlockMap extends Physics.Arcade.StaticGroup {
         inv = new Inventory(scene);
         //
 
-        scene.input.on(Input.Events.POINTER_UP, this.onPointerUp, this);
-        scene.input.on(Input.Events.POINTER_MOVE, this.onPointerMove, this);
+        scene.input.on(Phaser.Input.Events.POINTER_UP, this.onPointerUp, this);
+        scene.input.on(Phaser.Input.Events.POINTER_MOVE, this.onPointerMove, this);
         scene.input.keyboard.on("keydown-R", this.onBlockFlip, this);
     }
 
@@ -129,7 +127,7 @@ export class BlockMap extends Physics.Arcade.StaticGroup {
 
         let collision = false;
         blocks.forEach((block) => {
-            if (!block.isPreview() && Math.abs(block.x - x) <= Globals.BLOCK_SIZE && Math.abs(block.y - y) <= Globals.BLOCK_SIZE) {
+            if (!block.isPreview() && Math.abs(block.x - x) <= BLOCK_SIZE && Math.abs(block.y - y) <= BLOCK_SIZE) {
                 collision = true;
             }
         });
@@ -165,20 +163,5 @@ export class BlockMap extends Physics.Arcade.StaticGroup {
         this.children.entries.forEach((block) => {
             block.onPlayerCreated(player);
         });
-    }
-
-    registerPreloads () {
-        this.load.spritesheet("block_stone", "/assets/1_stone.png", { frameWidth: 42, frameHeight: 42 });
-        this.load.spritesheet("block_grass", "/assets/2_stone.png", { frameWidth: 42, frameHeight: 42 });
-        this.load.spritesheet("block_box", "/assets/block_box.png", { frameWidth: 42, frameHeight: 42 });
-        this.load.spritesheet("block_speed", "/assets/block_speed.png", { frameWidth: 42, frameHeight: 42 });
-
-        this.load.spritesheet("gun_slow", "/assets/gun_slow.png", { frameWidth: 42, frameHeight: 42 });
-        this.load.spritesheet("gun_fast", "/assets/gun_fast.png", { frameWidth: 42, frameHeight: 42 });
-        this.load.spritesheet("bullet_big", "/assets/bullet_big.png", { frameWidth: 10, frameHeight: 6 });
-        this.load.spritesheet("bullet_small", "/assets/bullet_small.png", { frameWidth: 10, frameHeight: 6 });
-
-        this.load.image("atlas", "/assets/tilemap/atlas.png");
-        this.load.tilemapTiledJSON("level_0", "assets/tilemap/level_0.json");
     }
 }
