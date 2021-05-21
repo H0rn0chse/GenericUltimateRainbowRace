@@ -12,6 +12,8 @@ export class Player extends Sprite {
         this.isPuppet = isPuppet;
         this.impulse = new Phaser.Math.Vector2(0, 0);
 
+        this.walkSpeed = 180;
+
         if (!isPuppet) {
             this.name = "Player";
             this.collider = [{
@@ -32,6 +34,10 @@ export class Player extends Sprite {
 
             this.setBounce(0.2);
             this.setCollideWorldBounds(true);
+
+            this.keyW = scene.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.W);
+            this.keyA = scene.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.A);
+            this.keyD = scene.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.D);
         }
 
         scene.anims.create({
@@ -106,36 +112,27 @@ export class Player extends Sprite {
             return;
         }
 
-        if (this.cursor.left.isDown) {
-            this.body.setVelocityX(-180);
+        // get user directional input
+        let ctrlDir = 0;
+        if (this.cursor.left.isDown || this.keyA.isDown) { ctrlDir -= 1; }
+        if (this.cursor.right.isDown || this.keyD.isDown) { ctrlDir += 1; }
 
-            if (!this.body.onFloor()) {
-                this.anims.play("playerJumpLeft", true);
-            } else {
-                this.anims.play("playerWalkLeft", true);
-            }
-        } else if (this.cursor.right.isDown) {
-            this.body.setVelocityX(180);
+        this.body.setVelocityX(ctrlDir * this.walkSpeed);
 
-            if (!this.body.onFloor()) {
-                this.anims.play("playerJumpRight", true);
-            } else {
-                this.anims.play("playerWalkRight", true);
-            }
+        if (ctrlDir !== 0) {
+            const strJump = (this.body.onFloor()) ? "Walk" : "Jump";
+            const strWalk = (ctrlDir > 0) ? "Right" : "Left";
+
+            this.anims.play(`player${strJump}${strWalk}`, true);
+            this.flipX = ctrlDir < 0;
         } else {
-            this.body.setVelocityX(0);
             this.anims.play("playerIdle");
         }
 
-        // should watch right
-        if (this.body.velocity.x > 0) {
-            this.flipX = false;
-        } else if (this.body.velocity.x < 0) {
-            this.flipX = true;
-        }
-
-        if (this.cursor.up.isDown && this.body.onFloor()) {
-            this.body.setVelocityY(-500);
+        if (this.body.onFloor()) {
+            if (this.cursor.up.isDown || this.keyW.isDown) {
+                this.body.setVelocityY(-500);
+            }
         }
 
         this.body.velocity.x += this.impulse.x;
