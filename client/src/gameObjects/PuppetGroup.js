@@ -22,6 +22,8 @@ export class PuppetGroup extends Phaser.GameObjects.Group {
         puppet.setPosition(x, y);
         puppet.anims.play(data.anim, true);
         puppet.flipX = data.flipX;
+        puppet.body.setVelocityX(data.vel.x);
+        puppet.body.setVelocityY(data.vel.y);
     }
 
     onPlayerRemoved (playerId) {

@@ -3,6 +3,7 @@ import { ViewManager } from "../ViewManager.js";
 import { getId, send, addEventListener, removeEventListener, ready } from "../socket.js";
 import { Phases, PhaseManager } from "../PhaseManager.js";
 import { GameBus } from "../EventBus.js";
+import { _ } from "../Globals.js";
 
 export const Status = {
     Alive: "Alive",
@@ -61,6 +62,8 @@ class _GameManager {
         this.runEnded = true;
         PhaseManager.listen(Phases.Results, this.onResults.bind(this));
         PhaseManager.listen(Phases.Colors, this.onColors.bind(this));
+
+        this.updatePlayer = _.throttle(this._updatePlayer, 100);
     }
 
     show () {
@@ -89,11 +92,15 @@ class _GameManager {
         }
     }
 
-    updatePlayer (x, y, anim, flipX) {
+    _updatePlayer (x, y, anim, flipX, velX, velY) {
         const data = {
             pos: {
                 x,
                 y,
+            },
+            vel: {
+                x: velX,
+                y: velY,
             },
             flipX,
             anim,

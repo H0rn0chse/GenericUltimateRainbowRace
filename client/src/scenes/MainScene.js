@@ -150,6 +150,6 @@ export class MainScene extends Phaser.Scene {
             gameObject.update?.(time, delta);
         });
 
-        GameManager.updatePlayer(this.player.x, this.player.y, this.player.anims.currentAnim.key, this.player.flipX);
+        GameManager.updatePlayer(this.player.x, this.player.y, this.player.anims.currentAnim.key, this.player.flipX, this.player.body.velocity.x, this.player.body.velocity.y);
     }
 }
