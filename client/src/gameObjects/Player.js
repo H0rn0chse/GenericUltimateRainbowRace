@@ -10,8 +10,6 @@ export class Player extends Phaser.Physics.Arcade.Sprite {
         this.isPuppet = isPuppet;
         this.impulse = new Phaser.Math.Vector2(0, 0);
 
-        this.walkSpeed = 180;
-
         if (!isPuppet) {
             this.name = "Player";
             this.collider = [{
@@ -30,12 +28,41 @@ export class Player extends Phaser.Physics.Arcade.Sprite {
             this.setSize(45, 50);
             this.setOffset(15, 5);
 
-            this.setBounce(0.2);
+            this.setBounce(0.0);
             this.setCollideWorldBounds(true);
 
-            this.keyW = scene.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.W);
-            this.keyA = scene.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.A);
-            this.keyD = scene.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.D);
+            // keys
+            this.keys = {};
+            this.keys.W = scene.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.W);
+            this.keys.A = scene.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.A);
+            this.keys.S = scene.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.S);
+            this.keys.D = scene.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.D);
+            this.keys.Space = scene.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.SPACE);
+
+            // constants
+            this.eps = 10;
+
+            // walking constants
+            this.walkAccel = 1.8;
+            this.walkSpeedMax = 180;
+            this.stopAccel = 0.9;
+
+            // jumping constants
+            this.jumpTimeMax = 400.0;
+            this.jumpTimeMin = 100.0;
+            this.jumpSpeed = 250.0;
+
+            // dashing constants
+            this.dashTime = 500.0;
+            this.dashSpeed = this.walkSpeedMax;
+
+            // state
+            this.curWalkSpeed = 0;
+            this.isCurJumping = false;
+            this.curJumpTime = 0;
+            this.isCurDashing = false;
+            this.hasDashed = false;
+            this.curDashTime = 0;
         }
 
         scene.anims.create({
@@ -98,7 +125,7 @@ export class Player extends Phaser.Physics.Arcade.Sprite {
         this.impulse.y = 0;
     }
 
-    update () {
+    update (time, delta) {
         // only handle the real player
         if (this.isPuppet || this.isDead) {
             return;
@@ -110,13 +137,67 @@ export class Player extends Phaser.Physics.Arcade.Sprite {
             return;
         }
 
-        // get user directional input
+        // Jump
+        this.curJumpTime += delta;
+        if (this.cursor.up.isDown || this.keys.W.isDown) {
+            // Start jump
+            if (this.body.onFloor()) {
+                this.isCurJumping = true;
+                this.curJumpTime = 0.0;
+            // Continue jump
+            } else if (this.isCurJumping) {
+                if (this.curJumpTime >= this.jumpTimeMax) {
+                    this.isCurJumping = false;
+                }
+            }
+        // End jump
+        } else if (this.isCurJumping && this.curJumpTime >= this.jumpTimeMin) {
+            this.isCurJumping = false;
+        }
+
+        // Dash
+        this.curDashTime += delta;
+        // Start dash
+        if (!this.isCurDashing
+            && !this.hasDashed
+            && (this.cursor.down.isDown || this.keys.S.isDown || this.keys.Space.isDown)) {
+            this.curDashTime = 0;
+            this.isCurDashing = true;
+            this.isCurJumping = false;
+            this.hasDashed = true;
+            this.body.setAllowGravity(false);
+            this.curWalkSpeed = (this.flipX ? -1 : 1) * (this.dashSpeed);
+        }
+        // End dash
+        if (this.isCurDashing && this.curDashTime > this.dashTime) {
+            this.isCurDashing = false;
+            this.body.setAllowGravity(true);
+        }
+        // Recover dash
+        if (this.body.onFloor()) {
+            this.hasDashed = false;
+        }
+
+        // walking & stopping
         let ctrlDir = 0;
-        if (this.cursor.left.isDown || this.keyA.isDown) { ctrlDir -= 1; }
-        if (this.cursor.right.isDown || this.keyD.isDown) { ctrlDir += 1; }
+        if (!this.isCurDashing) {
+            if (this.cursor.left.isDown || this.keys.A.isDown) { ctrlDir -= 1; }
+            if (this.cursor.right.isDown || this.keys.D.isDown) { ctrlDir += 1; }
 
-        this.body.setVelocityX(ctrlDir * this.walkSpeed);
+            if (ctrlDir !== 0) {
+                this.curWalkSpeed += ctrlDir * (this.walkAccel * delta);
+            } else {
+                this.curWalkSpeed -= Math.sign(this.curWalkSpeed) * (this.stopAccel * delta);
+                if (Math.abs(this.curWalkSpeed) < this.eps) {
+                    this.curWalkSpeed = 0;
+                }
+            }
+        }
 
+        // cap walk speed
+        this.curWalkSpeed = Math.sign(this.curWalkSpeed) * Math.min(Math.abs(this.curWalkSpeed), this.walkSpeedMax);
+
+        // determine animation
         if (ctrlDir !== 0) {
             const strJump = (this.body.onFloor()) ? "Walk" : "Jump";
             const strWalk = (ctrlDir > 0) ? "Right" : "Left";
@@ -127,14 +208,17 @@ export class Player extends Phaser.Physics.Arcade.Sprite {
             this.anims.play("playerIdle");
         }
 
-        if (this.body.onFloor()) {
-            if (this.cursor.up.isDown || this.keyW.isDown) {
-                this.body.setVelocityY(-500);
+        this.body.setVelocityX(this.curWalkSpeed + this.impulse.x);
+        if (!this.isCurDashing) {
+            if (this.isCurJumping) {
+                this.body.setVelocityY(this.impulse.y - this.jumpSpeed);
+            } else {
+                this.body.setVelocityY(this.body.velocity.y + this.impulse.y);
             }
+        } else {
+            this.body.setVelocityY(0);
         }
 
-        this.body.velocity.x += this.impulse.x;
-        this.body.velocity.y += this.impulse.y;
         this.impulse.x *= 0.95;
         this.impulse.y *= 0.95;
     }
