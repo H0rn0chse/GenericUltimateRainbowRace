@@ -5,7 +5,7 @@ export class BlockSpeed extends Block {
         super(config, "block_speed");
     }
 
-    onPlayerCollision(player) {
+    onPlayerCollision (player) {
         player.impulse.x = 400 * (this.isFlipped() ? -1 : 1);
         player.body.velocity.y = -500;
     }

@@ -37,14 +37,14 @@ export class Inventory {
 
     generateBlocks (blockMap, blockTypes) {
         let c = 0;
-        blockTypes.forEach(function (type) {
+        blockTypes.forEach((type) => {
             const x = 30;
             const y = 100 + c * 60;
             const newBlock = blockMap.createBlock(x, y, type);
             blocks.push(newBlock);
             c += 1;
             newBlock.setInteractive();
-            newBlock.on("pointerdown", function (pointer) {
+            newBlock.on("pointerdown", (pointer) => {
                 if (PhaseManager.isPhase(Phases.Build)) {
                     blockMap.setDraggingBlock(x, y, type);
                     that.selectOneBlock(newBlock, blockMap);
@@ -54,14 +54,14 @@ export class Inventory {
     }
 
     disableInventory () {
-        blocks.forEach(function (block) {
+        blocks.forEach((block) => {
             block.destroy();
         });
     }
 
     selectOneBlock (blockChoice, blockMap) {
         let c = 0;
-        blocks.forEach(function (block) {
+        blocks.forEach((block) => {
             if (blockChoice !== block) {
                 block.destroy();
             } else {
@@ -73,8 +73,7 @@ export class Inventory {
 
     disableOneBlock (blockNr) {
         let c = 0;
-        console.log(blockNr);
-        blocks.forEach(function (block) {
+        blocks.forEach((block) => {
             if (c === blockNr) {
                 block.destroy();
             }

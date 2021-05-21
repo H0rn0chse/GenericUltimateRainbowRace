@@ -127,8 +127,6 @@ export class Player extends Sprite {
             this.anims.play("playerIdle");
         }
 
-
-
         // should watch right
         if (this.body.velocity.x > 0) {
             this.flipX = false;

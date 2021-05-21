@@ -15,7 +15,7 @@ const BlockTypes = {
     Breakable: BlockBreakable,
     GunSlow: BlockGunSlow,
     GunFast: BlockGunFast,
-    Speed: BlockSpeed
+    Speed: BlockSpeed,
 };
 let inv;
 let isDragging = false;
@@ -50,7 +50,7 @@ export class BlockMap extends Physics.Arcade.StaticGroup {
 
         scene.input.on(Input.Events.POINTER_UP, this.onPointerUp, this);
         scene.input.on(Input.Events.POINTER_MOVE, this.onPointerMove, this);
-        scene.input.keyboard.on('keydown-R', this.onBlockFlip, this);
+        scene.input.keyboard.on("keydown-R", this.onBlockFlip, this);
     }
 
     getSpawnPoint () {
@@ -144,7 +144,7 @@ export class BlockMap extends Physics.Arcade.StaticGroup {
             scene: this.scene,
             x,
             y,
-            flipped: flipX
+            flipped: flipX,
         });
         block.type = blockType;
         this.add(block);
