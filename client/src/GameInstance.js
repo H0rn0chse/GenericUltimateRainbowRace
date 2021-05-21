@@ -22,20 +22,13 @@ class _GameInstance {
         };
 
         this.game = new globalThis.Phaser.Game(config);
-        this.preloads = {
-            GameScene: [],
-        };
         this.scenes = {};
 
         this.sceneDeferred = new Deferred();
     }
 
-    registerPreloads (sceneName, preloadHandler) {
-        this.preloads[sceneName].push(preloadHandler);
-    }
-
     createScene () {
-        this.scenes.GameScene = new GameScene(this.preloads.GameScene, this.sceneDeferred);
+        this.scenes.GameScene = new GameScene(this.sceneDeferred);
         this.game.scene.add("GameScene", this.scenes.GameScene, true);
 
         return this.sceneDeferred.promise;
@@ -77,6 +70,3 @@ class _GameInstance {
 
 export const GameInstance = new _GameInstance();
 globalThis.GameInstance = GameInstance;
-
-GameInstance.registerPreloads("GameScene", Player.prototype.registerPreloads);
-GameInstance.registerPreloads("GameScene", BlockMap.prototype.registerPreloads);

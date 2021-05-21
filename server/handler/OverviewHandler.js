@@ -1,4 +1,4 @@
-import { registerMessageHandler, send, publish, unsubscribe, subscribe } from "../socket2.js";
+import { registerMessageHandler, send, publish, unsubscribe, subscribe } from "../socket.js";
 import { LobbyManager } from "../LobbyManager.js";
 
 class _OverviewHandler {

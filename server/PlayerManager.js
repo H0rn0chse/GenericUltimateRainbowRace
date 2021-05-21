@@ -1,4 +1,4 @@
-import { registerMessageHandler } from "./socket2.js";
+import { registerMessageHandler } from "./socket.js";
 
 class _PlayerManager {
     constructor () {
