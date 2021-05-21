@@ -41,7 +41,7 @@ class BlockGun extends Block {
     getFireTimeDelta() { return 1000; }
 
     update(time, delta) {
-        if (this.isPreview() || !PhaseManager.isPhase(Phases.Run)) {
+        if (this.isPreview() || !PhaseManager.isPhase(Phases.Run)) {
             return;
         }
 
