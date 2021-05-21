@@ -12,8 +12,6 @@ export class Player extends Sprite {
         this.isPuppet = isPuppet;
         this.impulse = new Phaser.Math.Vector2(0, 0);
 
-        this.walkSpeed = 180;
-
         if (!isPuppet) {
             this.name = "Player";
             this.collider = [{
@@ -38,6 +36,24 @@ export class Player extends Sprite {
             this.keyW = scene.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.W);
             this.keyA = scene.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.A);
             this.keyD = scene.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.D);
+
+            // Constants
+            this.eps = 10;
+
+            // Walking Constants
+            this.walkAccel = 1.8;
+            this.walkSpeedMax = 180;
+            this.stopAccel = 0.9;
+
+            // Walking Constants
+            this.jumpTimeMax = 400.0;
+            this.jumpTimeMin = 100.0;
+            this.jumpSpeed = 250.0;
+
+            // State
+            this.curWalkSpeed = 0;
+            this.curJumpTime = 0;
+            this.isCurJumping = false;
         }
 
         scene.anims.create({
@@ -100,7 +116,7 @@ export class Player extends Sprite {
         this.impulse.y = 0;
     }
 
-    update () {
+    update (time, delta) {
         // only handle the real player
         if (this.isPuppet || this.isDead) {
             return;
@@ -117,8 +133,20 @@ export class Player extends Sprite {
         if (this.cursor.left.isDown || this.keyA.isDown) { ctrlDir -= 1; }
         if (this.cursor.right.isDown || this.keyD.isDown) { ctrlDir += 1; }
 
-        this.body.setVelocityX(ctrlDir * this.walkSpeed);
+        // walking & stopping
+        if (ctrlDir !== 0) {
+            this.curWalkSpeed += ctrlDir * (this.walkAccel * delta);
+        } else {
+            this.curWalkSpeed -= Math.sign(this.curWalkSpeed) * (this.stopAccel * delta);
+            if (Math.abs(this.curWalkSpeed) < this.eps) {
+                this.curWalkSpeed = 0;
+            }
+        }
 
+        // cap walk speed
+        this.curWalkSpeed = Math.sign(this.curWalkSpeed) * Math.min(Math.abs(this.curWalkSpeed), this.walkSpeedMax);
+
+        // determine animation
         if (ctrlDir !== 0) {
             const strJump = (this.body.onFloor()) ? "Walk" : "Jump";
             const strWalk = (ctrlDir > 0) ? "Right" : "Left";
@@ -129,14 +157,33 @@ export class Player extends Sprite {
             this.anims.play("playerIdle");
         }
 
-        if (this.body.onFloor()) {
-            if (this.cursor.up.isDown || this.keyW.isDown) {
-                this.body.setVelocityY(-500);
+        this.curJumpTime += delta;
+
+        if (this.cursor.up.isDown || this.keyW.isDown) {
+            // Start jump
+            if (this.body.onFloor()) {
+                this.isCurJumping = true;
+                this.curJumpTime = 0.0;
+            } else
+            // Continue jump
+            if (this.isCurJumping) {
+                if (this.curJumpTime >= this.jumpTimeMax) {
+                    this.isCurJumping = false;
+                }
             }
+        } else
+        // End jump
+        if (this.isCurJumping && this.curJumpTime >= this.jumpTimeMin) {
+            this.isCurJumping = false;
         }
 
-        this.body.velocity.x += this.impulse.x;
-        this.body.velocity.y += this.impulse.y;
+        this.body.setVelocityX(this.curWalkSpeed + this.impulse.x);
+        if (this.isCurJumping) {
+            this.body.setVelocityY(this.impulse.y - this.jumpSpeed);
+        } else {
+            this.body.setVelocityY(this.body.velocity.y + this.impulse.y);
+        }
+
         this.impulse.x *= 0.95;
         this.impulse.y *= 0.95;
     }
