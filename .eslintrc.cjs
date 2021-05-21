@@ -36,6 +36,6 @@ module.exports = {
         "prefer-destructuring": "warn",
         "import/no-cycle": "warn",
         "comma-dangle": "warn",
-        "max-classes-per-file": "off"
+        "max-classes-per-file": "off",
     },
 };
