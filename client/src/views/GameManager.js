@@ -2,6 +2,7 @@ import { GameInstance } from "../GameInstance.js";
 import { ViewManager } from "../ViewManager.js";
 import { getId, send, addEventListener, removeEventListener, ready } from "../socket.js";
 import { Phases, PhaseManager } from "../PhaseManager.js";
+import { GameBus } from "../EventBus.js";
 
 export const Status = {
     Alive: "Alive",
@@ -14,11 +15,14 @@ class _GameManager {
         this.ingame = false;
 
         this.container = document.querySelector("#game");
+
         this.points = document.querySelector("#gamePoints");
         this.results = document.querySelector("#gameResults");
         this.results.style.display = "none";
         this.resultsList = document.querySelector("#gameResultsList");
         this.resultsNextButton = document.querySelector("#gameResultsNext");
+
+        this.instance = null;
 
         document.addEventListener("keydown", (evt) => {
             if (this.ingame) {
@@ -62,13 +66,17 @@ class _GameManager {
     show () {
         this.startListen();
         this.container.style.display = "";
+
+        this.instance = new GameInstance(this.container, this);
     }
 
     hide () {
         this.ingame = false;
         this.stopListen();
         this.container.style.display = "none";
-        GameInstance.destroyScenes();
+
+        this.instance.destroy();
+        this.instance = null;
     }
 
     endRun (status) {
@@ -116,7 +124,7 @@ class _GameManager {
         if (data.playerId === getId()) {
             return;
         }
-        GameInstance.fillInv(data.types);
+        this.instance.fillInv(data.types);
     }
 
     sendBlockChoice (block) {
@@ -132,43 +140,32 @@ class _GameManager {
             return;
         }
         console.log(data.block);
-        GameInstance.removeInventoryBlock(data.block);
+        this.instance.removeInventoryBlock(data.block);
     }
 
     onPlayerUpdate (data) {
         if (data.id === getId()) {
             return;
         }
-
-        GameInstance.sceneDeferred.promise.then(() => {
-            let playerId = this.playerPuppets.get(data.id);
-            if (playerId === undefined) {
-                playerId = this.playerPuppets.size;
-                this.playerPuppets.set(data.id, playerId);
-                GameInstance.createPlayer(playerId, data.pos.x, data.pos.y);
-            }
-
-            GameInstance.updatePlayer(playerId, data.pos.x, data.pos.y, data.anim, data.flipX);
-        });
+        GameBus.emit("playerUpdated", data.id, data);
     }
 
     onSetBlock (data) {
         if (data.playerId === getId()) {
             return;
         }
-        GameInstance.setBlock(data.pos.x, data.pos.y, data.blockType, data.flipX);
+        this.instance.setBlock(data.pos.x, data.pos.y, data.blockType, data.flipX);
     }
 
     onJoinGame (data) {
         this.lobbyName = data.name;
         this.ingame = true;
 
-        GameInstance.createScene();
         ViewManager.showGame();
     }
 
     onPlayerRemoved (data) {
-        console.log("player left the game", data);
+        GameBus.emit("playerRemoved", data.id);
     }
 
     onCloseGame (data) {
@@ -237,7 +234,7 @@ class _GameManager {
 
     onColors () {
         this.results.style.display = "none";
-        GameInstance.resetPlayer();
+        this.instance.resetMainScene();
     }
 
     nextGame () {
