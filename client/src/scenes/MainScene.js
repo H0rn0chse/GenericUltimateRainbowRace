@@ -39,6 +39,7 @@ export class MainScene extends Phaser.Scene {
 
         this.load.setPath("assets/unicorn");
         this.load.spritesheet("unicorn", "unicorn.png", { frameWidth: 84, frameHeight: 84 });
+        this.load.spritesheet("unicornDash", "dash.png", { frameWidth: 84, frameHeight: 84 });
     }
 
     addGameObject (gameObject) {

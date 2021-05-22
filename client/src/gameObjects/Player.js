@@ -103,7 +103,7 @@ export class Player extends PlayerBase {
         });
         scene.anims.create({
             key: "playerDash",
-            frames: scene.anims.generateFrameNumbers("unicorn", { start: 12, end: 12 }),
+            frames: scene.anims.generateFrameNumbers("unicornDash", { start: 0, end: 0 }),
             frameRate: 16,
             repeat: -1,
         });
