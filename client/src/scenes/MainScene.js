@@ -82,8 +82,8 @@ export class MainScene extends Phaser.Scene {
         baqround.y = 578 / 2;
 
         this.tileMaps.init(_levelId);
-        const terrain = this.tileMaps.createLayer("Terrain");
-        this.debug.addLayer("Spikes", terrain);
+        const terrain = this.tiled.layer(this.tileMaps.createLayer("Terrain"));
+        // this.debug.addLayer("Spikes", terrain);
         this.bulletGroup = this.physics.add.group({
             allowGravity: false,
             runChildUpdate: true,

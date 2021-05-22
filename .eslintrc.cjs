@@ -40,5 +40,6 @@ module.exports = {
         "arrow-body-style": "off",
         "no-warning-comments": "error",
         "no-bitwise": "off",
+        "no-restricted-syntax": "off",
     },
 };

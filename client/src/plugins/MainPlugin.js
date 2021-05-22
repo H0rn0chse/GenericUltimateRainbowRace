@@ -4,6 +4,7 @@ import { CustomGroupManager } from "../scenePlugins/CustomGroupManager.js";
 import { TileMaps } from "../scenePlugins/TileMaps.js";
 import { DebugHelper } from "../scenePlugins/DebugHelper.js";
 import { VolumeMixer } from "../scenePlugins/VolumeMixer.js";
+import { TiledPlugin } from "../scenePlugins/TiledPlugin.js";
 
 export class MainPlugin extends Phaser.Plugins.BasePlugin {
     constructor (pluginManager) {
@@ -17,6 +18,7 @@ export class MainPlugin extends Phaser.Plugins.BasePlugin {
         pluginManager.installScenePlugin("tileMaps", TileMaps, "tileMaps");
         pluginManager.installScenePlugin("debug", DebugHelper, "debug");
         pluginManager.installScenePlugin("volume", VolumeMixer, "volume");
+        pluginManager.installScenePlugin("tiled", TiledPlugin, "tiled");
     }
 
     destroy () {
@@ -24,6 +26,7 @@ export class MainPlugin extends Phaser.Plugins.BasePlugin {
         this.pluginManager.removeScenePlugin("tileMaps");
         this.pluginManager.removeScenePlugin("debug");
         this.pluginManager.removeScenePlugin("volume");
+        this.pluginManager.removeScenePlugin("tiled");
 
         super.destroy();
     }
