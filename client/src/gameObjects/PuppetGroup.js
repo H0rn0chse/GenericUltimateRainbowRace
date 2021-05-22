@@ -2,9 +2,10 @@ import { GameBus } from "../EventBus.js";
 import { Phaser } from "../Globals.js";
 import { Puppet } from "./Puppet.js";
 
-export class PuppetGroup extends Phaser.GameObjects.Group {
+export class PuppetGroup extends Phaser.Physics.Arcade.Group {
     constructor (scene) {
-        super(scene);
+        const { world } = scene.physics;
+        super(world, scene);
 
         this.runChildUpdate = true;
 
@@ -18,14 +19,14 @@ export class PuppetGroup extends Phaser.GameObjects.Group {
         if (!puppet) {
             puppet = new Puppet(this.scene, data.avatarId, playerId);
             this.add(puppet, true);
+            puppet.setCollideWorldBounds(true);
         }
 
         const { x, y } = data.pos;
         puppet.setPosition(x, y);
         puppet.anims.play(data.anim, true);
         puppet.flipX = data.flipX;
-        puppet.body.setVelocityX(data.vel.x);
-        puppet.body.setVelocityY(data.vel.y);
+        // puppet.body.setVelocity(data.vel.x, data.vel.y);
     }
 
     onPlayerRemoved (playerId) {

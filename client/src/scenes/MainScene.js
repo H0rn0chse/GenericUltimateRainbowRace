@@ -56,13 +56,14 @@ export class MainScene extends Phaser.Scene {
 
         this.blockMap = this.add.existing(new BlockMap(this.physics.world, this, 0));
 
-        this.addGroup.puppet();
+        const puppets = this.addGroup.puppet();
 
         this.player = this.add.existing(new Player(this.physics.world, this, this.blockMap.getSpawnPoint()));
 
         this.createFlag();
 
         // ================== collision / overlap ==================
+        // player collision
         this.physics.add.collider(this.player, layer);
         this.physics.add.collider(this.player, this.blockMap, (player, block) => {
             block.onPlayerCollision?.(player);
@@ -70,6 +71,9 @@ export class MainScene extends Phaser.Scene {
         this.physics.add.overlap(this.player, this.bulletGroup, (player, bullet) => {
             bullet.onPlayerHit?.(player);
         });
+        // puppet collision
+        this.physics.add.collider(puppets, layer);
+        this.physics.add.collider(puppets, this.blockMap);
     }
 
     createFlag () {
