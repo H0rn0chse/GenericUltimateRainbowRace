@@ -3,10 +3,9 @@ import { BlockMap } from "../gameObjects/BlockMap.js";
 import { Status, GameManager } from "../views/GameManager.js";
 import { Rainbow } from "../gameObjects/Rainbow.js";
 import { PhaseManager, Phases } from "../PhaseManager.js";
+import { Phaser } from "../Globals.js";
 
-const { Scene } = globalThis.Phaser;
-
-export class GameScene extends Scene {
+export class MainScene extends Phaser.Scene {
     constructor (createDeferred) {
         super();
         this._gameObjects = new Map();
@@ -85,19 +84,20 @@ export class GameScene extends Scene {
         baqround.y = 578 / 2;
 
         this.rainbow = this.addGameObject(new Rainbow(this.physics.world, this));
-        this.map = this.addGameObject(new BlockMap(this.physics.world, this, 0));
-        this.playerPuppets = this.add.group();
+        this.blockMap = this.addGameObject(new BlockMap(this.physics.world, this, 0));
 
-        this.player = this.addGameObject(new Player(this.physics.world, this, this.map.getSpawnPoint()));
-        this.map.onPlayerCreated(this.player);
+        this.addGroup.puppet();
+
+        this.player = this.addGameObject(new Player(this.physics.world, this, this.blockMap.getSpawnPoint()));
+        this.blockMap.onPlayerCreated(this.player);
 
         this.createFlag();
 
-        this.createDeferred.resolve();
+        // ================== collision / overlap ==================
     }
 
     createFlag () {
-        const endPoint = this.map.getEndPoint();
+        const endPoint = this.blockMap.getEndPoint();
         this.flag = this.physics.add.sprite(endPoint.x + 21, endPoint.y - 21, "flag", 0);
         this.anims.create({
             key: "flag_wave",
@@ -117,50 +117,31 @@ export class GameScene extends Scene {
         }
     }
 
-    createPlayer (id, x, y) {
-        const puppet = new Player(this.physics.world, this, { x, y }, true);
-        puppet.id = id;
-
-        this.add.existing(puppet);
-
-        this.playerPuppets.children.set(puppet);
-
-        // puppet.visible = true;
-        // puppet.setPosition(x, y);
-    }
-
-    updatePlayer (id, x, y, animation, flipX = false) {
-        const puppet = this.playerPuppets.children.get("id", id);
-        puppet.setPosition(x, y);
-        puppet.anims.play(animation, true);
-        puppet.flipX = flipX;
-    }
-
-    resetPlayer () {
-        const spawnPoint = this.map.getSpawnPoint();
-        this.player.reset(spawnPoint);
-    }
-
     setBlock (x, y, blockType, flipX = false) {
-        this.map.createBlock(x, y, blockType, flipX);
+        this.blockMap.createBlock(x, y, blockType, flipX);
     }
 
     removeInventoryBlock (block) {
-        this.map.removeInventoryBlock(block);
+        this.blockMap.removeInventoryBlock(block);
     }
 
     fillInv (blockTypes) {
-        this.map.fillInv(blockTypes);
+        this.blockMap.fillInv(blockTypes);
     }
 
     generateInventory (count) {
         if (PhaseManager.isHost) {
-            this.map.generateInventory(count);
+            this.blockMap.generateInventory(count);
         }
     }
 
     getCursor () {
         return this.cursor;
+    }
+
+    resetScene () {
+        const spawnPoint = this.blockMap.getSpawnPoint();
+        this.player.reset(spawnPoint);
     }
 
     update (time, delta) {
@@ -169,6 +150,6 @@ export class GameScene extends Scene {
             gameObject.update?.(time, delta);
         });
 
-        GameManager.updatePlayer(this.player.x, this.player.y, this.player.anims.currentAnim.key, this.player.flipX);
+        GameManager.updatePlayer(this.player.x, this.player.y, this.player.anims.currentAnim.key, this.player.flipX, this.player.body.velocity.x, this.player.body.velocity.y);
     }
 }

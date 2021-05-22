@@ -37,5 +37,7 @@ module.exports = {
         "import/no-cycle": "warn",
         "comma-dangle": "warn",
         "max-classes-per-file": "off",
+        "arrow-body-style": "off",
+        "no-warning-comments": "error",
     },
 };
