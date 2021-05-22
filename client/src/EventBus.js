@@ -89,11 +89,16 @@ class EventBus {
 }
 
 export const LobbyBus = new EventBus("LobbyBus");
+globalThis.LobbyBus = LobbyBus;
 
 export const GameBus = new EventBus("GameBus");
+globalThis.GameBus = GameBus;
 
 export const PhaseBus = new EventBus("PhaseBus");
+globalThis.PhaseBus = PhaseBus;
 
 export const CommonBus = new EventBus("CommonBus");
+globalThis.CommonBus = CommonBus;
 
 export const DebugBus = new EventBus("DebugBus");
+globalThis.DebugBus = DebugBus;

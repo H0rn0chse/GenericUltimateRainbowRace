@@ -7,6 +7,7 @@ import { BlockBreakable } from "./blocks/BlockBreakable.js";
 import { BlockGunSlow, BlockGunFast } from "./blocks/BlockGun.js";
 import { Inventory } from "./Inventory.js";
 import { BLOCK_SIZE, PHASES, Phaser } from "../Globals.js";
+import { PhaseBus } from "../EventBus.js";
 
 const BlockTypes = {
     Boring: BlockBoring,
@@ -43,7 +44,7 @@ export class BlockMap extends Phaser.Physics.Arcade.StaticGroup {
         scene.input.on(Phaser.Input.Events.POINTER_MOVE, this.onPointerMove, this);
         scene.input.keyboard.on("keydown-R", this.onBlockFlip, this);
 
-        PhaseManager.listen(PHASES.PreRun, this.onBuildPhaseOver.bind(this));
+        PhaseBus.on(PHASES.PreRun, this.onBuildPhaseOver, this);
     }
 
     onBuildPhaseOver () {
@@ -55,6 +56,7 @@ export class BlockMap extends Phaser.Physics.Arcade.StaticGroup {
     }
 
     getSpawnPoint () {
+        this.spawnPoint.y -= 10;
         return this.spawnPoint;
     }
 

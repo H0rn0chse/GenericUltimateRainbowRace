@@ -1,15 +1,16 @@
 import { BlockMap } from "../gameObjects/BlockMap.js";
 import { GameManager } from "../views/GameManager.js";
 import { PhaseManager } from "../PhaseManager.js";
-import { BLOCKS_X, BLOCKS_Y, Phaser, PHASES, LEVELS } from "../Globals.js";
+import { BLOCKS_X, BLOCKS_Y, PHASES, LEVELS } from "../Globals.js";
 import { createPlayerAnims } from "../PlayerAnimations.js";
-import { GameBus } from "../EventBus.js";
+import { GameBus, PhaseBus } from "../EventBus.js";
+import { BaseScene } from "./BaseScene.js";
 
-export class MainScene extends Phaser.Scene {
+export class MainScene extends BaseScene {
     constructor (createDeferred) {
         super();
         this.createDeferred = createDeferred;
-        PhaseManager.listen(PHASES.Build, this.generateInventory.bind(this, 4));
+        PhaseBus.on(PHASES.Build, this.generateInventory, this);
         globalThis.GameScene = this;
     }
 
@@ -68,9 +69,11 @@ export class MainScene extends Phaser.Scene {
     }
 
     create () {
-        const { instanceConfig, deferred } = this.game;
+        super.create();
+        const { instanceConfig } = this.game;
         const { levelId, skinId } = instanceConfig;
 
+        this.physics.pause();
         this.scale.displaySize.setAspectRatio(BLOCKS_X / BLOCKS_Y);
         this.scale.refresh();
 
@@ -110,7 +113,7 @@ export class MainScene extends Phaser.Scene {
         this.physics.add.collider(puppets, this.blockMap);
         this.physics.add.overlap(this.player, flag, flag.onPlayerOverlap, null, flag);
 
-        GameBus.emit("phaserReady");
+        GameBus.emit("sceneReady");
     }
 
     setBlock (x, y, blockType, flipX = false) {
@@ -125,7 +128,7 @@ export class MainScene extends Phaser.Scene {
         this.blockMap.fillInv(blockTypes);
     }
 
-    generateInventory (count) {
+    generateInventory (count = 4) {
         if (PhaseManager.isHost) {
             this.blockMap.generateInventory(count);
         }
@@ -137,8 +140,15 @@ export class MainScene extends Phaser.Scene {
     }
 
     update (time, delta) {
+        if (!PhaseManager.isPhase(PHASES.Initial) && this.physics.world.isPaused) {
+            this.physics.resume();
+        }
         this.player.update(time, delta);
 
         GameManager.updatePlayer(this.player.getData());
+    }
+
+    destroy () {
+        PhaseBus.off(PHASES.Build, this.generateInventory, this);
     }
 }

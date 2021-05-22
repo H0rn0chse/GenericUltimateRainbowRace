@@ -1,3 +1,4 @@
+import { PhaseBus } from "../EventBus.js";
 import { PHASES } from "../Globals.js";
 import { PhaseManager } from "../PhaseManager.js";
 
@@ -8,7 +9,7 @@ export class Inventory {
     constructor (scene) {
         that = this;
         this.generateBackground(scene);
-        PhaseManager.listen(PHASES.PreRun, this.onBuildPhaseOver.bind(this));
+        PhaseBus.on(PHASES.PreRun, this.onBuildPhaseOver, this);
     }
 
     onBuildPhaseOver (data) {

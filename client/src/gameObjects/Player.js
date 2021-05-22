@@ -5,8 +5,10 @@ import { PlayerBase } from "./PlayerBase.js";
 
 export class Player extends PlayerBase {
     constructor (scene, spawnPoint, skinId) {
-        super(scene, spawnPoint.x, spawnPoint.y - 30, "unicorn");
+        super(scene, spawnPoint.x, spawnPoint.y, "unicorn");
         this.skinId = skinId;
+
+        this.setOrigin(0, 0.5);
 
         this.cursor = this.scene.input.keyboard.createCursorKeys();
         this.impulse = new Phaser.Math.Vector2(0, 0);

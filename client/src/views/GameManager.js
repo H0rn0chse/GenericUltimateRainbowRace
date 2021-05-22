@@ -59,7 +59,7 @@ class _GameManager {
         ];
 
         PhaseManager.listen(PHASES.Colors, this.onColors.bind(this));
-        GameBus.on("phaserReady", this.onPhaserReady, this);
+        GameBus.on("sceneReady", this.onSceneReady, this);
     }
 
     // ========================================== Game logic & handler =============================================
@@ -128,7 +128,7 @@ class _GameManager {
         this.instance.resetMainScene();
     }
 
-    onPhaserReady () {
+    onSceneReady () {
         send("playerReady", {});
     }
 
