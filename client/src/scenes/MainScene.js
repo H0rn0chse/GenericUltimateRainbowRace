@@ -3,8 +3,7 @@ import { BlockMap } from "../gameObjects/BlockMap.js";
 import { Status, GameManager } from "../views/GameManager.js";
 import { Rainbow } from "../gameObjects/Rainbow.js";
 import { PhaseManager } from "../PhaseManager.js";
-import { Phaser, PHASES } from "../Globals.js";
-import { createPlayerAnims } from "../PlayerAnimations.js";
+import { BLOCKS_X, BLOCKS_Y, Phaser, PHASES } from "../Globals.js";import { createPlayerAnims } from "../PlayerAnimations.js";
 
 export class MainScene extends Phaser.Scene {
     constructor (createDeferred) {
@@ -72,6 +71,11 @@ export class MainScene extends Phaser.Scene {
 
         const _levelId = 0;
         const _skinId = "Coffee";
+
+        this.scale.displaySize.setAspectRatio(BLOCKS_X / BLOCKS_Y);
+        this.scale.refresh();
+        console.log(this.scale);
+
         this.cursor = this.input.keyboard.createCursorKeys();
 
         const baqround = this.add.image(1280, 578, "baqround3");

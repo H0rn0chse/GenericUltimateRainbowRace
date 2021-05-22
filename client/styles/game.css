@@ -1,7 +1,5 @@
 #game {
     background-color: var(--game-bg);
-    align-items: center;
-    justify-content: center;
     position: relative;
 }
 
@@ -28,5 +26,29 @@
 #gameStats {
     position: absolute;
     top: 0;
+    left: 0;
+}
+#gameSettings {
+    position: absolute;
+    top: .6em;
     right: 0;
+}
+#gameSettingsCollapsible {
+    border: solid var(--settings-border);
+    background-color: var(--settings-bg);
+    border-radius: 0.5em;
+    padding: 0.2em 0.4em
+}
+body .hidden {
+    display: none;
+}
+#gameInfo {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    justify-content: center;
+}
+#score {
+    padding: 0 12px;
 }

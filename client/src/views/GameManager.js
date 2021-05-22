@@ -19,6 +19,20 @@ class _GameManager {
         this.container = document.querySelector("#game");
         this.instanceContainer = document.querySelector("#gameArea");
 
+        this.settingsBtnShow = document.querySelector("#gameSettingsShow");
+        this.settingsBtnHide = document.querySelector("#gameSettingsHide");
+        this.gameSettingsCollapsible = document.querySelector("#gameSettingsCollapsible");
+        this.settingsBtnShow.addEventListener("click", (evt) => {
+            this.gameSettingsCollapsible.classList.remove("hidden");
+            this.settingsBtnShow.classList.add("hidden");
+            this.settingsBtnHide.classList.remove("hidden");
+        });
+        this.settingsBtnHide.addEventListener("click", (evt) => {
+            this.gameSettingsCollapsible.classList.add("hidden");
+            this.settingsBtnShow.classList.remove("hidden");
+            this.settingsBtnHide.classList.add("hidden");
+        });
+
         this.debugCbx = document.querySelector("#debugCbx");
         this.debugCbx.addEventListener("change", (evt) => {
             DebugBus.emit("setDebug", this.debugCbx.checked);
