@@ -13,24 +13,23 @@ class BlockGun extends Block {
         super(config, "");
         this.texture = this.getSpriteName();
 
-        this.bullets = config.scene.physics.add.group({
+        const { scene } = config;
+
+        this.bullets = scene.add.group({
             classType: this.getBullet(),
             maxSize: 10,
-            runChildUpdate: true,
-            allowGravity: false,
         });
 
-        this.createAnimations(config.scene);
+        this.bullets.createCallback = (bullet) => {
+            scene.bulletGroup.add(bullet);
+        };
+        this.bullets.removeCallback = (bullet) => {
+            scene.bulletGroup.remove(bullet);
+        };
+
+        this.createAnimations(scene);
 
         this.enterState(State.Idle);
-    }
-
-    onPlayerCreated (player) {
-        this.scene.physics.add.overlap(player, this.bullets, this.onPlayerBulletHit, null, this.scene);
-    }
-
-    onPlayerBulletHit (player, bullet) {
-        player.die();
     }
 
     getBullet () { return null; }

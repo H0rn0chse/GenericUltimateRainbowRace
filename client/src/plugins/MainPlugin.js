@@ -1,5 +1,6 @@
 import { Phaser } from "../Globals.js";
 import { CustomGroupManager } from "../scenePlugins/CustomGroupManager.js";
+import { TileMaps } from "../scenePlugins/TileMaps.js";
 
 export class MainPlugin extends Phaser.Plugins.BasePlugin {
     constructor (pluginManager) {
@@ -15,10 +16,12 @@ export class MainPlugin extends Phaser.Plugins.BasePlugin {
         pluginManager.installScenePlugin("count", Countdown, "count");
         */
         pluginManager.installScenePlugin("addGroup", CustomGroupManager, "addGroup");
+        pluginManager.installScenePlugin("tileMaps", TileMaps, "tileMaps");
     }
 
     destroy () {
         this.pluginManager.removeScenePlugin("addGroup");
+        this.pluginManager.removeScenePlugin("tileMaps");
         /* scene plugin cleanup
         this.pluginManager.removeScenePlugin("count");
         */
