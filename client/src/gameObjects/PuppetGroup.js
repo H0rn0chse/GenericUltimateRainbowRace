@@ -6,6 +6,8 @@ export class PuppetGroup extends Phaser.GameObjects.Group {
     constructor (scene) {
         super(scene);
 
+        this.runChildUpdate = true;
+
         GameBus.on("playerUpdated", this.onPlayerUpdated, this);
         GameBus.on("playerRemoved", this.onPlayerRemoved, this);
     }

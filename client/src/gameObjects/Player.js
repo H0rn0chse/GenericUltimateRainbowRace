@@ -1,8 +1,9 @@
 import { Phaser } from "../Globals.js";
 import { Phases, PhaseManager } from "../PhaseManager.js";
 import { Status, GameManager } from "../views/GameManager.js";
+import { PlayerBase } from "./PlayerBase.js";
 
-export class Player extends Phaser.Physics.Arcade.Sprite {
+export class Player extends PlayerBase {
     constructor (world, scene, spawnPoint, isPuppet = false) {
         super(scene, spawnPoint.x, spawnPoint.y - 30, "unicorn");
 
@@ -58,6 +59,7 @@ export class Player extends Phaser.Physics.Arcade.Sprite {
             this.wasDashKeyUp = true;
 
             // state
+            this.isDead = false;
             this.animState = false;
             this.curWalkSpeed = 0;
             this.isCurJumping = false;
@@ -65,6 +67,7 @@ export class Player extends Phaser.Physics.Arcade.Sprite {
             this.isCurDashing = false;
             this.hasDashed = false;
             this.curDashTime = 0;
+            this.curDeathTime = 0;
         }
 
         scene.anims.create({
@@ -107,7 +110,7 @@ export class Player extends Phaser.Physics.Arcade.Sprite {
 
         scene.anims.create({
             key: "playerDied",
-            frames: scene.anims.generateFrameNumbers("unicorn", { start: 16, end: 19 }),
+            frames: scene.anims.generateFrameNumbers("unicorn", { start: 16, end: 16 }),
             frameRate: 16,
             repeat: -1,
         });
@@ -123,9 +126,10 @@ export class Player extends Phaser.Physics.Arcade.Sprite {
     }
 
     reset (position) {
-        this.setPosition(position.x, position.y);
         this.isDead = false;
+        this.setPosition(position.x, position.y);
         this.body.setVelocityX(0);
+        this.flipX = false;
         this.anims.play("playerIdle");
         this.impulse.x = 0;
         this.impulse.y = 0;
@@ -137,8 +141,10 @@ export class Player extends Phaser.Physics.Arcade.Sprite {
     }
 
     update (time, delta) {
-        // only handle the real player
-        if (this.isPuppet || this.isDead) {
+        super.update(time, delta);
+
+        // only handle alive player
+        if (this.isDead) {
             return;
         }
 
