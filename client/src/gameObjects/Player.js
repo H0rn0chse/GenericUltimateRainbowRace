@@ -3,67 +3,52 @@ import { Phases, PhaseManager } from "../PhaseManager.js";
 import { Status, GameManager } from "../views/GameManager.js";
 
 export class Player extends Phaser.Physics.Arcade.Sprite {
-    constructor (world, scene, spawnPoint, isPuppet = false) {
+    constructor (world, scene, spawnPoint) {
         super(scene, spawnPoint.x, spawnPoint.y - 30, "unicorn");
 
         this.cursor = scene.getCursor();
-        this.isPuppet = isPuppet;
         this.impulse = new Phaser.Math.Vector2(0, 0);
 
-        if (!isPuppet) {
-            this.name = "Player";
-            this.collider = [{
-                object1: this.name,
-                object2: "Map",
-                handler: (a, b) => {
-                    b.onPlayerCollision(a);
-                },
-            }, {
-                object1: this.name,
-                object2: "MapLevel",
-            }];
+        world.enable([this], 0);
 
-            world.enable([this], 0);
+        this.setSize(45, 50);
+        this.setOffset(15, 5);
 
-            this.setSize(45, 50);
-            this.setOffset(15, 5);
+        this.setBounce(0.0);
+        this.setCollideWorldBounds(true);
 
-            this.setBounce(0.0);
-            this.setCollideWorldBounds(true);
+        // keys
+        this.keys = {};
+        this.keys.W = scene.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.W);
+        this.keys.A = scene.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.A);
+        this.keys.S = scene.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.S);
+        this.keys.D = scene.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.D);
+        this.keys.Space = scene.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.SPACE);
 
-            // keys
-            this.keys = {};
-            this.keys.W = scene.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.W);
-            this.keys.A = scene.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.A);
-            this.keys.S = scene.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.S);
-            this.keys.D = scene.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.D);
-            this.keys.Space = scene.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.SPACE);
+        // constants
+        this.eps = 10;
 
-            // constants
-            this.eps = 10;
+        // walking constants
+        this.walkAccel = 1.8;
+        this.walkSpeedMax = 180;
+        this.stopAccel = 0.9;
 
-            // walking constants
-            this.walkAccel = 1.8;
-            this.walkSpeedMax = 180;
-            this.stopAccel = 0.9;
+        // jumping constants
+        this.jumpTimeMax = 400.0;
+        this.jumpTimeMin = 100.0;
+        this.jumpSpeed = 250.0;
 
-            // jumping constants
-            this.jumpTimeMax = 400.0;
-            this.jumpTimeMin = 100.0;
-            this.jumpSpeed = 250.0;
+        // dashing constants
+        this.dashTime = 500.0;
+        this.dashSpeed = this.walkSpeedMax;
 
-            // dashing constants
-            this.dashTime = 500.0;
-            this.dashSpeed = this.walkSpeedMax;
-
-            // state
-            this.curWalkSpeed = 0;
-            this.isCurJumping = false;
-            this.curJumpTime = 0;
-            this.isCurDashing = false;
-            this.hasDashed = false;
-            this.curDashTime = 0;
-        }
+        // state
+        this.curWalkSpeed = 0;
+        this.isCurJumping = false;
+        this.curJumpTime = 0;
+        this.isCurDashing = false;
+        this.hasDashed = false;
+        this.curDashTime = 0;
 
         scene.anims.create({
             key: "playerIdle",
@@ -127,7 +112,7 @@ export class Player extends Phaser.Physics.Arcade.Sprite {
 
     update (time, delta) {
         // only handle the real player
-        if (this.isPuppet || this.isDead) {
+        if (this.isDead) {
             return;
         }
 

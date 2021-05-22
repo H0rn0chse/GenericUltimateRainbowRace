@@ -22,29 +22,21 @@ let draggedBlock;
 export class BlockMap extends Phaser.Physics.Arcade.StaticGroup {
     constructor (world, scene, levelId) {
         super(world, scene, [], {});
-        this.name = "Map";
         this.runChildUpdate = true;
 
-        const map = scene.make.tilemap({ key: `level_${levelId}` });
-        const tileset = map.addTilesetImage("atlas", "atlas");
-        const layer = map.createLayer("Terrain", tileset, 0, 0);
+        const { tileMaps } = scene;
 
-        layer.name = "MapLevel";
-        scene.addGameObject(layer);
-        layer.setCollisionByExclusion(-1, true);
-
-        const spawnPointRaw = map.getObjectLayer("Spawn").objects;
+        const spawnPointRaw = tileMaps.getObjects("Spawn");
         if (spawnPointRaw.length >= 1) {
             this.spawnPoint = spawnPointRaw[0];
         }
 
-        const endPointRaw = map.getObjectLayer("Goal").objects;
+        const endPointRaw = tileMaps.getObjects("Goal");
         if (endPointRaw.length >= 1) {
             this.endPoint = endPointRaw[0];
         }
 
         inv = new Inventory(scene);
-        //
 
         scene.input.on(Phaser.Input.Events.POINTER_UP, this.onPointerUp, this);
         scene.input.on(Phaser.Input.Events.POINTER_MOVE, this.onPointerMove, this);
@@ -152,16 +144,6 @@ export class BlockMap extends Phaser.Physics.Arcade.StaticGroup {
         block.visible = true;
         block.setActive(true);
 
-        if (this.scene.player) {
-            block.onPlayerCreated(this.scene.player);
-        }
-
         return block;
-    }
-
-    onPlayerCreated (player) {
-        this.children.entries.forEach((block) => {
-            block.onPlayerCreated(player);
-        });
     }
 }

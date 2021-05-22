@@ -8,9 +8,6 @@ import { Phaser } from "../Globals.js";
 export class MainScene extends Phaser.Scene {
     constructor (createDeferred) {
         super();
-        this._gameObjects = new Map();
-        this._collider = new Map();
-        this._colliderWasUpdated = false;
         this.createDeferred = createDeferred;
         PhaseManager.listen(Phases.Build, this.generateInventory.bind(this, 4));
         globalThis.GameScene = this;
@@ -41,59 +38,37 @@ export class MainScene extends Phaser.Scene {
         this.load.spritesheet("unicorn", "unicorn.png", { frameWidth: 84, frameHeight: 84 });
     }
 
-    addGameObject (gameObject) {
-        this._gameObjects.set(gameObject.name, gameObject);
-        this.add.existing(gameObject);
-
-        if (Array.isArray(gameObject.collider)) {
-            gameObject.collider.forEach((collider) => {
-                this._collider.set(collider, true);
-                this._colliderWasUpdated = true;
-            });
-        }
-        this.updateCollider();
-        return gameObject;
-    }
-
-    updateCollider () {
-        if (!this._collider.size === 0) {
-            return;
-        }
-
-        this._collider.forEach((value, collisionConfig, map) => {
-            // collider was already added
-            if (!value) {
-                return;
-            }
-
-            const object1 = this._gameObjects.get(collisionConfig.object1);
-            const object2 = this._gameObjects.get(collisionConfig.object2);
-
-            if (object1 && object2) {
-                this.physics.add.collider(object1, object2, collisionConfig.handler || (() => {}));
-                map.delete(collisionConfig);
-            }
-        });
-    }
-
     create () {
+        const levelId = 0;
         this.cursor = this.input.keyboard.createCursorKeys();
 
         const baqround = this.add.image(1280, 578, "baqround3");
         baqround.x = 1280 / 2;
         baqround.y = 578 / 2;
 
-        this.rainbow = this.addGameObject(new Rainbow(this.physics.world, this));
-        this.blockMap = this.addGameObject(new BlockMap(this.physics.world, this, 0));
+        this.tileMaps.init(levelId);
+        const layer = this.tileMaps.createLayer("Terrain");
+        this.bulletGroup = this.physics.add.group({
+            allowGravity: false,
+            runChildUpdate: true,
+        });
+
+        this.blockMap = this.add.existing(new BlockMap(this.physics.world, this, 0));
 
         this.addGroup.puppet();
 
-        this.player = this.addGameObject(new Player(this.physics.world, this, this.blockMap.getSpawnPoint()));
-        this.blockMap.onPlayerCreated(this.player);
+        this.player = this.add.existing(new Player(this.physics.world, this, this.blockMap.getSpawnPoint()));
 
         this.createFlag();
 
         // ================== collision / overlap ==================
+        this.physics.add.collider(this.player, layer);
+        this.physics.add.collider(this.player, this.blockMap, (player, block) => {
+            block.onPlayerCollision?.(player);
+        });
+        this.physics.add.overlap(this.player, this.bulletGroup, (player, bullet) => {
+            bullet.onPlayerHit?.(player);
+        });
     }
 
     createFlag () {
@@ -145,10 +120,7 @@ export class MainScene extends Phaser.Scene {
     }
 
     update (time, delta) {
-        this.updateCollider();
-        this._gameObjects.forEach((gameObject, name) => {
-            gameObject.update?.(time, delta);
-        });
+        this.player.update(time, delta);
 
         GameManager.updatePlayer(this.player.x, this.player.y, this.player.anims.currentAnim.key, this.player.flipX, this.player.body.velocity.x, this.player.body.velocity.y);
     }

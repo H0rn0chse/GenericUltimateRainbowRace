@@ -9,8 +9,6 @@ export class Block extends Physics.Arcade.Sprite {
         }
     }
 
-    onPlayerCreated (player) {}
-
     flipBlock () {
         this._isFlipped = !this._isFlipped;
         this.flipX = this._isFlipped;
@@ -21,7 +19,7 @@ export class Block extends Physics.Arcade.Sprite {
     }
 
     onPlayerCollision (player) {
-
+        // to be implemented by the specific block
     }
 
     setIsPreview (isPreview) {

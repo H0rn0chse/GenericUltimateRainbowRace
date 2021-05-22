@@ -16,6 +16,10 @@ class Bullet extends Phaser.Physics.Arcade.Sprite {
         this.anims.play(`${this.getSpriteName()}_fly`, true);
     }
 
+    onPlayerHit (player) {
+        player.die();
+    }
+
     getSpriteName () { return ""; }
 
     getSpeed () { return 0; }
