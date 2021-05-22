@@ -25,10 +25,10 @@ export class MainScene extends Phaser.Scene {
         this.load.spritesheet("gun_fast", "gun_fast.png", { frameWidth: 42, frameHeight: 42 });
         this.load.spritesheet("bullet_big", "bullet_big.png", { frameWidth: 10, frameHeight: 6 });
         this.load.spritesheet("bullet_small", "bullet_small.png", { frameWidth: 10, frameHeight: 6 });
-        this.load.spritesheet("block_stone", "1_stone.png", { frameWidth: 42, frameHeight: 42 });
-        this.load.spritesheet("block_grass", "2_stone.png", { frameWidth: 42, frameHeight: 42 });
-        this.load.spritesheet("block_box", "block_box.png", { frameWidth: 42, frameHeight: 42 });
-        this.load.spritesheet("block_speed", "block_speed.png", { frameWidth: 42, frameHeight: 42 });
+        this.load.image("block_stone", "1_stone.png");
+        this.load.image("block_box", "block_box.png");
+        this.load.image("block_speed", "block_speed.png");
+        this.load.image("block_pillar", "pillar.png");
 
         this.load.setPath("assets/tilemap");
         this.load.image("atlas", "atlas.png");
