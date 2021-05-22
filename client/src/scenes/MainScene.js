@@ -1,7 +1,5 @@
-import { Player } from "../gameObjects/Player.js";
 import { BlockMap } from "../gameObjects/BlockMap.js";
-import { Status, GameManager } from "../views/GameManager.js";
-import { Rainbow } from "../gameObjects/Rainbow.js";
+import { GameManager } from "../views/GameManager.js";
 import { PhaseManager } from "../PhaseManager.js";
 import { BLOCKS_X, BLOCKS_Y, Phaser, PHASES, LEVELS } from "../Globals.js";
 import { createPlayerAnims } from "../PlayerAnimations.js";
