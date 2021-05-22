@@ -74,19 +74,7 @@ class _GameManager {
         }
     }
 
-    _updatePlayer (x, y, anim, flipX, velX, velY) {
-        const data = {
-            pos: {
-                x,
-                y,
-            },
-            vel: {
-                x: velX,
-                y: velY,
-            },
-            flipX,
-            anim,
-        };
+    _updatePlayer (data) {
         send("playerUpdate", data);
     }
 

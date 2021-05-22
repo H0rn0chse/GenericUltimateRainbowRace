@@ -23,11 +23,7 @@ export class PuppetGroup extends Phaser.Physics.Arcade.Group {
             puppet.body.setAllowGravity(false);
         }
 
-        const { x, y } = data.pos;
-        puppet.setPosition(x, y);
-        puppet.anims.play(data.anim, true);
-        puppet.flipX = data.flipX;
-        puppet.body.setVelocity(data.vel.x, data.vel.y);
+        puppet.setData(data);
     }
 
     onPlayerRemoved (playerId) {

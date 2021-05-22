@@ -150,10 +150,6 @@ export class MainScene extends Phaser.Scene {
         }
     }
 
-    getCursor () {
-        return this.cursor;
-    }
-
     resetScene () {
         const spawnPoint = this.blockMap.getSpawnPoint();
         this.player.reset(spawnPoint);
@@ -162,6 +158,6 @@ export class MainScene extends Phaser.Scene {
     update (time, delta) {
         this.player.update(time, delta);
 
-        GameManager.updatePlayer(this.player.x, this.player.y, this.player.anims.currentAnim.key, this.player.flipX, this.player.body.velocity.x, this.player.body.velocity.y);
+        GameManager.updatePlayer(this.player.getData());
     }
 }

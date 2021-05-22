@@ -8,7 +8,7 @@ export class Player extends PlayerBase {
         super(scene, spawnPoint.x, spawnPoint.y - 30, "unicorn");
         this.skinId = skinId;
 
-        this.cursor = scene.getCursor();
+        this.cursor = this.scene.input.keyboard.createCursorKeys();
         this.impulse = new Phaser.Math.Vector2(0, 0);
 
         // keys

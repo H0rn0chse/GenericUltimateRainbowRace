@@ -14,6 +14,26 @@ export class PlayerBase extends Phaser.Physics.Arcade.Sprite {
         this.setCollideWorldBounds(true);
     }
 
+    getData () {
+        return {
+            pos: {
+                x: this.x,
+                y: this.y,
+            },
+            anim: this.anims.currentAnim.key,
+            flipX: this.flipX,
+            vel: this.body.velocity,
+        };
+    }
+
+    setData (data) {
+        const { x, y } = data.pos;
+        this.setPosition(x, y);
+        this.anims.play(data.anim, true);
+        this.flipX = data.flipX;
+        this.body.setVelocity(data.vel.x, data.vel.y);
+    }
+
     update (time, delta) {
         if (this.anims.currentAnim && this.anims.currentAnim.key.includes("Died")) {
             const tintRed = 1 - 0.5 * (Math.sin(0.04 * time) + 1);
