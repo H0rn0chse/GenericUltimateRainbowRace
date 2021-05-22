@@ -16,9 +16,9 @@ export class MainScene extends BaseScene {
 
     preload () {
         this.load.setPath("assets/baqrounds");
-        this.load.image("baqround1", "baqround1.png");
-        this.load.image("baqround2", "baqround2.png");
-        this.load.image("baqround3", "baqround3.png");
+        for (let i = 1; i <= 5; i++) {
+            this.load.image(`baqround${i}`, `baqround${i}.png`);
+        }
 
         this.load.setPath("assets/blocks");
         this.load.spritesheet("flag", "flag.png", { frameWidth: 42, frameHeight: 42 });
