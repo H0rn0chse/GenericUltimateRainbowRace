@@ -116,10 +116,6 @@ export class MainScene extends BaseScene {
         GameBus.emit("sceneReady");
     }
 
-    setBlock (x, y, blockType, flipX = false) {
-        this.blockMap.createBlock(x, y, blockType, flipX);
-    }
-
     removeInventoryBlock (block) {
         this.blockMap.removeInventoryBlock(block);
     }

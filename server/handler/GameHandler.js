@@ -3,6 +3,7 @@ import { PlayerManager } from "../PlayerManager.js";
 import { OverviewHandler } from "./OverviewHandler.js";
 import { publish, registerMessageHandler, send, unsubscribe } from "../socket.js";
 import { PLAYER_STATUS, SCORE_FIRST } from "../../client/src/Globals.js";
+import { guid } from "../../client/src/utils.js";
 
 class _GameHandler {
     init () {
@@ -150,6 +151,8 @@ class _GameHandler {
         }
 
         data.playerId = playerId;
+        data.clientBlockId = data.blockId;
+        data.blockId = guid();
 
         publish(lobby.topic, "setBlock", data);
     }

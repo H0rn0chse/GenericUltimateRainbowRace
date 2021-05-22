@@ -87,7 +87,7 @@ class _GameManager {
         send("playerUpdate", data);
     }
 
-    setBlock (x, y, blockType, flipX) {
+    setBlock (x, y, blockType, flipX, blockId) {
         const data = {
             pos: {
                 x,
@@ -95,6 +95,7 @@ class _GameManager {
             },
             blockType,
             flipX,
+            blockId,
         };
         send("setBlock", data);
     }
@@ -176,9 +177,9 @@ class _GameManager {
 
     onSetBlock (data) {
         if (data.playerId === getId()) {
-            return;
+            GameBus.emit("updateBlockId", data);
         }
-        this.instance.setBlock(data.pos.x, data.pos.y, data.blockType, data.flipX);
+        GameBus.emit("setBlock", data);
     }
 
     onJoinGame (data) {
