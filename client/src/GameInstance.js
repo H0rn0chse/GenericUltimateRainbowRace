@@ -35,10 +35,6 @@ export class GameInstance {
 
         this.game = new Phaser.Game(phaserConfig);
         this.game.instanceConfig = controller.getGameInstanceConfig();
-
-        this.game.events.once("postrender", () => {
-            GameBus.emit("phaserReady");
-        });
     }
 
     _getMainScene () {

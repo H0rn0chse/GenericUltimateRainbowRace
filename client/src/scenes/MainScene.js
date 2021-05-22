@@ -3,6 +3,7 @@ import { GameManager } from "../views/GameManager.js";
 import { PhaseManager } from "../PhaseManager.js";
 import { BLOCKS_X, BLOCKS_Y, Phaser, PHASES, LEVELS } from "../Globals.js";
 import { createPlayerAnims } from "../PlayerAnimations.js";
+import { GameBus } from "../EventBus.js";
 
 export class MainScene extends Phaser.Scene {
     constructor (createDeferred) {
@@ -108,6 +109,8 @@ export class MainScene extends Phaser.Scene {
         this.physics.add.collider(puppets, terrain);
         this.physics.add.collider(puppets, this.blockMap);
         this.physics.add.overlap(this.player, flag, flag.onPlayerOverlap, null, flag);
+
+        GameBus.emit("phaserReady");
     }
 
     setBlock (x, y, blockType, flipX = false) {
