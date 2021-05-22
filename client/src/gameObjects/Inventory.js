@@ -7,6 +7,11 @@ export class Inventory {
     constructor (scene) {
         that = this;
         this.generateBackground(scene);
+        PhaseManager.listen(Phases.PreRun, this.onBuildPhaseOver.bind(this));
+    }
+
+    onBuildPhaseOver (data) {
+        this.disableInventory();
     }
 
     fillInventoryRandom (blockMap, blockTypes, count) {
@@ -78,5 +83,9 @@ export class Inventory {
 
     getRandomInt (max) {
         return Math.floor(Math.random() * Math.floor(max));
+    }
+
+    destroy () {
+        // TODO unbind PhaseManager
     }
 }
