@@ -7,6 +7,8 @@ export class Player extends PlayerBase {
     constructor (world, scene, spawnPoint) {
         super(scene, spawnPoint.x, spawnPoint.y - 30, "unicorn");
 
+        this.character = "Coffee";
+
         this.cursor = scene.getCursor();
         this.impulse = new Phaser.Math.Vector2(0, 0);
 
@@ -46,51 +48,6 @@ export class Player extends PlayerBase {
         this.hasDashed = false;
         this.curDashTime = 0;
         this.curDeathTime = 0;
-
-        scene.anims.create({
-            key: "playerIdle",
-            frames: [{ key: "unicorn", frame: 0 }],
-            frameRate: 20,
-        });
-
-        scene.anims.create({
-            key: "playerWalk",
-            frames: scene.anims.generateFrameNumbers("unicorn", { start: 0, end: 4 }), // 5 frames
-            frameRate: 10,
-            repeat: -1,
-        });
-
-        scene.anims.create({
-            key: "playerJumpStart",
-            frames: scene.anims.generateFrameNumbers("unicorn", { start: 9, end: 11 }),
-            frameRate: 16,
-            repeat: 0,
-        });
-        scene.anims.create({
-            key: "playerJumping",
-            frames: scene.anims.generateFrameNumbers("unicorn", { start: 12, end: 12 }),
-            frameRate: 16,
-            repeat: -1,
-        });
-        scene.anims.create({
-            key: "playerJumpEnd",
-            frames: scene.anims.generateFrameNumbers("unicorn", { start: 13, end: 15 }),
-            frameRate: 20,
-            repeat: 0,
-        });
-        scene.anims.create({
-            key: "playerDash",
-            frames: scene.anims.generateFrameNumbers("unicornDash", { start: 0, end: 0 }),
-            frameRate: 16,
-            repeat: -1,
-        });
-
-        scene.anims.create({
-            key: "playerDied",
-            frames: scene.anims.generateFrameNumbers("unicorn", { start: 16, end: 16 }),
-            frameRate: 16,
-            repeat: -1,
-        });
     }
 
     die () {
@@ -98,7 +55,8 @@ export class Player extends PlayerBase {
             console.log("Player died!");
             GameManager.endRun(Status.Dead);
             this.isDead = true;
-            this.anims.play("playerDied", true);
+
+            this.anims.play(`player${this.character}Died`, true);
         }
     }
 
@@ -107,7 +65,7 @@ export class Player extends PlayerBase {
         this.setPosition(position.x, position.y);
         this.body.setVelocityX(0);
         this.flipX = false;
-        this.anims.play("playerIdle");
+        this.anims.play(`player${this.character}Idle`);
         this.impulse.x = 0;
         this.impulse.y = 0;
         this.curWalkSpeed = 0;
@@ -128,27 +86,27 @@ export class Player extends PlayerBase {
 
         // only allow user input during run phase
         if (!PhaseManager.isPhase(Phases.Run)) {
-            this.anims.play("playerIdle");
+            this.anims.play(`player${this.character}Idle`);
             return;
         }
 
         // Jump
         this.curJumpTime += delta;
-        if (this.animState === "playerJumpEnd" && !this.anims.isPlaying) {
+        if (this.animState === `player${this.character}JumpEnd` && this.body.onFloor()) {
             this.animState = false;
         }
-        if (this.animState === "playerJumping" && this.body.onFloor()) {
-            this.animState = "playerJumpEnd";
+        if (this.animState === `player${this.character}Jumping` && this.body.velocity.y > 0) {
+            this.animState = `player${this.character}JumpEnd`;
         }
-        if (this.animState === "playerJumpStart" && !this.anims.isPlaying) {
-            this.animState = "playerJumping";
+        if (this.animState === `player${this.character}JumpStart` && !this.anims.isPlaying) {
+            this.animState = `player${this.character}Jumping`;
         }
         if (this.cursor.up.isDown || this.keys.W.isDown) {
             // Start jump
             if (this.body.onFloor()) {
                 this.isCurJumping = true;
                 this.curJumpTime = 0.0;
-                this.animState = "playerJumpStart";
+                this.animState = `player${this.character}JumpStart`;
             // Continue jump
             } else if (this.isCurJumping) {
                 if (this.curJumpTime >= this.jumpTimeMax) {
@@ -174,12 +132,12 @@ export class Player extends PlayerBase {
             this.hasDashed = true;
             this.wasDashKeyUp = false;
             this.curWalkSpeed = (this.flipX ? -1 : 1) * (this.dashSpeed);
-            this.animState = "playerDash";
+            this.animState = `player${this.character}Dash`;
         }
         // End dash
         if (this.isCurDashing && this.curDashTime > this.dashTime) {
             this.isCurDashing = false;
-            this.animState = this.body.onFloor() ? false : "playerJumping";
+            this.animState = this.body.onFloor() ? false : `player${this.character}Jumping`;
         }
         // Recover dash
         if (this.body.onFloor()) {
@@ -206,11 +164,11 @@ export class Player extends PlayerBase {
         this.curWalkSpeed = Math.sign(this.curWalkSpeed) * Math.min(Math.abs(this.curWalkSpeed), this.walkSpeedMax);
 
         // determine animation
-        if (this.animState !== "playerDash" && ctrlDir !== 0) {
+        if (this.animState !== `player${this.character}Dash` && ctrlDir !== 0) {
             this.flipX = ctrlDir < 0;
         }
         if (this.animState === false) {
-            this.anims.play(ctrlDir === 0 ? "playerIdle" : "playerWalk", true);
+            this.anims.play(ctrlDir === 0 ? `player${this.character}Idle` : `player${this.character}Walk`, true);
         } else {
             this.anims.play(this.animState, true);
         }
