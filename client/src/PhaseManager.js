@@ -1,6 +1,6 @@
 import { getId, send, addEventListener } from "./socket.js";
 import { GameManager } from "./views/GameManager.js";
-import { GameInstance } from "./GameInstance.js";
+// import { GameInstance } from "./GameInstance.js";
 import { Timer } from "./Timer.js";
 
 export const Phases = {
@@ -97,7 +97,6 @@ class _PhaseManager {
         }
 
         this._startPhaseCountdown(10, Phases.PreRun);
-
     }
 
     onPreRun () {
@@ -144,12 +143,13 @@ class _PhaseManager {
             return;
         }
 
-        GameInstance.sceneDeferred.promise.then(() => {
-            this.currentPhase = data.phase;
-            this.title.innerText = PhaseTexts[this.currentPhase];
+        // todo: Check removal
+        // GameInstance.sceneDeferred.promise.then(() => {
+        this.currentPhase = data.phase;
+        this.title.innerText = PhaseTexts[this.currentPhase];
 
-            this.dispatch(data.phase, data);
-        });
+        this.dispatch(data.phase, data);
+        // });
     }
 
     onSetCountdown (data) {

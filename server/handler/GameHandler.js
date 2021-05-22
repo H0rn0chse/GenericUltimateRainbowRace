@@ -93,6 +93,7 @@ class _GameHandler {
         playerData.pos = data.pos;
         playerData.anim = data.anim;
         playerData.flipX = data.flipX;
+        playerData.vel = data.vel;
 
         publish(lobby.topic, "playerUpdate", playerData);
     }
