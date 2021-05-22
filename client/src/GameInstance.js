@@ -53,10 +53,6 @@ export class GameInstance {
         this._getMainScene()?.fillInv(blockTypes);
     }
 
-    generateInventory (count) {
-        this._getMainScene()?.generateInventory(count);
-    }
-
     resetMainScene () {
         this._getMainScene()?.resetScene();
     }

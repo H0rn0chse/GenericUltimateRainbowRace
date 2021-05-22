@@ -10,7 +10,7 @@ export class MainScene extends BaseScene {
     constructor (createDeferred) {
         super();
         this.createDeferred = createDeferred;
-        PhaseBus.on(PHASES.Build, this.generateInventory, this);
+        PhaseBus.on(PHASES.Build, this.onBuild, this);
         globalThis.GameScene = this;
     }
 
@@ -128,9 +128,9 @@ export class MainScene extends BaseScene {
         this.blockMap.fillInv(blockTypes);
     }
 
-    generateInventory (count = 4) {
+    onBuild () {
         if (PhaseManager.isHost) {
-            this.blockMap.generateInventory(count);
+            this.blockMap.generateInventory(4);
         }
     }
 
@@ -140,15 +140,17 @@ export class MainScene extends BaseScene {
     }
 
     update (time, delta) {
-        if (!PhaseManager.isPhase(PHASES.Initial) && this.physics.world.isPaused) {
-            this.physics.resume();
-        }
-        this.player.update(time, delta);
+        if (!PhaseManager.isPhase(PHASES.Initial)) {
+            if (this.physics.world.isPaused) {
+                this.physics.resume();
+            }
+            this.player.update(time, delta);
 
-        GameManager.updatePlayer(this.player.getData());
+            GameManager.updatePlayer(this.player.getData());
+        }
     }
 
     destroy () {
-        PhaseBus.off(PHASES.Build, this.generateInventory, this);
+        PhaseBus.off(PHASES.Build, this.onBuild, this);
     }
 }

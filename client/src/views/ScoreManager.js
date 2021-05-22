@@ -16,7 +16,7 @@ class _ScoreManager {
         addEventListener("updateScore", this.onUpdateScore, this);
 
         PhaseBus.on(PHASES.Run, this.onRun, this);
-        PhaseBus.on(PHASES.PreRun, this.onPreRun, this);
+        PhaseBus.on(PHASES.Colors, this.onColors, this);
     }
 
     // ========================================== Manager logic & handler =============================================
@@ -61,7 +61,7 @@ class _ScoreManager {
 
     // ========================================== Phase / EventBus handler =============================================
 
-    onPreRun (data) {
+    onColors (data) {
         this.resetScore();
     }
 

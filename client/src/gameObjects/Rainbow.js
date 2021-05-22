@@ -1,5 +1,5 @@
 import { Phaser, PHASES, SCENE_HEIGHT, SCENE_WIDTH } from "../Globals.js";
-import { PhaseManager } from "../PhaseManager.js";
+import { PhaseBus } from "../EventBus.js";
 
 const Colors = [
     "0xff0000", // red
@@ -28,7 +28,7 @@ export class Rainbow extends Phaser.Physics.Arcade.StaticGroup {
             return rect;
         });
 
-        PhaseManager.listen(PHASES.Colors, this.onColorChange.bind(this));
+        PhaseBus.on(PHASES.Colors, this.onColorChange, this);
     }
 
     onColorChange (data) {

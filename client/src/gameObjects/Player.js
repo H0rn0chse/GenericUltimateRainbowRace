@@ -8,8 +8,6 @@ export class Player extends PlayerBase {
         super(scene, spawnPoint.x, spawnPoint.y, "unicorn");
         this.skinId = skinId;
 
-        this.setOrigin(0, 0.5);
-
         this.cursor = this.scene.input.keyboard.createCursorKeys();
         this.impulse = new Phaser.Math.Vector2(0, 0);
 
@@ -81,7 +79,11 @@ export class Player extends PlayerBase {
         super.update(time, delta);
 
         // only handle alive player
-        if (this.isDead) {
+        if (this.isDead || !PhaseManager.isPhase(PHASES.Run) || GameManager.runEnded) {
+            if (!this.isDead) {
+                this.anims.play(`player${this.skinId}Idle`);
+                this.setVelocityX(0);
+            }
             return;
         }
 

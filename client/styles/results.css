@@ -6,6 +6,10 @@
     justify-content: flex-start;
     align-items: center;
     z-index: 1;
+    margin: auto;
+    top: 0;
+    left: 0;
+    right: 0;
 }
 
 #gameResultsList {

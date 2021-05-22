@@ -3,8 +3,9 @@ import { ViewManager } from "../ViewManager.js";
 import { getId, send, addEventListener, removeEventListener, ready } from "../socket.js";
 import { PhaseManager } from "../PhaseManager.js";
 import { AvatarManager } from "../AvatarManager.js";
-import { DebugBus, GameBus } from "../EventBus.js";
-import { PHASES, _ } from "../Globals.js";
+import { ScoreManager } from "./ScoreManager.js";
+import { DebugBus, GameBus, PhaseBus } from "../EventBus.js";
+import { PHASES, PLAYER_STATUS, _ } from "../Globals.js";
 
 export const Status = {
     Alive: "Alive",
@@ -58,16 +59,24 @@ class _GameManager {
             { channel: "resetRun", handler: this.onResetRun },
         ];
 
-        PhaseManager.listen(PHASES.Colors, this.onColors.bind(this));
+        PhaseBus.on(PHASES.Colors, this.onColors, this);
         GameBus.on("sceneReady", this.onSceneReady, this);
     }
 
     // ========================================== Game logic & handler =============================================
 
     endRun (status) {
+        ScoreManager.stopTimer();
+        PhaseManager.setTitle("Waiting for others...");
+
         if (!this.runEnded) {
+            if (status === PLAYER_STATUS.Dead) {
+                ScoreManager.clearScore();
+            }
+
             const data = {
                 status,
+                score: ScoreManager.getScore(),
             };
             send("runEnd", data);
             this.runEnded = true;
@@ -107,6 +116,15 @@ class _GameManager {
 
     nextGame () {
         send("setPhase", { phase: PHASES.Colors });
+    }
+
+    stopGame () {
+        send("stopGame", {});
+    }
+
+    leaveGame () {
+        send("leaveGame", {});
+        ViewManager.showOverview();
     }
 
     getGameInstanceConfig () {
