@@ -10,26 +10,6 @@ export class Player extends PlayerBase {
         this.cursor = scene.getCursor();
         this.impulse = new Phaser.Math.Vector2(0, 0);
 
-        this.name = "Player";
-        this.collider = [{
-            object1: this.name,
-            object2: "Map",
-            handler: (a, b) => {
-                b.onPlayerCollision(a);
-            },
-        }, {
-            object1: this.name,
-            object2: "MapLevel",
-        }];
-
-        world.enable([this], 0);
-
-        this.setSize(45, 50);
-        this.setOffset(15, 5);
-
-        this.setBounce(0.0);
-        this.setCollideWorldBounds(true);
-
         // keys
         this.keys = {};
         this.keys.W = scene.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.W);
