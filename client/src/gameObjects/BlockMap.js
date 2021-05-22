@@ -7,6 +7,8 @@ import { BlockSpeed } from "./blocks/BlockSpeed.js";
 import { BlockGunSlow, BlockGunFast } from "./blocks/BlockGun.js";
 import { Inventory } from "./Inventory.js";
 import { BLOCK_SIZE, PHASES, Phaser } from "../Globals.js";
+import { PhaseBus, GameBus } from "../EventBus.js";
+import { guid } from "../utils.js";
 
 const BlockTypes = {
     Stone: BlockStone,
@@ -43,7 +45,9 @@ export class BlockMap extends Phaser.Physics.Arcade.StaticGroup {
         scene.input.on(Phaser.Input.Events.POINTER_MOVE, this.onPointerMove, this);
         scene.input.keyboard.on("keydown-R", this.onBlockFlip, this);
 
-        PhaseManager.listen(PHASES.PreRun, this.onBuildPhaseOver.bind(this));
+        PhaseBus.on(PHASES.PreRun, this.onBuildPhaseOver, this);
+        GameBus.on("setBlock", this.onSetBlock, this);
+        GameBus.on("updateBlockId", this.onUpdateBlockId, this);
     }
 
     onBuildPhaseOver () {
@@ -54,7 +58,21 @@ export class BlockMap extends Phaser.Physics.Arcade.StaticGroup {
         }
     }
 
+    onSetBlock (data) {
+        this.createBlock(data.pos.x, data.pos.y, data.blockType, data.flipX, data.blockId);
+    }
+
+    onUpdateBlockId (data) {
+        const { clientBlockId, blockId } = data;
+        const block = this.getMatching("blockId", clientBlockId)[0];
+        if (block) {
+            debugger
+            block.blockId = blockId;
+        }
+    }
+
     getSpawnPoint () {
+        this.spawnPoint.y -= 10;
         return this.spawnPoint;
     }
 
@@ -88,8 +106,9 @@ export class BlockMap extends Phaser.Physics.Arcade.StaticGroup {
                 draggedBlock.y = Math.round(pointer.worldY, 0);
                 draggedBlock.resetHighlight();
                 draggedBlock.refreshBody();
+                draggedBlock.blockId = guid();
                 inv.disableInventory();
-                GameManager.setBlock(draggedBlock.x, draggedBlock.y, draggedBlock.type, draggedBlock.isFlipped());
+                GameManager.setBlock(draggedBlock.x, draggedBlock.y, draggedBlock.type, draggedBlock.isFlipped(), draggedBlock.blockId);
             } else {
                 draggedBlock.destroy();
             }
@@ -138,7 +157,7 @@ export class BlockMap extends Phaser.Physics.Arcade.StaticGroup {
         return !collision;
     }
 
-    createBlock (x, y, blockType = "Boring", flipX = false) {
+    createBlock (x, y, blockType = "Boring", flipX = false, blockId) {
         const BlockConstructor = BlockTypes[blockType];
 
         const block = new BlockConstructor({
@@ -154,6 +173,10 @@ export class BlockMap extends Phaser.Physics.Arcade.StaticGroup {
         block.addToUpdateList();
         block.visible = true;
         block.setActive(true);
+
+        if (blockId) {
+            block.blockId = blockId;
+        }
 
         return block;
     }

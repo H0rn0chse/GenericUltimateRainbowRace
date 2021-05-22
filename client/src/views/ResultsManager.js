@@ -25,7 +25,7 @@ class _ResultsManager {
         });
 
         PhaseBus.on(PHASES.Results, this.onResults, this);
-        PhaseBus.on(PHASES.PreRun, this.onPreRun, this);
+        PhaseBus.on(PHASES.Colors, this.onColors, this);
     }
 
     // ========================================== Manager handler =============================================
@@ -78,7 +78,7 @@ class _ResultsManager {
         this.backBtn.disabled = !isHost;
     }
 
-    onPreRun () {
+    onColors () {
         this.results.style.display = "none";
     }
 

@@ -2,6 +2,8 @@ import { LobbyManager } from "../LobbyManager.js";
 import { PlayerManager } from "../PlayerManager.js";
 import { OverviewHandler } from "./OverviewHandler.js";
 import { publish, registerMessageHandler, send, unsubscribe } from "../socket.js";
+import { PLAYER_STATUS, SCORE_FIRST } from "../../client/src/Globals.js";
+import { guid } from "../../client/src/utils.js";
 
 class _GameHandler {
     init () {
@@ -149,6 +151,8 @@ class _GameHandler {
         }
 
         data.playerId = playerId;
+        data.clientBlockId = data.blockId;
+        data.blockId = guid();
 
         publish(lobby.topic, "setBlock", data);
     }
@@ -192,8 +196,20 @@ class _GameHandler {
         }
 
         const count = Object.keys(lobby.data.run).length + 1;
+
+        const alivePlayer = Object.values(lobby.data.run).map((player) => {
+            return player.status !== PLAYER_STATUS.Dead;
+        }).length;
+
+        if (alivePlayer === 0 && data.status !== PLAYER_STATUS.Dead) {
+            data.score += SCORE_FIRST;
+            send(ws, "updateScore", { score: data.score });
+        }
+
         lobby.data.run[playerId] = {
             status: data.status,
+            score: data.score,
+            playerId,
             count,
         };
 

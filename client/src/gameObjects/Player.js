@@ -5,7 +5,7 @@ import { PlayerBase } from "./PlayerBase.js";
 
 export class Player extends PlayerBase {
     constructor (scene, spawnPoint, skinId) {
-        super(scene, spawnPoint.x, spawnPoint.y - 30, "unicorn");
+        super(scene, spawnPoint.x, spawnPoint.y, "unicorn");
         this.skinId = skinId;
 
         this.cursor = this.scene.input.keyboard.createCursorKeys();
@@ -79,7 +79,11 @@ export class Player extends PlayerBase {
         super.update(time, delta);
 
         // only handle alive player
-        if (this.isDead) {
+        if (this.isDead || !PhaseManager.isPhase(PHASES.Run) || GameManager.runEnded) {
+            if (!this.isDead) {
+                this.anims.play(`player${this.skinId}Idle`);
+                this.setVelocityX(0);
+            }
             return;
         }
 

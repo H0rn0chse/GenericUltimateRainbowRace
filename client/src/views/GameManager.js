@@ -3,8 +3,9 @@ import { ViewManager } from "../ViewManager.js";
 import { getId, send, addEventListener, removeEventListener, ready } from "../socket.js";
 import { PhaseManager } from "../PhaseManager.js";
 import { AvatarManager } from "../AvatarManager.js";
-import { DebugBus, GameBus } from "../EventBus.js";
-import { PHASES, _ } from "../Globals.js";
+import { ScoreManager } from "./ScoreManager.js";
+import { DebugBus, GameBus, PhaseBus } from "../EventBus.js";
+import { PHASES, PLAYER_STATUS, _ } from "../Globals.js";
 
 export const Status = {
     Alive: "Alive",
@@ -58,16 +59,24 @@ class _GameManager {
             { channel: "resetRun", handler: this.onResetRun },
         ];
 
-        PhaseManager.listen(PHASES.Colors, this.onColors.bind(this));
-        GameBus.on("phaserReady", this.onPhaserReady, this);
+        PhaseBus.on(PHASES.Colors, this.onColors, this);
+        GameBus.on("sceneReady", this.onSceneReady, this);
     }
 
     // ========================================== Game logic & handler =============================================
 
     endRun (status) {
+        ScoreManager.stopTimer();
+        PhaseManager.setTitle("Waiting for others...");
+
         if (!this.runEnded) {
+            if (status === PLAYER_STATUS.Dead) {
+                ScoreManager.clearScore();
+            }
+
             const data = {
                 status,
+                score: ScoreManager.getScore(),
             };
             send("runEnd", data);
             this.runEnded = true;
@@ -78,7 +87,7 @@ class _GameManager {
         send("playerUpdate", data);
     }
 
-    setBlock (x, y, blockType, flipX) {
+    setBlock (x, y, blockType, flipX, blockId) {
         const data = {
             pos: {
                 x,
@@ -86,6 +95,7 @@ class _GameManager {
             },
             blockType,
             flipX,
+            blockId,
         };
         send("setBlock", data);
     }
@@ -109,6 +119,15 @@ class _GameManager {
         send("setPhase", { phase: PHASES.Colors });
     }
 
+    stopGame () {
+        send("stopGame", {});
+    }
+
+    leaveGame () {
+        send("leaveGame", {});
+        ViewManager.showOverview();
+    }
+
     getGameInstanceConfig () {
         if (!this.lobbyData) {
             return;
@@ -128,7 +147,7 @@ class _GameManager {
         this.instance.resetMainScene();
     }
 
-    onPhaserReady () {
+    onSceneReady () {
         send("playerReady", {});
     }
 
@@ -158,9 +177,9 @@ class _GameManager {
 
     onSetBlock (data) {
         if (data.playerId === getId()) {
-            return;
+            GameBus.emit("updateBlockId", data);
         }
-        this.instance.setBlock(data.pos.x, data.pos.y, data.blockType, data.flipX);
+        GameBus.emit("setBlock", data);
     }
 
     onJoinGame (data) {
