@@ -13,6 +13,8 @@ export class PlayerBase extends Phaser.Physics.Arcade.Sprite {
                 (Math.round(255 * tintDark * tintRed) << 8) |
                 (Math.round(255 * tintDark * tintRed));
             this.setTint(tint);
+        } else {
+            this.clearTint();
         }
     }
 }

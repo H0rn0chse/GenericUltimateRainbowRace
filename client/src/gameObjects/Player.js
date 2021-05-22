@@ -135,6 +135,7 @@ export class Player extends PlayerBase {
         this.isCurDashing = false;
         this.hasDashed = false;
         this.wasDashKeyUp = true;
+        this.clearTint();
     }
 
     update (time, delta) {
