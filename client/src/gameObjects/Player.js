@@ -1,6 +1,7 @@
 import { Phaser } from "../Globals.js";
 import { Phases, PhaseManager } from "../PhaseManager.js";
 import { Status, GameManager } from "../views/GameManager.js";
+import { PlayerBase } from "./PlayerBase.js";
 
 export class Player extends Phaser.Physics.Arcade.Sprite {
     constructor (world, scene, spawnPoint) {
@@ -8,6 +9,18 @@ export class Player extends Phaser.Physics.Arcade.Sprite {
 
         this.cursor = scene.getCursor();
         this.impulse = new Phaser.Math.Vector2(0, 0);
+
+        this.name = "Player";
+        this.collider = [{
+            object1: this.name,
+            object2: "Map",
+            handler: (a, b) => {
+                b.onPlayerCollision(a);
+            },
+        }, {
+            object1: this.name,
+            object2: "MapLevel",
+        }];
 
         world.enable([this], 0);
 
@@ -41,14 +54,18 @@ export class Player extends Phaser.Physics.Arcade.Sprite {
         // dashing constants
         this.dashTime = 500.0;
         this.dashSpeed = this.walkSpeedMax;
+        this.wasDashKeyUp = true;
 
         // state
+        this.isDead = false;
+        this.animState = false;
         this.curWalkSpeed = 0;
         this.isCurJumping = false;
         this.curJumpTime = 0;
         this.isCurDashing = false;
         this.hasDashed = false;
         this.curDashTime = 0;
+        this.curDeathTime = 0;
 
         scene.anims.create({
             key: "playerIdle",
@@ -57,36 +74,40 @@ export class Player extends Phaser.Physics.Arcade.Sprite {
         });
 
         scene.anims.create({
-            key: "playerWalkLeft",
+            key: "playerWalk",
             frames: scene.anims.generateFrameNumbers("unicorn", { start: 0, end: 4 }), // 5 frames
             frameRate: 10,
             repeat: -1,
         });
 
         scene.anims.create({
-            key: "playerWalkRight",
-            frames: scene.anims.generateFrameNumbers("unicorn", { start: 0, end: 4 }), // 5 frames
-            frameRate: 10,
-            repeat: -1,
+            key: "playerJumpStart",
+            frames: scene.anims.generateFrameNumbers("unicorn", { start: 9, end: 11 }),
+            frameRate: 16,
+            repeat: 0,
         });
-
         scene.anims.create({
-            key: "playerJumpLeft",
-            frames: scene.anims.generateFrameNumbers("unicorn", { start: 9, end: 15 }), // 8 frames
+            key: "playerJumping",
+            frames: scene.anims.generateFrameNumbers("unicorn", { start: 12, end: 12 }),
             frameRate: 16,
             repeat: -1,
         });
-
         scene.anims.create({
-            key: "playerJumpRight",
-            frames: scene.anims.generateFrameNumbers("unicorn", { start: 9, end: 15 }), // 8 frames
+            key: "playerJumpEnd",
+            frames: scene.anims.generateFrameNumbers("unicorn", { start: 13, end: 15 }),
+            frameRate: 20,
+            repeat: 0,
+        });
+        scene.anims.create({
+            key: "playerDash",
+            frames: scene.anims.generateFrameNumbers("unicorn", { start: 12, end: 12 }),
             frameRate: 16,
             repeat: -1,
         });
 
         scene.anims.create({
             key: "playerDied",
-            frames: scene.anims.generateFrameNumbers("unicorn", { start: 16, end: 19 }),
+            frames: scene.anims.generateFrameNumbers("unicorn", { start: 16, end: 16 }),
             frameRate: 16,
             repeat: -1,
         });
@@ -102,16 +123,24 @@ export class Player extends Phaser.Physics.Arcade.Sprite {
     }
 
     reset (position) {
-        this.setPosition(position.x, position.y);
         this.isDead = false;
+        this.setPosition(position.x, position.y);
         this.body.setVelocityX(0);
+        this.flipX = false;
         this.anims.play("playerIdle");
         this.impulse.x = 0;
         this.impulse.y = 0;
+        this.curWalkSpeed = 0;
+        this.isCurJumping = false;
+        this.isCurDashing = false;
+        this.hasDashed = false;
+        this.wasDashKeyUp = true;
     }
 
     update (time, delta) {
-        // only handle the real player
+        super.update(time, delta);
+
+        // only handle alive player
         if (this.isDead) {
             return;
         }
@@ -124,11 +153,21 @@ export class Player extends Phaser.Physics.Arcade.Sprite {
 
         // Jump
         this.curJumpTime += delta;
+        if (this.animState === "playerJumpEnd" && !this.anims.isPlaying) {
+            this.animState = false;
+        }
+        if (this.animState === "playerJumping" && this.body.onFloor()) {
+            this.animState = "playerJumpEnd";
+        }
+        if (this.animState === "playerJumpStart" && !this.anims.isPlaying) {
+            this.animState = "playerJumping";
+        }
         if (this.cursor.up.isDown || this.keys.W.isDown) {
             // Start jump
             if (this.body.onFloor()) {
                 this.isCurJumping = true;
                 this.curJumpTime = 0.0;
+                this.animState = "playerJumpStart";
             // Continue jump
             } else if (this.isCurJumping) {
                 if (this.curJumpTime >= this.jumpTimeMax) {
@@ -142,21 +181,24 @@ export class Player extends Phaser.Physics.Arcade.Sprite {
 
         // Dash
         this.curDashTime += delta;
+        const isDashKeyDown = (this.cursor.down.isDown || this.keys.S.isDown || this.keys.Space.isDown);
+        if (!this.wasDashKeyUp && !isDashKeyDown) {
+            this.wasDashKeyUp = true;
+        }
         // Start dash
-        if (!this.isCurDashing
-            && !this.hasDashed
-            && (this.cursor.down.isDown || this.keys.S.isDown || this.keys.Space.isDown)) {
+        if (!this.isCurDashing && !this.hasDashed && isDashKeyDown && this.wasDashKeyUp) {
             this.curDashTime = 0;
             this.isCurDashing = true;
             this.isCurJumping = false;
             this.hasDashed = true;
-            this.body.setAllowGravity(false);
+            this.wasDashKeyUp = false;
             this.curWalkSpeed = (this.flipX ? -1 : 1) * (this.dashSpeed);
+            this.animState = "playerDash";
         }
         // End dash
         if (this.isCurDashing && this.curDashTime > this.dashTime) {
             this.isCurDashing = false;
-            this.body.setAllowGravity(true);
+            this.animState = this.body.onFloor() ? false : "playerJumping";
         }
         // Recover dash
         if (this.body.onFloor()) {
@@ -183,14 +225,13 @@ export class Player extends Phaser.Physics.Arcade.Sprite {
         this.curWalkSpeed = Math.sign(this.curWalkSpeed) * Math.min(Math.abs(this.curWalkSpeed), this.walkSpeedMax);
 
         // determine animation
-        if (ctrlDir !== 0) {
-            const strJump = (this.body.onFloor()) ? "Walk" : "Jump";
-            const strWalk = (ctrlDir > 0) ? "Right" : "Left";
-
-            this.anims.play(`player${strJump}${strWalk}`, true);
+        if (this.animState !== "playerDash" && ctrlDir !== 0) {
             this.flipX = ctrlDir < 0;
+        }
+        if (this.animState === false) {
+            this.anims.play(ctrlDir === 0 ? "playerIdle" : "playerWalk", true);
         } else {
-            this.anims.play("playerIdle");
+            this.anims.play(this.animState, true);
         }
 
         this.body.setVelocityX(this.curWalkSpeed + this.impulse.x);

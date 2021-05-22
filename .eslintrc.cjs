@@ -39,5 +39,6 @@ module.exports = {
         "max-classes-per-file": "off",
         "arrow-body-style": "off",
         "no-warning-comments": "error",
+        "no-bitwise": "off",
     },
 };
