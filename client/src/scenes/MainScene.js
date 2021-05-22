@@ -95,7 +95,7 @@ export class MainScene extends Phaser.Scene {
         const puppets = this.addGroup.puppet();
         this.player = this.add.player(this.blockMap.getSpawnPoint(), skinId);
 
-        this.createFlag();
+        const flag = this.add.flag(this.blockMap.getEndPoint());
 
         // ================== collision / overlap ==================
         // player collision
@@ -109,27 +109,7 @@ export class MainScene extends Phaser.Scene {
         // puppet collision
         this.physics.add.collider(puppets, terrain);
         this.physics.add.collider(puppets, this.blockMap);
-    }
-
-    createFlag () {
-        const endPoint = this.blockMap.getEndPoint();
-        this.flag = this.physics.add.sprite(endPoint.x + 21, endPoint.y - 21, "flag", 0);
-        this.anims.create({
-            key: "flag_wave",
-            frames: this.anims.generateFrameNumbers("flag", { start: 0, end: 2 }),
-            frameRate: 10,
-            repeat: -1,
-        });
-        this.flag.body.allowGravity = false;
-        this.flag.anims.play("flag_wave", true);
-
-        this.physics.add.overlap(this.player, this.flag, this.playerReachedFlag, null, this);
-    }
-
-    playerReachedFlag (player, flag) {
-        if (PhaseManager.isPhase(PHASES.Run)) {
-            GameManager.endRun(Status.Alive);
-        }
+        this.physics.add.overlap(this.player, flag, flag.onPlayerOverlap, null, flag);
     }
 
     setBlock (x, y, blockType, flipX = false) {

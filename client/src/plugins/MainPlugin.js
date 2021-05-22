@@ -5,6 +5,7 @@ import { TileMaps } from "../scenePlugins/TileMaps.js";
 import { DebugHelper } from "../scenePlugins/DebugHelper.js";
 import { VolumeMixer } from "../scenePlugins/VolumeMixer.js";
 import { TiledPlugin } from "../scenePlugins/TiledPlugin.js";
+import { Flag } from "../gameObjects/Flag.js";
 
 export class MainPlugin extends Phaser.Plugins.BasePlugin {
     constructor (pluginManager) {
@@ -12,6 +13,10 @@ export class MainPlugin extends Phaser.Plugins.BasePlugin {
 
         pluginManager.registerGameObject("player", function (pos, skinId) {
             return this.displayList.add(new Player(this.scene, pos, skinId));
+        });
+
+        pluginManager.registerGameObject("flag", function (pos) {
+            return this.displayList.add(new Flag(this.scene, pos.x, pos.y));
         });
 
         pluginManager.installScenePlugin("addGroup", CustomGroupManager, "addGroup");
