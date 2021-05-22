@@ -3,7 +3,7 @@ import { Phases, PhaseManager } from "../PhaseManager.js";
 import { Status, GameManager } from "../views/GameManager.js";
 import { PlayerBase } from "./PlayerBase.js";
 
-export class Player extends Phaser.Physics.Arcade.Sprite {
+export class Player extends PlayerBase {
     constructor (world, scene, spawnPoint) {
         super(scene, spawnPoint.x, spawnPoint.y - 30, "unicorn");
 
