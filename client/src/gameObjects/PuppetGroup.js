@@ -20,6 +20,7 @@ export class PuppetGroup extends Phaser.Physics.Arcade.Group {
             puppet = new Puppet(this.scene, data.avatarId, playerId);
             this.add(puppet, true);
             puppet.setCollideWorldBounds(true);
+            puppet.body.setAllowGravity(false);
         }
 
         const { x, y } = data.pos;

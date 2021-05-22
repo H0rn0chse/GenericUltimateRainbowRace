@@ -76,8 +76,9 @@ class _GameHandler {
 
         const playerData = lobby.data.player[playerId];
         playerData.pos = data.pos;
+        data.id = playerId;
 
-        publish(lobby.topic, "playerUpdate", playerData);
+        publish(lobby.topic, "playerUpdate", data);
     }
 
     onStopGame (ws, data, playerId) {
