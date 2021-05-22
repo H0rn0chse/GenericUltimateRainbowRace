@@ -70,7 +70,6 @@ export class MainScene extends Phaser.Scene {
         const { levelId, skinId } = instanceConfig;
 
         const _levelId = 0;
-        const _skinId = "Coffee";
 
         this.scale.displaySize.setAspectRatio(BLOCKS_X / BLOCKS_Y);
         this.scale.refresh();
@@ -94,7 +93,7 @@ export class MainScene extends Phaser.Scene {
 
         createPlayerAnims(this.anims);
         const puppets = this.addGroup.puppet();
-        this.player = this.add.player(this.blockMap.getSpawnPoint(), _skinId);
+        this.player = this.add.player(this.blockMap.getSpawnPoint(), skinId);
 
         this.createFlag();
 

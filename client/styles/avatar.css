@@ -20,8 +20,8 @@
 
 .avatarImage {
     background-image: url("../assets/atlas/animals_round.png");
-    transform-origin: left top;
-    transform: scale(0.4);
+    transform-origin: center;
+    transform: scale(0.8);
 
     cursor: pointer;
 }
