@@ -1,10 +1,11 @@
 import { addEventListener, removeEventListener, send, ready, getName, setName } from "../socket.js";
 import { LobbyManager } from "./LobbyManager.js";
+import { OverviewEntry } from "../domElements/OverviewEntry.js";
 
 class _OverviewManager {
     constructor () {
         this.container = document.querySelector("#overview");
-        this.list = document.querySelector("#overviewList");
+        this.listNode = document.querySelector("#overviewList");
         this.name = document.querySelector("#overviewName");
 
         const createButton = document.querySelector("#createOverview");
@@ -27,12 +28,75 @@ class _OverviewManager {
             }
         });
 
+        this.gameHandler = [
+            { channel: "lobbyAdded", handler: this.onLobbyAdded },
+            { channel: "lobbyRemoved", handler: this.onLobbyRemoved },
+        ];
+
         // initial state
         this.usernameInput.value = getName();
+        this.lobbyList = {};
         ready().then(() => {
             this.startListen();
         });
     }
+
+    // ========================================== Manager logic & handler =============================================
+
+    createLobby () {
+        if (this.name.value) {
+            send("createLobby", { name: this.name.value });
+        }
+    }
+
+    resetList () {
+        this.listNode.innerHTML = "";
+        this.name.value = "";
+        this.lobbyList = {};
+    }
+
+    joinLobby (lobbyId) {
+        send("joinLobby", { id: lobbyId });
+    }
+
+    // ========================================== Phase handler =============================================
+
+    // ========================================== Websocket handler =============================================
+
+    onLobbyAdded (lobby) {
+        const lobbyId = lobby.id;
+
+        if (this.lobbyList[lobbyId]) {
+            return;
+        }
+
+        const entry = new OverviewEntry(lobbyId);
+        entry.update(lobby.name);
+
+        this.lobbyList[lobbyId] = entry;
+        this.listNode.appendChild(entry.row);
+    }
+
+    onLobbyRemoved (lobby) {
+        const lobbyId = lobby.id;
+
+        const entry = this.lobbyList[lobbyId];
+        if (entry) {
+            entry.row.remove();
+            delete this.lobbyList[lobbyId];
+        }
+    }
+
+    onLobbyList (data) {
+        if (Array.isArray(data)) {
+            data.forEach((entry) => {
+                this.onLobbyAdded(entry);
+            });
+        }
+        removeEventListener("lobbyList", this.onLobbyList);
+    }
+
+    // ========================================== Basic Manager Interface =============================================
 
     show () {
         this.startListen();
@@ -46,62 +110,20 @@ class _OverviewManager {
         this.container.style.display = "none";
     }
 
-    createLobby () {
-        if (this.name.value) {
-            send("createLobby", { name: this.name.value });
-        }
-    }
-
-    resetList () {
-        this.list.innerHTML = "";
-        this.name.value = "";
-    }
-
-    onLobbyAdded (lobby) {
-        const row = document.createElement("div");
-        row.classList.add("flexRow", "overviewRow");
-        row.setAttribute("data-name", lobby.name);
-
-        const name = document.createElement("div");
-        name.innerText = lobby.name;
-        row.appendChild(name);
-
-        const button = document.createElement("button");
-        button.innerText = "Join Game";
-        button.addEventListener("click", (evt) => {
-            send("joinLobby", { name: lobby.name });
-        });
-        row.appendChild(button);
-
-        this.list.appendChild(row);
-    }
-
-    onLobbyRemoved (lobby) {
-        const row = this.list.querySelector(`div[data-name=${lobby.name}]`);
-        if (row) {
-            row.remove();
-        }
-    }
-
-    onLobbyList (data) {
-        if (Array.isArray(data)) {
-            data.forEach((entry) => {
-                this.onLobbyAdded({ name: entry });
-            });
-        }
-        removeEventListener("lobbyList", this.onLobbyList);
-    }
-
     stopListen () {
-        removeEventListener("lobbyAdded", this.onLobbyAdded, this);
-        removeEventListener("lobbyRemoved", this.onLobbyRemoved, this);
+        this.gameHandler.forEach((data) => {
+            removeEventListener(data.channel, data.handler, this);
+        });
+
         send("unsubscribeOverview");
     }
 
     startListen () {
         addEventListener("lobbyList", this.onLobbyList, this);
-        addEventListener("lobbyAdded", this.onLobbyAdded, this);
-        addEventListener("lobbyRemoved", this.onLobbyRemoved, this);
+        this.gameHandler.forEach((data) => {
+            addEventListener(data.channel, data.handler, this);
+        });
+
         send("subscribeOverview");
     }
 }

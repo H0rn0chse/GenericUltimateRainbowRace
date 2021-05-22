@@ -8,7 +8,10 @@
 @import "lobby.css";
 @import "game.css";
 @import "logoff.css";
-@import "ui.css";
+
+/*elements*/
+@import "avatar.css";
+@import "results.css";
 
 body {
     margin: 0;
@@ -41,20 +44,6 @@ body {
     "mainContent";
 }
 
-#acknowledgements {
-    position: absolute;
-    width: 3em;
-    height: 3em;
-    top: 0.5em;
-    right: 4.5em;
-    cursor: pointer;
-}
-
-#acknowledgements > svg{
-    height: 100%;
-    width: 100%;
-}
-
 .header {
     grid-area: header;
 }
@@ -72,7 +61,22 @@ button {
 }
 
 input {
-    padding-top: 0px;
-    padding-bottom: 0px;
+    padding-top: 0;
+    padding-bottom: 0;
     height: 1.8em;
+}
+
+input[type=range] {
+    padding-left: 0;
+    padding-right: 0;
+}
+
+/*
+    Workaround for bug in Firefox
+*/
+@-moz-document url-prefix() {
+    option {
+        font-weight: normal !important;;
+        font-size: medium !important;
+    }
 }

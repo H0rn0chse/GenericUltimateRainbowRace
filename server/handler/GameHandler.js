@@ -164,10 +164,10 @@ class _GameHandler {
     // ================= not bound to events ==================================================
 
     onJoinGame (ws, data, playerId) {
-        const lobbyName = PlayerManager.getProperty(playerId, "lobby");
-        const lobbyData = LobbyManager.getLobbyData(lobbyName);
+        const lobbyId = PlayerManager.getProperty(playerId, "lobby");
+        const lobbyData = LobbyManager.getLobbyData(lobbyId);
 
-        const topic = `lobby-${lobbyName}`;
+        const topic = `lobby-${lobbyId}`;
         publish(topic, "joinGame", lobbyData);
     }
 }

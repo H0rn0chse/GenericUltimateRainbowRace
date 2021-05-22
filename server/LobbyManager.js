@@ -1,39 +1,52 @@
+import { MAXIMUM_LOBBY_SIZE } from "./globals.js";
+
 class _LobbyManager {
     constructor () {
         this.lobbies = new Map();
+        this.count = 0;
     }
 
     createLobby (name) {
-        if (this.lobbies.has(name)) {
-            return;
-        }
+        this.count += 1;
         const lobbyData = {
-            name,
+            id: this.count,
             running: false,
+            maxSize: MAXIMUM_LOBBY_SIZE,
             player: {},
+            run: {},
+            items: {},
+            levelId: 0,
+            name,
         };
 
-        this.lobbies.set(name, lobbyData);
+        this.lobbies.set(lobbyData.id, lobbyData);
         return lobbyData;
     }
 
     getLobbyNames () {
         const result = [];
-        this.lobbies.forEach((lobbyData, lobbyName) => {
-            if (!lobbyData.running) {
-                result.push(lobbyName);
+        this.lobbies.forEach((lobbyData, lobbyId) => {
+            const lobbySize = Object.keys(lobbyData.player).length;
+            const isFull = lobbyData.maxSize && lobbyData.maxSize <= lobbySize;
+
+            if (!lobbyData.running && !isFull) {
+                const data = {
+                    id: lobbyId,
+                    name: lobbyData.name,
+                };
+                result.push(data);
             }
         });
 
         return result;
     }
 
-    getLobbyData (name) {
-        return this.lobbies.get(name);
+    getLobbyData (id) {
+        return this.lobbies.get(id);
     }
 
-    removeLobby (name) {
-        this.lobbies.delete(name);
+    removeLobby (id) {
+        this.lobbies.delete(id);
     }
 }
 

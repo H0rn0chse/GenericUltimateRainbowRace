@@ -35,13 +35,27 @@
                 <button id="debugGame">Join Debug Game (Solo)</button>
             </div>
         </div>
-        <div id="lobby" class="mainContent" style="display: none;">
-            <div class="flexRow">
-                <h2 id="lobbyName">Lobby Title</h2>
-                <input id="lobbyUsername" type="text" placeholder="Username">
+        <div id="lobby" class="mainContent flexRow" style="display: none;">
+            <div class="lobbyColumn">
+                <div class="flexRow">
+                    <h2 id="lobbyName">Lobby Title</h2>
+                    <input id="lobbyUsername" type="text" placeholder="Username">
+                </div>
+                <button id="lobbyLeave">Leave Lobby</button>
+                <div id="lobbyList"></div>
+                <div id="lobbyFooter">
+                    <button id="lobbyStart">start Game</button>
+                </div>
             </div>
-            <button id="lobbyStart">start Game</button>
-            <div id="lobbyList"></div>
+            <div id="lobbyDetails" class="lobbyColumn">
+                <div id="avatarSelect" class="flexRow">
+                </div>
+                <div id="lobbyLevel" class="flexColumn">
+                    <select id="levelSelect">
+                    </select>
+                    <img id="levelPreview">
+                </div>
+            </div>
         </div>
         <div id="game" class="mainContent flexColumn" style="display: none;">
             <div class="flexRow">
