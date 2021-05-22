@@ -4,6 +4,7 @@ import { Status, GameManager } from "../views/GameManager.js";
 import { Rainbow } from "../gameObjects/Rainbow.js";
 import { PhaseManager, Phases } from "../PhaseManager.js";
 import { Phaser } from "../Globals.js";
+import { createPlayerAnims } from "../PlayerAnimations.js";
 
 export class MainScene extends Phaser.Scene {
     constructor (createDeferred) {
@@ -37,6 +38,32 @@ export class MainScene extends Phaser.Scene {
         this.load.setPath("assets/unicorn");
         this.load.spritesheet("unicorn", "unicorn.png", { frameWidth: 84, frameHeight: 84 });
         this.load.spritesheet("unicornDash", "dash.png", { frameWidth: 84, frameHeight: 84 });
+
+        this.load.setPath("assets/panda");
+        for (let i = 0; i <= 3; i++) {
+            this.load.image(`pandaWalk_0${i}`, `pandaWalk_000${i}.png`);
+        }
+        for (let i = 0; i <= 4; i++) {
+            this.load.image(`pandaJump_0${i}`, `pandaJump_000${i}.png`);
+        }
+        for (let i = 0; i <= 2; i++) {
+            this.load.image(`pandaDash_0${i}`, `pandaDash_000${i}.png`);
+        }
+        this.load.image("pandaDie_00", "pandaDie_0000.png");
+
+        this.load.setPath("assets/coffee");
+        for (let i = 0; i <= 1; i++) {
+            this.load.image(`coffeeWalk_0${i}`, `coffeeWalk_000${i}.png`);
+        }
+        for (let i = 0; i <= 2; i++) {
+            this.load.image(`coffeeJump_0${i}`, `coffeeJump_000${i}.png`);
+        }
+        for (let i = 0; i <= 3; i++) {
+            this.load.image(`coffeeDash_0${i}`, `coffeeDash_000${i}.png`);
+        }
+        for (let i = 0; i <= 1; i++) {
+            this.load.image(`coffeeDie_0${i}`, `coffeeDie_000${i}.png`);
+        }
     }
 
     create () {
@@ -56,8 +83,8 @@ export class MainScene extends Phaser.Scene {
 
         this.blockMap = this.add.existing(new BlockMap(this.physics.world, this, 0));
 
+        createPlayerAnims(this.anims);
         const puppets = this.addGroup.puppet();
-
         this.player = this.add.existing(new Player(this.physics.world, this, this.blockMap.getSpawnPoint()));
 
         this.createFlag();
