@@ -56,7 +56,7 @@ class _ResultsManager {
         score.innerText = entryData.score;
     }
 
-    // ========================================== Phase handler =============================================
+    // ========================================== Phase / EventBus handler =============================================
 
     onResults (data) {
         this.resultsList.innerHTML = "";

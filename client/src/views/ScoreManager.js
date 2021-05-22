@@ -19,7 +19,7 @@ class _ScoreManager {
         PhaseBus.on(PHASES.PreRun, this.onPreRun, this);
     }
 
-    // ========================================== Game logic & handler =============================================
+    // ========================================== Manager logic & handler =============================================
 
     clearScore () {
         this.currentScore = 0;
@@ -59,7 +59,7 @@ class _ScoreManager {
         }
     }
 
-    // ========================================== Phase handler =============================================
+    // ========================================== Phase / EventBus handler =============================================
 
     onPreRun (data) {
         this.resetScore();

@@ -2,10 +2,7 @@ import { BLOCKS_X, BLOCKS_Y, BLOCK_SIZE, Phaser } from "./Globals.js";
 import { MainPlugin } from "./plugins/MainPlugin.js";
 import { MainScene } from "./scenes/MainScene.js";
 import { Deferred } from "./Deferred.js";
-
-// TODO: check removal
-import { Player } from "./gameObjects/Player.js";
-import { BlockMap } from "./gameObjects/BlockMap.js";
+import { GameBus } from "./EventBus.js";
 
 export class GameInstance {
     constructor (container, controller) {
@@ -20,7 +17,7 @@ export class GameInstance {
             physics: {
                 default: "arcade",
                 arcade: {
-                    debug: true,
+                    debug: false,
                     gravity: { y: 600 },
                 },
             },
@@ -34,6 +31,10 @@ export class GameInstance {
 
         this.game = new Phaser.Game(phaserConfig);
         this.game.instanceConfig = controller.getGameInstanceConfig();
+
+        this.game.events.once("ready", () => {
+            GameBus.emit("phaserReady");
+        });
     }
 
     _getMainScene () {

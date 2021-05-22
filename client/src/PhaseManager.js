@@ -6,7 +6,7 @@ import { PHASES, PHASE_TEXTS, PRERUN_COUNTDOWN, BUILD_COUNTDOWN, RESULTS_COUNTDO
 
 class _PhaseManager {
     constructor () {
-        addEventListener("joinGame", this.onJoinGame, this);
+        addEventListener("lobbyReady", this.onLobbyReady, this);
         addEventListener("setPhase", this.onSetPhase, this);
         addEventListener("setCountdown", this.onSetCountdown, this);
         addEventListener("runProgress", this.onRunProgress, this);
@@ -113,7 +113,7 @@ class _PhaseManager {
         }, RESULTS_COUNTDOWN * 1000);
     }
 
-    onJoinGame (data) {
+    onLobbyReady (data) {
         this.isHost = data.host === getId();
 
         if (!this.isHost) {

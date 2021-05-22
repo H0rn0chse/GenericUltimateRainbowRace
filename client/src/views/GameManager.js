@@ -25,13 +25,14 @@ class _GameManager {
         });
 
         this.instance = null;
+        this.runEnded = true;
+
+        this.updatePlayer = _.throttle(this._updatePlayer, 100);
 
         // initial state
         ready().then(() => {
             addEventListener("joinGame", this.onJoinGame, this);
         });
-
-        this.playerPuppets = new Map();
 
         this.gameHandler = [
             { channel: "setBlock", handler: this.onSetBlock },
@@ -43,10 +44,8 @@ class _GameManager {
             { channel: "resetRun", handler: this.onResetRun },
         ];
 
-        this.runEnded = true;
         PhaseManager.listen(PHASES.Colors, this.onColors.bind(this));
-
-        this.updatePlayer = _.throttle(this._updatePlayer, 100);
+        GameBus.on("phaserReady", this.onPhaserReady, this);
     }
 
     // ========================================== Game logic & handler =============================================
@@ -121,10 +120,14 @@ class _GameManager {
         };
     }
 
-    // ========================================== Phase handler =============================================
+    // ========================================== Phase / EventBus handler =============================================
 
     onColors () {
         this.instance.resetMainScene();
+    }
+
+    onPhaserReady () {
+        send("playerReady", {});
     }
 
     // ========================================== Websocket handler =============================================

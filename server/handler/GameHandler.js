@@ -1,11 +1,20 @@
 import { LobbyManager } from "../LobbyManager.js";
 import { PlayerManager } from "../PlayerManager.js";
+import { OverviewHandler } from "./OverviewHandler.js";
 import { publish, registerMessageHandler, send, unsubscribe } from "../socket.js";
 
 class _GameHandler {
     init () {
+        // leave by intention
+        registerMessageHandler("leaveGame", this.onLeaveGame, this);
+        // leave by disconnect
         registerMessageHandler("close", this.onLeaveGame, this);
         registerMessageHandler("playerUpdate", this.onPlayerUpdate, this);
+        registerMessageHandler("stopGame", this.onStopGame, this);
+        /*
+            Here comes game logic listener...
+        */
+        registerMessageHandler("playerReady", this.onPlayerReady, this);
         registerMessageHandler("setBlock", this.onSetBlock, this);
         registerMessageHandler("setPhase", this.onSetPhase, this);
         registerMessageHandler("setCountdown", this.onSetCountdown, this);
@@ -36,30 +45,6 @@ class _GameHandler {
         };
     }
 
-    onFillInv (ws, data, playerId) {
-        const lobby = this._getLobbyData(playerId);
-
-        if (!lobby) {
-            return;
-        }
-
-        data.playerId = playerId;
-
-        publish(lobby.topic, "fillInv", data);
-    }
-
-    onPickBlock (ws, data, playerId) {
-        const lobby = this._getLobbyData(playerId);
-
-        if (!lobby) {
-            return;
-        }
-
-        data.playerId = playerId;
-
-        publish(lobby.topic, "pickBlock", data);
-    }
-
     onLeaveGame (ws, data, playerId) {
         const lobby = this._getLobbyData(playerId);
 
@@ -68,7 +53,7 @@ class _GameHandler {
         }
 
         // remove reference player/ lobby
-        PlayerManager.removeProperty("lobby");
+        PlayerManager.removeProperty(playerId, "lobby");
         delete lobby.data.player[playerId];
 
         // unsubscribe from lobby
@@ -91,11 +76,68 @@ class _GameHandler {
 
         const playerData = lobby.data.player[playerId];
         playerData.pos = data.pos;
-        playerData.anim = data.anim;
-        playerData.flipX = data.flipX;
-        playerData.vel = data.vel;
 
         publish(lobby.topic, "playerUpdate", playerData);
+    }
+
+    onStopGame (ws, data, playerId) {
+        const lobby = this._getLobbyData(playerId);
+        lobby.data.running = false;
+
+        publish(lobby.topic, "joinLobby", lobby.data);
+        OverviewHandler.onLobbyAdded(lobby.data);
+    }
+
+    /*
+        Here comes game logic...
+    */
+
+    onPlayerReady (ws, data, playerId) {
+        const lobby = this._getLobbyData(playerId);
+
+        if (!lobby) {
+            return;
+        }
+
+        lobby.data.player[playerId].ready = true;
+
+        const isGameReady = Object.values(lobby.data.player).reduce((ready, playerData) => {
+            if (!ready) {
+                return ready;
+            }
+            if (!playerData.ready) {
+                return false;
+            }
+            return ready;
+        }, true);
+
+        if (isGameReady) {
+            publish(lobby.topic, "lobbyReady", { host: lobby.data.host });
+        }
+    }
+
+    onFillInv (ws, data, playerId) {
+        const lobby = this._getLobbyData(playerId);
+
+        if (!lobby) {
+            return;
+        }
+
+        data.playerId = playerId;
+
+        publish(lobby.topic, "fillInv", data);
+    }
+
+    onPickBlock (ws, data, playerId) {
+        const lobby = this._getLobbyData(playerId);
+
+        if (!lobby) {
+            return;
+        }
+
+        data.playerId = playerId;
+
+        publish(lobby.topic, "pickBlock", data);
     }
 
     onSetBlock (ws, data, playerId) {

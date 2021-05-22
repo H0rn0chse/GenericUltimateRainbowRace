@@ -67,7 +67,7 @@ export class MainScene extends Phaser.Scene {
     }
 
     create () {
-        const { instanceConfig } = this.game;
+        const { instanceConfig, deferred } = this.game;
         const { levelId, skinId } = instanceConfig;
 
         const _levelId = 0;
@@ -79,7 +79,8 @@ export class MainScene extends Phaser.Scene {
         baqround.y = 578 / 2;
 
         this.tileMaps.init(_levelId);
-        const layer = this.tileMaps.createLayer("Terrain");
+        const terrain = this.tileMaps.createLayer("Terrain");
+        this.debug.addLayer("Spikes", terrain);
         this.bulletGroup = this.physics.add.group({
             allowGravity: false,
             runChildUpdate: true,
@@ -95,7 +96,7 @@ export class MainScene extends Phaser.Scene {
 
         // ================== collision / overlap ==================
         // player collision
-        this.physics.add.collider(this.player, layer);
+        this.physics.add.collider(this.player, terrain);
         this.physics.add.collider(this.player, this.blockMap, (player, block) => {
             block.onPlayerCollision?.(player);
         });
@@ -103,7 +104,7 @@ export class MainScene extends Phaser.Scene {
             bullet.onPlayerHit?.(player);
         });
         // puppet collision
-        this.physics.add.collider(puppets, layer);
+        this.physics.add.collider(puppets, terrain);
         this.physics.add.collider(puppets, this.blockMap);
     }
 

@@ -47,7 +47,7 @@ class _LobbyManager {
 
         const avatarSelectNode = document.querySelector("#avatarSelect");
         this.avatarSelect = new AvatarSelect(avatarSelectNode);
-        LobbyBus.on("selectAvatar", this.selectAvatar, this);
+        LobbyBus.on("selectAvatar", this.onSelectAvatar, this);
 
         this.gameHandler = [
             { channel: "playerUpdated", handler: this.onPlayerUpdated },
@@ -63,17 +63,7 @@ class _LobbyManager {
         });
     }
 
-    show () {
-        this.startListen();
-        this.container.style.display = "";
-        this.usernameInput.value = getName();
-    }
-
-    hide () {
-        this.resetLobby();
-        this.stopListen();
-        this.container.style.display = "none";
-    }
+    // ========================================== Manager logic & handler =============================================
 
     startLobby () {
         send("startLobby", {});
@@ -88,11 +78,6 @@ class _LobbyManager {
         ViewManager.showOverview();
     }
 
-    selectAvatar (avatarId) {
-        this.avatarSelect.select(avatarId);
-        send("avatarUpdate", { avatarId });
-    }
-
     selectLevel (levelId) {
         console.log("selecting a level", levelId);
         send("selectLevel", { levelId });
@@ -104,6 +89,15 @@ class _LobbyManager {
         this.listNode.innerHTML = "";
         this.avatarSelect.reset();
     }
+
+    // ========================================== Phase / EventBus handler =============================================
+
+    onSelectAvatar (avatarId) {
+        this.avatarSelect.select(avatarId);
+        send("avatarUpdate", { avatarId });
+    }
+
+    // ========================================== Websocket handler =============================================
 
     onPlayerAdded (playerData, isHost = false) {
         const playerId = playerData.id;
@@ -164,6 +158,20 @@ class _LobbyManager {
             this.onPlayerAdded(playerData, isHost);
         });
         ViewManager.showLobby();
+    }
+
+    // ========================================== Basic Manager Interface =============================================
+
+    show () {
+        this.startListen();
+        this.container.style.display = "";
+        this.usernameInput.value = getName();
+    }
+
+    hide () {
+        this.resetLobby();
+        this.stopListen();
+        this.container.style.display = "none";
     }
 
     stopListen () {

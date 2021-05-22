@@ -14,6 +14,8 @@ class _SoundManager {
         });
     }
 
+    // ========================================== Manager logic & handler =============================================
+
     getMusicVolume () {
         return this.music.value / 100;
     }
@@ -21,6 +23,12 @@ class _SoundManager {
     getSoundVolume () {
         return this.sound.value / 100;
     }
+
+    // ========================================== Phase / EventBus handler =============================================
+
+    // ========================================== Websocket handler =============================================
+
+    // ========================================== Basic Manager Interface =============================================
 }
 
 export const SoundManager = new _SoundManager();
