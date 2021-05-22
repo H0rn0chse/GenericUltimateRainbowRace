@@ -57,24 +57,30 @@
                 </div>
             </div>
         </div>
-        <div id="game" class="mainContent flexColumn" style="display: none;">
-            <div class="flexRow">
+        <div id="game" class="mainContent" style="display: none;">
+            <div id="gameInfo" class="flexRow">
                 <h2 id=phaseTitle></h2>
                 <h2 id=phaseCountdown></h2>
             </div>
             <div id="gameArea">
             </div>
-            <div id="gameStats" class="flexColumn">
-                <h1>Points</h1>
+            <div id="gameSettings" class="flexColumn">
+                <button id="gameSettingsShow">Settings</button>
+                <button id="gameSettingsHide" class="hidden">Hide</button>
+                <div id="gameSettingsCollapsible" class="flexColumn hidden">
+                    <label class="flexRow">
+                        <input id="debugCbx" type="checkbox">
+                        <span class="checkable">Debug</span>
+                    </label>
+                    <span>Music Volume</span>
+                    <input id="musicVolume" type="range" min="0" max="100" value="20">
+                    <span>Sound Volume</span>
+                    <input id="soundVolume" type="range" min="0" max="100" value="70">
+                </div>
+            </div>
+            <div id="gameStats" class="flexRow">
+                <h3>Score</h3>
                 <h3 id="score">0</h3>
-                <label class="flexRow">
-                    <input id="debugCbx" type="checkbox">
-                    <span class="checkable">Debug</span>
-                </label>
-                <span>Music Volume</span>
-                <input id="musicVolume" type="range" min="0" max="100" value="20">
-                <span>Sound Volume</span>
-                <input id="soundVolume" type="range" min="0" max="100" value="70">
             </div>
             <div id="gameResults" class="flexColumn">
                 <h2>Results</h2>

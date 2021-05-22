@@ -11,8 +11,12 @@ export class GameInstance {
 
         const phaserConfig = {
             type: Phaser.AUTO,
-            width: BLOCKS_X * BLOCK_SIZE,
-            height: BLOCKS_Y * BLOCK_SIZE,
+            scale: {
+                mode: Phaser.Scale.FIT,
+                autoCenter: Phaser.Scale.CENTER_BOTH,
+                width: BLOCKS_X * BLOCK_SIZE,
+                height: BLOCKS_Y * BLOCK_SIZE,
+            },
             parent: container,
             physics: {
                 default: "arcade",
