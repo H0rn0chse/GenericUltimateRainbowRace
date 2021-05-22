@@ -1,17 +1,17 @@
 import { GameManager } from "../views/GameManager.js";
 import { PhaseManager } from "../PhaseManager.js";
-import { BlockBoring } from "./blocks/BlockBoring.js";
+import { BlockStone } from "./blocks/BlockStone.js";
 import { BlockBox } from "./blocks/BlockBox.js";
+import { BlockPillar } from "./blocks/BlockPillar.js";
 import { BlockSpeed } from "./blocks/BlockSpeed.js";
-import { BlockBreakable } from "./blocks/BlockBreakable.js";
 import { BlockGunSlow, BlockGunFast } from "./blocks/BlockGun.js";
 import { Inventory } from "./Inventory.js";
 import { BLOCK_SIZE, PHASES, Phaser } from "../Globals.js";
 
 const BlockTypes = {
-    Boring: BlockBoring,
+    Stone: BlockStone,
     Box: BlockBox,
-    Breakable: BlockBreakable,
+    Pillar: BlockPillar,
     GunSlow: BlockGunSlow,
     GunFast: BlockGunFast,
     Speed: BlockSpeed,

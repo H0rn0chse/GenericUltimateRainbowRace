@@ -1,9 +1,12 @@
+import { STATIC, BLOCK_SIZE } from "../../Globals.js";
+
 const { Physics } = globalThis.Phaser;
 
 export class Block extends Physics.Arcade.Sprite {
     constructor (config, sprite) {
         super(config.scene, config.x, config.y, sprite);
         this._isPreview = false;
+        this.scene.physics.world.enable([this], STATIC);
         if (config.flipped) {
             this.flipBlock();
         }
@@ -26,6 +29,11 @@ export class Block extends Physics.Arcade.Sprite {
         this._isPreview = isPreview;
         this.setActive(!isPreview);
         this.body.enable = !isPreview;
+    }
+
+    scaleToFitBlockSize () {
+        const maxSize = Math.max(this.width, this.height);
+        this.setScale(BLOCK_SIZE / maxSize);
     }
 
     isPreview () {
