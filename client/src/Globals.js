@@ -45,12 +45,68 @@ export const PHASE_TEXTS = {
 export const LEVELS = {
     0: {
         id: 0,
-        name: "The first Level",
+        name: "Level 0",
+        baqround: "baqround1",
         preview: "./assets/preview/level_0.png",
     },
     1: {
         id: 1,
-        name: "The second Level",
-        preview: "./assets/preview/level_1.png",
+        name: "Level 1",
+        baqround: "baqround2",
+        preview: "./assets/preview/level_0.png",
     },
+    2: {
+        id: 2,
+        name: "Level 2",
+        baqround: "baqround3",
+        preview: "./assets/preview/level_0.png",
+    },
+    3: {
+        id: 3,
+        name: "Level 3",
+        baqround: "baqround1",
+        preview: "./assets/preview/level_0.png",
+    },
+    4: {
+        id: 4,
+        name: "Level 4",
+        baqround: "baqround2",
+        preview: "./assets/preview/level_0.png",
+    },
+    5: {
+        id: 5,
+        name: "Level 5",
+        baqround: "baqround3",
+        preview: "./assets/preview/level_0.png",
+    },
+    6: {
+        id: 6,
+        name: "Level 6",
+        baqround: "baqround1",
+        preview: "./assets/preview/level_0.png",
+    },
+    7: {
+        id: 7,
+        name: "Level 7",
+        baqround: "baqround2",
+        preview: "./assets/preview/level_0.png",
+    },
+    8: {
+        id: 8,
+        name: "Level 8",
+        baqround: "baqround3",
+        preview: "./assets/preview/level_0.png",
+    },
+    9: {
+        id: 9,
+        name: "Level 9",
+        baqround: "baqround1",
+        preview: "./assets/preview/level_0.png",
+    },
+    10: {
+        id: 10,
+        name: "Level 10",
+        baqround: "baqround2",
+        preview: "./assets/preview/level_0.png",
+    }
 };

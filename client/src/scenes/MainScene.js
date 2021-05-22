@@ -3,7 +3,8 @@ import { BlockMap } from "../gameObjects/BlockMap.js";
 import { Status, GameManager } from "../views/GameManager.js";
 import { Rainbow } from "../gameObjects/Rainbow.js";
 import { PhaseManager } from "../PhaseManager.js";
-import { BLOCKS_X, BLOCKS_Y, Phaser, PHASES } from "../Globals.js";import { createPlayerAnims } from "../PlayerAnimations.js";
+import { BLOCKS_X, BLOCKS_Y, Phaser, PHASES, LEVELS } from "../Globals.js";
+import { createPlayerAnims } from "../PlayerAnimations.js";
 
 export class MainScene extends Phaser.Scene {
     constructor (createDeferred) {
@@ -32,7 +33,9 @@ export class MainScene extends Phaser.Scene {
 
         this.load.setPath("assets/tilemap");
         this.load.image("atlas", "atlas.png");
-        this.load.tilemapTiledJSON("level_0", "level_0.json");
+        for (let i = 0; i <= 10; i++) {
+            this.load.tilemapTiledJSON(`level_${i}`, `level_${i}.json`);
+        }
 
         this.load.setPath("assets/unicorn");
         this.load.spritesheet("unicorn", "unicorn.png", { frameWidth: 84, frameHeight: 84 });
@@ -69,19 +72,16 @@ export class MainScene extends Phaser.Scene {
         const { instanceConfig, deferred } = this.game;
         const { levelId, skinId } = instanceConfig;
 
-        const _levelId = 0;
-
         this.scale.displaySize.setAspectRatio(BLOCKS_X / BLOCKS_Y);
         this.scale.refresh();
-        console.log(this.scale);
 
         this.cursor = this.input.keyboard.createCursorKeys();
 
-        const baqround = this.add.image(1280, 578, "baqround3");
+        const baqround = this.add.image(1280, 578, LEVELS[levelId].baqround);
         baqround.x = 1280 / 2;
         baqround.y = 578 / 2;
 
-        this.tileMaps.init(_levelId);
+        this.tileMaps.init(levelId);
         const terrain = this.tileMaps.createLayer("Terrain");
         this.debug.addLayer("Spikes", terrain);
         this.bulletGroup = this.physics.add.group({
