@@ -1,13 +1,12 @@
 import { GameManager } from "../views/GameManager.js";
-import { Phases, PhaseManager } from "../PhaseManager.js";
+import { PhaseManager } from "../PhaseManager.js";
 import { BlockBoring } from "./blocks/BlockBoring.js";
 import { BlockBox } from "./blocks/BlockBox.js";
 import { BlockSpeed } from "./blocks/BlockSpeed.js";
 import { BlockBreakable } from "./blocks/BlockBreakable.js";
 import { BlockGunSlow, BlockGunFast } from "./blocks/BlockGun.js";
 import { Inventory } from "./Inventory.js";
-import { BLOCK_SIZE, Phaser } from "../Globals.js";
-
+import { BLOCK_SIZE, PHASES, Phaser } from "../Globals.js";
 
 const BlockTypes = {
     Boring: BlockBoring,
@@ -44,7 +43,7 @@ export class BlockMap extends Phaser.Physics.Arcade.StaticGroup {
         scene.input.on(Phaser.Input.Events.POINTER_MOVE, this.onPointerMove, this);
         scene.input.keyboard.on("keydown-R", this.onBlockFlip, this);
 
-        PhaseManager.listen(Phases.PreRun, this.onBuildPhaseOver.bind(this));
+        PhaseManager.listen(PHASES.PreRun, this.onBuildPhaseOver.bind(this));
     }
 
     onBuildPhaseOver () {

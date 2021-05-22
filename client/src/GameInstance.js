@@ -33,6 +33,7 @@ export class GameInstance {
         };
 
         this.game = new Phaser.Game(phaserConfig);
+        this.game.instanceConfig = controller.getGameInstanceConfig();
     }
 
     _getMainScene () {

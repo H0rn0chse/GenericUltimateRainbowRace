@@ -2,15 +2,15 @@ import { Player } from "../gameObjects/Player.js";
 import { BlockMap } from "../gameObjects/BlockMap.js";
 import { Status, GameManager } from "../views/GameManager.js";
 import { Rainbow } from "../gameObjects/Rainbow.js";
-import { PhaseManager, Phases } from "../PhaseManager.js";
-import { Phaser } from "../Globals.js";
+import { PhaseManager } from "../PhaseManager.js";
+import { Phaser, PHASES } from "../Globals.js";
 import { createPlayerAnims } from "../PlayerAnimations.js";
 
 export class MainScene extends Phaser.Scene {
     constructor (createDeferred) {
         super();
         this.createDeferred = createDeferred;
-        PhaseManager.listen(Phases.Build, this.generateInventory.bind(this, 4));
+        PhaseManager.listen(PHASES.Build, this.generateInventory.bind(this, 4));
         globalThis.GameScene = this;
     }
 
@@ -67,14 +67,18 @@ export class MainScene extends Phaser.Scene {
     }
 
     create () {
-        const levelId = 0;
+        const { instanceConfig } = this.game;
+        const { levelId, skinId } = instanceConfig;
+
+        const _levelId = 0;
+        const _skinId = "Coffee";
         this.cursor = this.input.keyboard.createCursorKeys();
 
         const baqround = this.add.image(1280, 578, "baqround3");
         baqround.x = 1280 / 2;
         baqround.y = 578 / 2;
 
-        this.tileMaps.init(levelId);
+        this.tileMaps.init(_levelId);
         const layer = this.tileMaps.createLayer("Terrain");
         this.bulletGroup = this.physics.add.group({
             allowGravity: false,
@@ -85,7 +89,7 @@ export class MainScene extends Phaser.Scene {
 
         createPlayerAnims(this.anims);
         const puppets = this.addGroup.puppet();
-        this.player = this.add.existing(new Player(this.physics.world, this, this.blockMap.getSpawnPoint()));
+        this.player = this.add.player(this.blockMap.getSpawnPoint(), _skinId);
 
         this.createFlag();
 
@@ -119,7 +123,7 @@ export class MainScene extends Phaser.Scene {
     }
 
     playerReachedFlag (player, flag) {
-        if (PhaseManager.isPhase(Phases.Run)) {
+        if (PhaseManager.isPhase(PHASES.Run)) {
             GameManager.endRun(Status.Alive);
         }
     }

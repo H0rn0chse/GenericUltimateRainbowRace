@@ -10,7 +10,8 @@ export const SCENE_HEIGHT = BLOCKS_Y * BLOCK_SIZE;
 export const STATIC = 1;
 export const DYNAMIC = 0;
 
-export const PRERUN_COUNTDOWN = 5;
+export const BUILD_COUNTDOWN = 3;
+export const PRERUN_COUNTDOWN = 1;
 export const RESULTS_COUNTDOWN = 1;
 
 export const SCORE_TICK = 0.2;
@@ -28,6 +29,8 @@ export const PHASES = {
     PreRun: "PreRun",
     Run: "Run",
     Results: "Results",
+    Colors: "Colors",
+    Build: "Build",
 };
 
 export const PHASE_TEXTS = {
@@ -35,6 +38,8 @@ export const PHASE_TEXTS = {
     PreRun: "Countdown",
     Run: "Run!",
     Results: "Results",
+    Colors: "Switching Colors",
+    Build: "Place your Block",
 };
 
 export const LEVELS = {

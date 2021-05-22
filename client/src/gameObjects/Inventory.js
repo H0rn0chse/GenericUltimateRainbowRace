@@ -1,4 +1,5 @@
-import { Phases, PhaseManager } from "../PhaseManager.js";
+import { PHASES } from "../Globals.js";
+import { PhaseManager } from "../PhaseManager.js";
 
 const blocks = [];
 let that;
@@ -7,7 +8,7 @@ export class Inventory {
     constructor (scene) {
         that = this;
         this.generateBackground(scene);
-        PhaseManager.listen(Phases.PreRun, this.onBuildPhaseOver.bind(this));
+        PhaseManager.listen(PHASES.PreRun, this.onBuildPhaseOver.bind(this));
     }
 
     onBuildPhaseOver (data) {
@@ -45,7 +46,7 @@ export class Inventory {
             c += 1;
             newBlock.setInteractive();
             newBlock.on("pointerdown", (pointer) => {
-                if (PhaseManager.isPhase(Phases.Build)) {
+                if (PhaseManager.isPhase(PHASES.Build)) {
                     blockMap.setDraggingBlock(x, y, type);
                     that.selectOneBlock(newBlock, blockMap);
                 }

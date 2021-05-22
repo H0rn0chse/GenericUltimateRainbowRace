@@ -1,9 +1,10 @@
 import { GameInstance } from "../GameInstance.js";
 import { ViewManager } from "../ViewManager.js";
 import { getId, send, addEventListener, removeEventListener, ready } from "../socket.js";
-import { Phases, PhaseManager } from "../PhaseManager.js";
-import { GameBus } from "../EventBus.js";
-import { _ } from "../Globals.js";
+import { PhaseManager } from "../PhaseManager.js";
+import { AvatarManager } from "../AvatarManager.js";
+import { DebugBus, GameBus } from "../EventBus.js";
+import { PHASES, _ } from "../Globals.js";
 
 export const Status = {
     Alive: "Alive",
@@ -16,36 +17,19 @@ class _GameManager {
         this.ingame = false;
 
         this.container = document.querySelector("#game");
+        this.instanceContainer = document.querySelector("#gameArea");
 
-        this.points = document.querySelector("#gamePoints");
-        this.results = document.querySelector("#gameResults");
-        this.results.style.display = "none";
-        this.resultsList = document.querySelector("#gameResultsList");
-        this.resultsNextButton = document.querySelector("#gameResultsNext");
+        this.debugCbx = document.querySelector("#debugCbx");
+        this.debugCbx.addEventListener("change", (evt) => {
+            DebugBus.emit("setDebug", this.debugCbx.checked);
+        });
 
         this.instance = null;
-
-        document.addEventListener("keydown", (evt) => {
-            if (this.ingame) {
-                // todo
-            }
-        });
-
-        this.resultsNextButton.addEventListener("click", (evt) => {
-            this.nextGame();
-        });
 
         // initial state
         ready().then(() => {
             addEventListener("joinGame", this.onJoinGame, this);
         });
-
-        GameInstance.updateServer = (x, y) => {
-            if (this.ingame) {
-                const data = { pos: { x, y } };
-                send("gamePosition", data);
-            }
-        };
 
         this.playerPuppets = new Map();
 
@@ -60,27 +44,12 @@ class _GameManager {
         ];
 
         this.runEnded = true;
-        PhaseManager.listen(Phases.Results, this.onResults.bind(this));
-        PhaseManager.listen(Phases.Colors, this.onColors.bind(this));
+        PhaseManager.listen(PHASES.Colors, this.onColors.bind(this));
 
         this.updatePlayer = _.throttle(this._updatePlayer, 100);
     }
 
-    show () {
-        this.startListen();
-        this.container.style.display = "";
-
-        this.instance = new GameInstance(this.container, this);
-    }
-
-    hide () {
-        this.ingame = false;
-        this.stopListen();
-        this.container.style.display = "none";
-
-        this.instance.destroy();
-        this.instance = null;
-    }
+    // ========================================== Game logic & handler =============================================
 
     endRun (status) {
         if (!this.runEnded) {
@@ -127,19 +96,44 @@ class _GameManager {
         send("fillInv", data);
     }
 
-    onFillInv (data) {
-        if (data.playerId === getId()) {
-            return;
-        }
-        this.instance.fillInv(data.types);
-    }
-
     sendBlockChoice (block) {
         const data = {
             block,
         };
         console.log(`send${block}`);
         send("pickBlock", data);
+    }
+
+    nextGame () {
+        send("setPhase", { phase: PHASES.Colors });
+    }
+
+    getGameInstanceConfig () {
+        if (!this.lobbyData) {
+            return;
+        }
+
+        const playerData = this.lobbyData.player[getId()];
+
+        return {
+            skinId: playerData.avatarId || AvatarManager.getDefault(),
+            levelId: this.lobbyData.levelId,
+        };
+    }
+
+    // ========================================== Phase handler =============================================
+
+    onColors () {
+        this.instance.resetMainScene();
+    }
+
+    // ========================================== Websocket handler =============================================
+
+    onFillInv (data) {
+        if (data.playerId === getId()) {
+            return;
+        }
+        this.instance.fillInv(data.types);
     }
 
     onPickBlock (data) {
@@ -166,9 +160,18 @@ class _GameManager {
 
     onJoinGame (data) {
         this.lobbyName = data.name;
+        this.lobbyData = data;
         this.ingame = true;
 
         ViewManager.showGame();
+
+        Object.values(data.player).forEach((playerData) => {
+            if (playerData.id === getId()) {
+                return;
+            }
+
+            GameBus.emit("playerUpdated", playerData.id, playerData);
+        });
     }
 
     onPlayerRemoved (data) {
@@ -184,68 +187,22 @@ class _GameManager {
         this.runEnded = false;
     }
 
-    onResults (data) {
-        this.resultsList.innerHTML = "";
+    // ========================================== Basic Manager Interface =============================================
 
-        const alivePlayer = [];
-        const deadPlayer = [];
+    show () {
+        this.startListen();
+        this.container.style.display = "";
 
-        Object.keys(data.run)
-            .map((key) => {
-                data.run[key].id = key;
-                return data.run[key];
-            })
-            .sort((a, b) => a.count - b.count)
-            .forEach((player) => {
-                if (player.status === Status.Alive) {
-                    alivePlayer.push(player.id);
-                } else {
-                    deadPlayer.push(player.id);
-                }
-            });
-
-        alivePlayer.forEach((playerId, index) => {
-            const row = document.createElement("div");
-            row.classList.add("flexRow", "resultRow");
-
-            const place = document.createElement("div");
-            place.innerText = index + 1;
-            row.appendChild(place);
-
-            const name = document.createElement("div");
-            name.innerText = data.player[playerId].name;
-            row.appendChild(name);
-
-            this.resultsList.appendChild(row);
-        });
-
-        deadPlayer.forEach((playerId) => {
-            const row = document.createElement("div");
-            row.classList.add("flexRow", "resultRow");
-
-            const place = document.createElement("div");
-            place.innerText = "(dead)";
-            row.appendChild(place);
-
-            const name = document.createElement("div");
-            name.innerText = data.player[playerId].name;
-            row.appendChild(name);
-
-            this.resultsList.appendChild(row);
-        });
-
-        this.results.style.display = "";
-
-        this.resultsNextButton.disabled = data.host !== getId();
+        this.instance = new GameInstance(this.instanceContainer, this);
     }
 
-    onColors () {
-        this.results.style.display = "none";
-        this.instance.resetMainScene();
-    }
+    hide () {
+        this.ingame = false;
+        this.stopListen();
+        this.container.style.display = "none";
 
-    nextGame () {
-        send("setPhase", { phase: Phases.Colors });
+        this.instance.destroy();
+        this.instance = null;
     }
 
     stopListen () {

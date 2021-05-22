@@ -24,3 +24,9 @@
 .resultRow > div {
     margin-right: 1em;
 }
+
+#gameStats {
+    position: absolute;
+    top: 0;
+    right: 0;
+}

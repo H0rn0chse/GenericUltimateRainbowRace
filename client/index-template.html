@@ -62,20 +62,29 @@
                 <h2 id=phaseTitle></h2>
                 <h2 id=phaseCountdown></h2>
             </div>
+            <div id="gameArea">
+            </div>
+            <div id="gameStats" class="flexColumn">
+                <h1>Points</h1>
+                <h3 id="score">0</h3>
+                <label class="flexRow">
+                    <input id="debugCbx" type="checkbox">
+                    <span class="checkable">Debug</span>
+                </label>
+                <span>Music Volume</span>
+                <input id="musicVolume" type="range" min="0" max="100" value="20">
+                <span>Sound Volume</span>
+                <input id="soundVolume" type="range" min="0" max="100" value="70">
+            </div>
             <div id="gameResults" class="flexColumn">
                 <h2>Results</h2>
-                <div id="gameResultsList" class="flexColumn"></div>
-                <button id="gameResultsNext">Next Game</button>
+                <div id="gameResultsList"></div>
+                <div class="flexRow buttonRow">
+                    <button id="gameBack">Back to Lobby</button>
+                    <button id="gameNext">Next Game</button>
+                    <button id="gameQuit">Quit</button>
+                </div>
             </div>
-            <!--<div id="ui">
-                <ul>
-                    <li><img  id="item1" src="./assets/1_stone.png"></li>
-                    <li><img  id="item2" src="./assets/2_stone.png"></li>
-                    <li><img  id="item3" src="./assets/3_stone.png"></li>
-                    <li><img  id="item4" src="./assets/4_stone.png"></li>
-                    <li style="float:right"> 1/4</li>
-                </ul>
-            </div>-->
         </div>
     </div>
     <div id="logoff" class="flexColumn" style="display: none;">

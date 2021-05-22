@@ -2,24 +2,7 @@ import { getId, send, addEventListener } from "./socket.js";
 import { GameManager } from "./views/GameManager.js";
 // import { GameInstance } from "./GameInstance.js";
 import { Timer } from "./Timer.js";
-
-export const Phases = {
-    Initial: "Intial",
-    Colors: "Colors",
-    Build: "Build",
-    PreRun: "PreRun",
-    Run: "Run",
-    Results: "Results",
-};
-
-const PhaseTexts = {
-    Initial: "Intial Setup",
-    Colors: "Color are switching",
-    Build: "Place your Block",
-    PreRun: "Countdown",
-    Run: "Run!",
-    Results: "Results",
-};
+import { PHASES, PHASE_TEXTS, PRERUN_COUNTDOWN, BUILD_COUNTDOWN, RESULTS_COUNTDOWN } from "./Globals.js";
 
 class _PhaseManager {
     constructor () {
@@ -29,7 +12,7 @@ class _PhaseManager {
         addEventListener("runProgress", this.onRunProgress, this);
         addEventListener("runEnd", this.onRunEnd, this);
 
-        this.currentPhase = Phases.Initial;
+        this.currentPhase = PHASES.Initial;
 
         this.title = document.querySelector("#phaseTitle");
         this.title.innerText = this.currentPhase;
@@ -40,14 +23,14 @@ class _PhaseManager {
         this.remainingSeconds = 0;
 
         this.listener = {};
-        Object.keys(Phases).forEach((key) => {
+        Object.keys(PHASES).forEach((key) => {
             this.listener[key] = [];
         });
 
-        this.listen(Phases.Colors, this.onColors.bind(this));
-        this.listen(Phases.Build, this.onBuild.bind(this));
-        this.listen(Phases.PreRun, this.onPreRun.bind(this));
-        this.listen(Phases.Run, this.onRun.bind(this));
+        this.listen(PHASES.Colors, this.onColors.bind(this));
+        this.listen(PHASES.Build, this.onBuild.bind(this));
+        this.listen(PHASES.PreRun, this.onPreRun.bind(this));
+        this.listen(PHASES.Run, this.onRun.bind(this));
     }
 
     listen (phase, handler) {
@@ -87,7 +70,7 @@ class _PhaseManager {
         }
 
         setTimeout(() => {
-            send("setPhase", { phase: Phases.Build });
+            send("setPhase", { phase: PHASES.Build });
         }, 1000);
     }
 
@@ -96,7 +79,7 @@ class _PhaseManager {
             return;
         }
 
-        this._startPhaseCountdown(10, Phases.PreRun);
+        this._startPhaseCountdown(BUILD_COUNTDOWN, PHASES.PreRun);
     }
 
     onPreRun () {
@@ -104,7 +87,7 @@ class _PhaseManager {
             return;
         }
 
-        this._startPhaseCountdown(3, Phases.Run);
+        this._startPhaseCountdown(PRERUN_COUNTDOWN, PHASES.Run);
     }
 
     onRun () {
@@ -124,9 +107,10 @@ class _PhaseManager {
             return;
         }
 
-        data.phase = Phases.Results;
-
-        send("setPhase", data);
+        setTimeout(() => {
+            data.phase = PHASES.Results;
+            send("setPhase", data);
+        }, RESULTS_COUNTDOWN * 1000);
     }
 
     onJoinGame (data) {
@@ -135,7 +119,7 @@ class _PhaseManager {
         if (!this.isHost) {
             return;
         }
-        send("setPhase", { phase: Phases.Colors });
+        send("setPhase", { phase: PHASES.Colors });
     }
 
     onSetPhase (data) {
@@ -146,7 +130,7 @@ class _PhaseManager {
         // todo: Check removal
         // GameInstance.sceneDeferred.promise.then(() => {
         this.currentPhase = data.phase;
-        this.title.innerText = PhaseTexts[this.currentPhase];
+        this.title.innerText = PHASE_TEXTS[this.currentPhase];
 
         this.dispatch(data.phase, data);
         // });

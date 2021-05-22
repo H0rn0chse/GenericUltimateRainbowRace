@@ -3,9 +3,9 @@ import { GameManager } from "./views/GameManager.js";
 import { LobbyManager } from "./views/LobbyManager.js";
 
 // Sub Views need to be instantiated
-//import { ResultsManager } from "./views/ResultsManager.js";
-//import { ScoreManager } from "./views/ScoreManager.js";
-//import { SoundManager } from "./views/SoundManager.js";
+import { ResultsManager } from "./views/ResultsManager.js";
+import { ScoreManager } from "./views/ScoreManager.js";
+import { SoundManager } from "./views/SoundManager.js";
 import { CommonBus } from "./EventBus.js";
 
 class _ViewManager {

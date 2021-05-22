@@ -1,13 +1,12 @@
-import { Phaser } from "../Globals.js";
-import { Phases, PhaseManager } from "../PhaseManager.js";
+import { Phaser, PHASES } from "../Globals.js";
+import { PhaseManager } from "../PhaseManager.js";
 import { Status, GameManager } from "../views/GameManager.js";
 import { PlayerBase } from "./PlayerBase.js";
 
 export class Player extends PlayerBase {
-    constructor (world, scene, spawnPoint) {
+    constructor (scene, spawnPoint, skinId) {
         super(scene, spawnPoint.x, spawnPoint.y - 30, "unicorn");
-
-        this.character = "Coffee";
+        this.skinId = skinId;
 
         this.cursor = scene.getCursor();
         this.impulse = new Phaser.Math.Vector2(0, 0);
@@ -51,12 +50,12 @@ export class Player extends PlayerBase {
     }
 
     die () {
-        if (PhaseManager.isPhase(Phases.Run)) {
+        if (PhaseManager.isPhase(PHASES.Run)) {
             console.log("Player died!");
             GameManager.endRun(Status.Dead);
             this.isDead = true;
 
-            this.anims.play(`player${this.character}Died`, true);
+            this.anims.play(`player${this.skinId}Died`, true);
         }
     }
 
@@ -65,7 +64,7 @@ export class Player extends PlayerBase {
         this.setPosition(position.x, position.y);
         this.body.setVelocityX(0);
         this.flipX = false;
-        this.anims.play(`player${this.character}Idle`);
+        this.anims.play(`player${this.skinId}Idle`);
         this.impulse.x = 0;
         this.impulse.y = 0;
         this.curWalkSpeed = 0;
@@ -85,28 +84,28 @@ export class Player extends PlayerBase {
         }
 
         // only allow user input during run phase
-        if (!PhaseManager.isPhase(Phases.Run)) {
-            this.anims.play(`player${this.character}Idle`);
+        if (!PhaseManager.isPhase(PHASES.Run)) {
+            this.anims.play(`player${this.skinId}Idle`);
             return;
         }
 
         // Jump
         this.curJumpTime += delta;
-        if (this.animState === `player${this.character}JumpEnd` && this.body.onFloor()) {
+        if (this.animState === `player${this.skinId}JumpEnd` && this.body.onFloor()) {
             this.animState = false;
         }
-        if (this.animState === `player${this.character}Jumping` && this.body.velocity.y > 0) {
-            this.animState = `player${this.character}JumpEnd`;
+        if (this.animState === `player${this.skinId}Jumping` && this.body.velocity.y > 0) {
+            this.animState = `player${this.skinId}JumpEnd`;
         }
-        if (this.animState === `player${this.character}JumpStart` && !this.anims.isPlaying) {
-            this.animState = `player${this.character}Jumping`;
+        if (this.animState === `player${this.skinId}JumpStart` && !this.anims.isPlaying) {
+            this.animState = `player${this.skinId}Jumping`;
         }
         if (this.cursor.up.isDown || this.keys.W.isDown) {
             // Start jump
             if (this.body.onFloor()) {
                 this.isCurJumping = true;
                 this.curJumpTime = 0.0;
-                this.animState = `player${this.character}JumpStart`;
+                this.animState = `player${this.skinId}JumpStart`;
             // Continue jump
             } else if (this.isCurJumping) {
                 if (this.curJumpTime >= this.jumpTimeMax) {
@@ -132,12 +131,12 @@ export class Player extends PlayerBase {
             this.hasDashed = true;
             this.wasDashKeyUp = false;
             this.curWalkSpeed = (this.flipX ? -1 : 1) * (this.dashSpeed);
-            this.animState = `player${this.character}Dash`;
+            this.animState = `player${this.skinId}Dash`;
         }
         // End dash
         if (this.isCurDashing && this.curDashTime > this.dashTime) {
             this.isCurDashing = false;
-            this.animState = this.body.onFloor() ? false : `player${this.character}Jumping`;
+            this.animState = this.body.onFloor() ? false : `player${this.skinId}Jumping`;
         }
         // Recover dash
         if (this.body.onFloor()) {
@@ -164,11 +163,11 @@ export class Player extends PlayerBase {
         this.curWalkSpeed = Math.sign(this.curWalkSpeed) * Math.min(Math.abs(this.curWalkSpeed), this.walkSpeedMax);
 
         // determine animation
-        if (this.animState !== `player${this.character}Dash` && ctrlDir !== 0) {
+        if (this.animState !== `player${this.skinId}Dash` && ctrlDir !== 0) {
             this.flipX = ctrlDir < 0;
         }
         if (this.animState === false) {
-            this.anims.play(ctrlDir === 0 ? `player${this.character}Idle` : `player${this.character}Walk`, true);
+            this.anims.play(ctrlDir === 0 ? `player${this.skinId}Idle` : `player${this.skinId}Walk`, true);
         } else {
             this.anims.play(this.animState, true);
         }
