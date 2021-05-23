@@ -23,6 +23,9 @@ export class Flag extends Phaser.Physics.Arcade.Sprite {
     }
 
     onPlayerOverlap (player, flag) {
+        if (!GameManager.runEnded) {
+            player.onFlagTouched();
+        }
         if (PhaseManager.isPhase(PHASES.Run)) {
             GameManager.endRun(PLAYER_STATUS.Alive);
         }

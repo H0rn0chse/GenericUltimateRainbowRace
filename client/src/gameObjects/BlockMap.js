@@ -26,6 +26,7 @@ const BlockTypes = {
     Banana: BlockBanana,
     Palm: BlockPalm,
     Platform: BlockPlatform,
+    Barrel: BlockBarrel,
 };
 let inv;
 let isDragging = false;

@@ -3,6 +3,8 @@ import { Block } from "./Block.js";
 export class BlockBox extends Block {
     constructor (config) {
         super(config, "block_box");
+
+        this.sound = this.scene.sound.add("block_break");
     }
 
     onPlayerCollision (player) {
@@ -10,6 +12,8 @@ export class BlockBox extends Block {
         if (player.body.top >= this.body.bottom) {
             // update block on server and local block
             this.updateBlock({}, true);
+
+            this.sound.play();
         }
     }
 
