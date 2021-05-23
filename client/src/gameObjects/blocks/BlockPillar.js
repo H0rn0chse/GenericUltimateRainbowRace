@@ -1,5 +1,4 @@
 import { Block } from "./Block.js";
-import { BLOCK_SIZE } from "../../Globals.js";
 
 export class BlockPillar extends Block {
     constructor (config) {
@@ -11,11 +10,12 @@ export class BlockPillar extends Block {
     onPlayerCollision (player) {
         // If from above
         if (this.body.top >= player.body.bottom) {
-            this.performAction(); // TODO tell server instead
+            // update block on server and local block
+            this.updateBlock({}, true);
         }
     }
 
-    performAction () {
+    onUpdateBlock () {
         this.y += this.fallSpeed;
         this.body.updateFromGameObject();
     }

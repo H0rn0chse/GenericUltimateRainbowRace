@@ -8,11 +8,12 @@ export class BlockBox extends Block {
     onPlayerCollision (player) {
         // If from below
         if (player.body.top >= this.body.bottom) {
-            this.performAction(); // TODO tell server instead
+            // update block on server and local block
+            this.updateBlock({}, true);
         }
     }
 
-    performAction () {
+    onUpdateBlock () {
         this.body.enable = false;
         this.setActive(false);
         this.setVisible(false);

@@ -1,5 +1,6 @@
 import { PHASES, STATIC, BLOCK_SIZE } from "../../Globals.js";
 import { PhaseBus } from "../../EventBus.js";
+import { GameManager } from "../../views/GameManager.js";
 
 const { Physics } = globalThis.Phaser;
 
@@ -27,7 +28,15 @@ export class Block extends Physics.Arcade.Sprite {
         // to be implemented by the specific block
     }
 
-    performAction () {
+    updateBlock (data = {}, updateLocalBlock = false) {
+        data.blockId = this.blockId;
+        if (updateLocalBlock && this.onUpdateBlock) {
+            this.onUpdateBlock(data);
+        }
+        GameManager.updateBlock(data);
+    }
+
+    onUpdateBlock (data) {
         // to be implemented by the specific block
     }
 

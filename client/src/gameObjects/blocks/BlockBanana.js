@@ -12,10 +12,11 @@ export class BlockBanana extends Block {
         const sign = player.flipX ? -1 : 1;
         player.body.setVelocityX(400 * sign);
 
-        this.performAction(); // TODO tell server instead
+        // update block on server and local block
+        this.updateBlock({}, true);
     }
 
-    performAction () {
+    onUpdateBlock () {
         this.body.enable = false;
         this.setActive(false);
         this.setVisible(false);

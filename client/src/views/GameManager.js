@@ -59,6 +59,7 @@ class _GameManager {
             { channel: "resetRun", handler: this.onResetRun },
             { channel: "kittyCollected", handler: this.onKittyCollected },
             { channel: "hideKitty", handler: this.onHideKitty },
+            { channel: "updateBlock", handler: this.onUpdateBlock },
         ];
 
         PhaseBus.on(PHASES.Colors, this.onColors, this);
@@ -91,6 +92,10 @@ class _GameManager {
 
     _updatePlayer (data) {
         send("playerUpdate", data);
+    }
+
+    updateBlock (data) {
+        send("updateBlock", data);
     }
 
     setBlock (x, y, blockType, flipX, blockId) {
@@ -225,6 +230,12 @@ class _GameManager {
 
     onResetRun () {
         this.runEnded = false;
+    }
+
+    onUpdateBlock (data) {
+        if (data.playerId !== getId()) {
+            GameBus.emit("updateBlock", data);
+        }
     }
 
     // ========================================== Basic Manager Interface =============================================
