@@ -53,10 +53,10 @@ export class Player extends PlayerBase {
     die () {
         if (PhaseManager.isPhase(PHASES.Run)) {
             console.log("Player died!");
-            GameManager.endRun(Status.Dead);
             this.isDead = true;
 
             this.anims.play(`player${this.skinId}Died`, true);
+            GameManager.endRun(Status.Dead);
         }
     }
 
@@ -74,14 +74,14 @@ export class Player extends PlayerBase {
         this.hasDashed = false;
         this.wasDashKeyUp = true;
         this.disableTime = 0;
+        this.animState = false;
         this.clearTint();
     }
 
     isInBounds () {
-        return this.body.right > 0
-            && this.body.left < BLOCK_SIZE * BLOCKS_X
-            && this.body.bottom > 0
-            && this.body.top < BLOCK_SIZE * BLOCKS_Y;
+        return this.body.right > BLOCK_SIZE * (-2)
+            && this.body.left < BLOCK_SIZE * (BLOCKS_X + 2)
+            && this.body.top < BLOCK_SIZE * (BLOCKS_Y + 2);
     }
 
     disableControlsFor (disableTime) {
