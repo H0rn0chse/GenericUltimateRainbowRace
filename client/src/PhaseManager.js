@@ -1,5 +1,6 @@
 import { getId, send, addEventListener } from "./socket.js";
 import { GameManager } from "./views/GameManager.js";
+import { ScoreManager } from "./views/ScoreManager.js";
 import { Timer } from "./Timer.js";
 import { PHASES, PHASE_TEXTS, PRERUN_COUNTDOWN, BUILD_COUNTDOWN, RESULTS_COUNTDOWN } from "./Globals.js";
 import { PhaseBus } from "./EventBus.js";
@@ -95,6 +96,7 @@ class _PhaseManager {
         if (!this.isHost) {
             return;
         }
+        ScoreManager.stopTimer();
 
         setTimeout(() => {
             data.phase = PHASES.Results;

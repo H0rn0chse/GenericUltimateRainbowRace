@@ -1,19 +1,16 @@
-import { addEventListener } from "../socket.js";
-import { GameBus, PhaseBus } from "../EventBus.js";
-import { PHASES, SCORE_COIN, SCORE_START, SCORE_TICK } from "../Globals.js";
+import { PhaseBus } from "../EventBus.js";
+import { LEVEL_TIMEOUT, PHASES, PLAYER_STATUS } from "../Globals.js";
 import { Timer } from "../Timer.js";
+import { GameManager } from "./GameManager.js";
 
 class _ScoreManager {
     constructor () {
         this.container = document.querySelector("#gameStats");
-        this.score = document.querySelector("#score");
+        this.text = document.querySelector("#score");
 
-        this.currentScore = 0;
+        this.timeLeft = 0;
         this.running = false;
-        this.timer = new Timer(SCORE_TICK, this.onTick.bind(this));
-
-        addEventListener("coinCollected", this.onCoinCollected, this);
-        addEventListener("updateScore", this.onUpdateScore, this);
+        this.timer = new Timer(1, this.onTick.bind(this));
 
         PhaseBus.on(PHASES.Run, this.onRun, this);
         PhaseBus.on(PHASES.Colors, this.onColors, this);
@@ -21,18 +18,18 @@ class _ScoreManager {
 
     // ========================================== Manager logic & handler =============================================
 
-    clearScore () {
-        this.currentScore = 0;
-        this.updateScore();
+    clearTime () {
+        this.timeLeft = 0;
+        this.updateTime();
     }
 
-    resetScore () {
-        this.currentScore = SCORE_START;
-        this.updateScore();
+    resetTime () {
+        this.timeLeft = LEVEL_TIMEOUT;
+        this.updateTime();
     }
 
-    updateScore () {
-        this.score.innerText = this.currentScore;
+    updateTime () {
+        this.text.innerText = this.timeLeft;
     }
 
     startTimer () {
@@ -44,15 +41,17 @@ class _ScoreManager {
         this.running = false;
     }
 
-    getScore () {
-        return this.currentScore;
+    getTime () {
+        return this.timeLeft;
     }
 
     onTick () {
         if (this.running) {
-            if (this.currentScore > 0) {
-                this.currentScore -= 1;
-                this.updateScore();
+            if (this.timeLeft > 0) {
+                this.timeLeft -= 1;
+                this.updateTime();
+            } else {
+                GameManager.endRun(PLAYER_STATUS.Idle);
             }
 
             this.startTimer();
@@ -62,7 +61,7 @@ class _ScoreManager {
     // ========================================== Phase / EventBus handler =============================================
 
     onColors (data) {
-        this.resetScore();
+        this.resetTime();
     }
 
     onRun (data) {
@@ -70,17 +69,6 @@ class _ScoreManager {
     }
 
     // ========================================== Websocket handler =============================================
-
-    onCoinCollected (data) {
-        this.currentScore += SCORE_COIN;
-        this.updateScore();
-        GameBus.emit("coinCollected", {});
-    }
-
-    onUpdateScore (data) {
-        this.currentScore = data.score;
-        this.updateScore();
-    }
 }
 
 export const ScoreManager = new _ScoreManager();

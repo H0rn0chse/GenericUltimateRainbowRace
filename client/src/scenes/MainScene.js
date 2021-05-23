@@ -107,7 +107,7 @@ export class MainScene extends BaseScene {
         this.tileMaps.init(levelId);
         const terrain = this.tiled.layer(this.tileMaps.createLayer("Terrain"));
         // this.debug.addLayer("Terrain", terrain);
-        this.bulletGroup = this.physics.add.group({
+        const bulletGroup = this.physics.add.group({
             allowGravity: false,
             runChildUpdate: true,
         });
@@ -131,20 +131,20 @@ export class MainScene extends BaseScene {
         this.physics.add.overlap(this.player, this.kittyGroup, (player, kitty) => {
             this.kittyGroup.collectKitty(player, kitty);
         });
+        this.physics.add.overlap(this.player, flag, flag.onPlayerOverlap, null, flag);
         // bullet collision
-        this.physics.add.overlap(this.player, this.bulletGroup, (player, bullet) => {
+        this.physics.add.overlap(this.player, bulletGroup, (player, bullet) => {
             bullet.onPlayerHit(player);
         });
-        this.physics.add.overlap(this.bulletGroup, terrain, (bullet, obstacle) => {
+        this.physics.add.overlap(bulletGroup, terrain, (bullet, obstacle) => {
             bullet.onObstacleHit(obstacle);
         });
-        this.physics.add.overlap(this.bulletGroup, this.blockMap, (bullet, obstacle) => {
+        this.physics.add.overlap(bulletGroup, this.blockMap, (bullet, obstacle) => {
             bullet.onObstacleHit(obstacle);
         });
         // puppet collision
         this.physics.add.collider(puppets, terrain);
         this.physics.add.collider(puppets, this.blockMap);
-        this.physics.add.overlap(this.player, flag, flag.onPlayerOverlap, null, flag);
 
         GameBus.emit("sceneReady");
     }
