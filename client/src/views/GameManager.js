@@ -121,7 +121,6 @@ class _GameManager {
         const data = {
             block,
         };
-        console.log(`send${block}`);
         send("pickBlock", data);
     }
 
@@ -184,7 +183,6 @@ class _GameManager {
         if (data.playerId === getId()) {
             return;
         }
-        console.log(data.block);
         this.instance.removeInventoryBlock(data.block);
     }
 

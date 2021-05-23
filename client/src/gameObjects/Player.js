@@ -73,7 +73,6 @@ export class Player extends PlayerBase {
             this.sounds.die.play();
         }
         if (PhaseManager.isPhase(PHASES.Run)) {
-            console.log("Player died!");
             this.isDead = true;
 
             this.anims.play(`player${this.skinId}Died`, true);

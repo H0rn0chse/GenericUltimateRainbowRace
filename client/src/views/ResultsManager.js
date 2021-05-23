@@ -59,7 +59,6 @@ class _ResultsManager {
     // ========================================== Phase / EventBus handler =============================================
 
     onResults (data) {
-        console.log(data);
         this.resultsList.innerHTML = "";
 
         const list = Object.values(data.scoreHelper.score).sort((a, b) => {

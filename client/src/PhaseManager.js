@@ -90,7 +90,7 @@ class _PhaseManager {
     }
 
     onRunProgress (data) {
-        console.log(data);
+        // console.log(data);
     }
 
     onRunEnd (data) {
