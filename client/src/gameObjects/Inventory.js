@@ -67,13 +67,12 @@ export class Inventory {
     selectOneBlock (blockChoice, blockMap) {
         let c = 0;
         blocks.forEach((block) => {
-            if (blockChoice !== block) {
-                block.destroy();
-            } else {
+            if (blockChoice === block) {
                 blockMap.sendBlockChoice(c);
             }
             c += 1;
         });
+        this.disableInventory();
     }
 
     disableOneBlock (blockNr) {
@@ -91,6 +90,7 @@ export class Inventory {
     }
 
     destroy () {
+        super.destroy();
         PhaseBus.off(PHASES.PreRun, this.onBuildPhaseOver, this);
     }
 }
