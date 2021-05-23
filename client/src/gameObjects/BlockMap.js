@@ -8,6 +8,7 @@ import { BlockGunSlow, BlockGunFast } from "./blocks/BlockGun.js";
 import { BlockSpike } from "./blocks/BlockSpike.js";
 import { BlockBanana } from "./blocks/BlockBanana.js";
 import { BlockPalm } from "./blocks/BlockPalm.js";
+import { BlockPlatform } from "./blocks/BlockPlatform.js";
 import { Inventory } from "./Inventory.js";
 import { BLOCK_SIZE, PHASES, Phaser } from "../Globals.js";
 import { PhaseBus, GameBus } from "../EventBus.js";
@@ -23,6 +24,7 @@ const BlockTypes = {
     Spike: BlockSpike,
     Banana: BlockBanana,
     Palm: BlockPalm,
+    Platform: BlockPlatform,
 };
 let inv;
 let isDragging = false;
