@@ -45,6 +45,10 @@ class BlockGun extends Block {
 
     getFireTimeDelta () { return 1000; }
 
+    resetBlock () {
+        this.enterState(State.Idle);
+    }
+
     update (time, delta) {
         if (!PhaseManager.isPhase(PHASES.Run)) {
             return;

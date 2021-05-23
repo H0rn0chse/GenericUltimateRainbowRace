@@ -1,4 +1,5 @@
-import { STATIC, BLOCK_SIZE } from "../../Globals.js";
+import { PHASES, STATIC, BLOCK_SIZE } from "../../Globals.js";
+import { PhaseBus } from "../../EventBus.js";
 
 const { Physics } = globalThis.Phaser;
 
@@ -10,6 +11,7 @@ export class Block extends Physics.Arcade.Sprite {
         if (config.flipped) {
             this.flipBlock();
         }
+        PhaseBus.on(PHASES.Build, this.resetBlock, this);
     }
 
     flipBlock () {
@@ -22,6 +24,10 @@ export class Block extends Physics.Arcade.Sprite {
     }
 
     onPlayerCollision (player) {
+        // to be implemented by the specific block
+    }
+
+    resetBlock () {
         // to be implemented by the specific block
     }
 

@@ -8,7 +8,15 @@ export class BlockBox extends Block {
     onPlayerCollision (player) {
         // If from below
         if (player.body.top >= this.body.bottom) {
-            this.destroy();
+            this.body.enable = false;
+            this.setActive(false);
+            this.setVisible(false);
         }
+    }
+
+    resetBlock () {
+        this.body.enable = true;
+        this.setActive(true);
+        this.setVisible(true);
     }
 }

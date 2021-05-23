@@ -66,7 +66,6 @@ export class BlockMap extends Phaser.Physics.Arcade.StaticGroup {
         const { clientBlockId, blockId } = data;
         const block = this.getMatching("blockId", clientBlockId)[0];
         if (block) {
-            debugger
             block.blockId = blockId;
         }
     }
