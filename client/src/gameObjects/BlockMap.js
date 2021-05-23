@@ -100,14 +100,9 @@ export class BlockMap extends Phaser.Physics.Arcade.StaticGroup {
     onPointerUp (pointer) {
         if (isDragging) {
             if (this.canPlaceBlockAt(pointer.worldX, pointer.worldY)) {
-                draggedBlock.setIsPreview(false);
-                draggedBlock.x = Math.round(pointer.worldX, 0);
-                draggedBlock.y = Math.round(pointer.worldY, 0);
-                draggedBlock.resetHighlight();
-                draggedBlock.refreshBody();
-                draggedBlock.blockId = guid();
+                draggedBlock.destroy();
                 inv.disableInventory();
-                GameManager.setBlock(draggedBlock.x, draggedBlock.y, draggedBlock.type, draggedBlock.isFlipped(), draggedBlock.blockId);
+                GameManager.setBlock(Math.round(pointer.worldX, 0), Math.round(pointer.worldY, 0), draggedBlock.type, draggedBlock.isFlipped(), guid());
             } else {
                 draggedBlock.destroy();
             }
