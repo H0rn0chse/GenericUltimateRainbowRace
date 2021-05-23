@@ -63,7 +63,7 @@ export class Player extends PlayerBase {
     reset (position) {
         this.isDead = false;
         this.setPosition(position.x, position.y);
-        this.body.setVelocityX(0);
+        this.body.setVelocity(0, 0);
         this.flipX = false;
         this.anims.play(`player${this.skinId}Idle`);
         this.impulse.x = 0;
