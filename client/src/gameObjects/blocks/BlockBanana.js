@@ -7,6 +7,7 @@ export class BlockBanana extends Block {
         this.body.setSize(26, 26);
 
         this.sound = this.scene.sound.add("block_slip");
+        this.scene.volume.addSound(this.sound);
     }
 
     onPlayerCollision (player) {
