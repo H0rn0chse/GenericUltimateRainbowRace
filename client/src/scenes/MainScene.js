@@ -73,6 +73,20 @@ export class MainScene extends BaseScene {
         for (let i = 0; i <= 1; i++) {
             this.load.image(`coffeeDie_0${i}`, `coffeeDie_000${i}.png`);
         }
+
+        this.load.setPath("assets/dragon");
+        for (let i = 0; i <= 2; i++) {
+            this.load.image(`dragonWalk_0${i}`, `dragonWalk_000${i}.png`);
+        }
+        for (let i = 0; i <= 2; i++) {
+            this.load.image(`dragonJump_0${i}`, `dragonJump_000${i}.png`);
+        }
+        for (let i = 0; i <= 3; i++) {
+            this.load.image(`dragonDash_0${i}`, `dragonDash_000${i}.png`);
+        }
+        for (let i = 0; i <= 1; i++) {
+            this.load.image(`dragonDie_0${i}`, `dragonDie_000${i}.png`);
+        }
     }
 
     create () {

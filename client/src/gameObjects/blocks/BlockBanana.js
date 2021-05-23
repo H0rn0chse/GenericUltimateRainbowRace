@@ -4,6 +4,7 @@ export class BlockBanana extends Block {
     constructor (config) {
         super(config, "block_banana");
         this.disableTime = 1500;
+        this.body.setSize(26, 26);
     }
 
     onPlayerCollision (player) {
