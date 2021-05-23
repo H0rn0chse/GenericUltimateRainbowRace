@@ -8,6 +8,9 @@ export class BlockSpike extends Block {
     }
 
     onPlayerCollision (player) {
-        player.die();
+        // If from above
+        if (this.body.top >= player.body.bottom) {
+            player.die();
+        }
     }
 }
