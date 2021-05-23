@@ -48,21 +48,22 @@ class _ResultsManager {
         const status = document.createElement("span");
         this.resultsList.appendChild(status);
         if (entryData.status === PLAYER_STATUS.Dead) {
-            status.innerText = `(${entryData.status})`;
+            status.innerHTML = "&nbsp;†&nbsp;";
         }
 
         const score = document.createElement("span");
         this.resultsList.appendChild(score);
-        score.innerText = entryData.score;
+        score.innerText = entryData.text;
     }
 
     // ========================================== Phase / EventBus handler =============================================
 
     onResults (data) {
+        console.log(data);
         this.resultsList.innerHTML = "";
 
-        const list = Object.values(data.run).sort((a, b) => {
-            return b.score - a.score;
+        const list = Object.values(data.scoreHelper.score).sort((a, b) => {
+            return b.value - a.value;
         });
 
         list.forEach((entryData, index) => {

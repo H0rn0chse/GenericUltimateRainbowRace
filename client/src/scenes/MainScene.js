@@ -163,6 +163,7 @@ export class MainScene extends BaseScene {
         this.physics.add.overlap(this.player, this.kittyGroup, (player, kitty) => {
             this.kittyGroup.collectKitty(player, kitty);
         });
+        this.physics.add.overlap(this.player, flag, flag.onPlayerOverlap, null, flag);
         // bullet collision
         this.physics.add.overlap(this.player, this.bulletGroup, (player, bullet) => {
             bullet.onPlayerHit(player);
@@ -176,7 +177,6 @@ export class MainScene extends BaseScene {
         // puppet collision
         this.physics.add.collider(puppets, terrain);
         this.physics.add.collider(puppets, this.blockMap);
-        this.physics.add.overlap(this.player, flag, flag.onPlayerOverlap, null, flag);
 
         GameBus.emit("sceneReady");
     }

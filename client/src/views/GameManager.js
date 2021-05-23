@@ -73,17 +73,16 @@ class _GameManager {
     }
 
     endRun (status) {
-        ScoreManager.stopTimer();
         PhaseManager.setTitle("Waiting for others...");
 
         if (!this.runEnded) {
             if (status === PLAYER_STATUS.Dead) {
-                ScoreManager.clearScore();
+                // clear score
             }
 
             const data = {
                 status,
-                score: ScoreManager.getScore(),
+                score: 0,
             };
             send("runEnd", data);
             this.runEnded = true;

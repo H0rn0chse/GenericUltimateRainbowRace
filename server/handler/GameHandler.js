@@ -4,6 +4,7 @@ import { OverviewHandler } from "./OverviewHandler.js";
 import { publish, registerMessageHandler, send, unsubscribe } from "../socket.js";
 import { PLAYER_STATUS, SCORE_FIRST } from "../../client/src/Globals.js";
 import { guid } from "../../client/src/utils.js";
+import { ScoreHelper } from "./ScoreHelper.js";
 
 class _GameHandler {
     init () {
@@ -117,6 +118,7 @@ class _GameHandler {
         }, true);
 
         if (isGameReady) {
+            ScoreHelper.onInit(lobby.data);
             publish(lobby.topic, "lobbyReady", { host: lobby.data.host });
         }
     }
@@ -188,6 +190,7 @@ class _GameHandler {
 
         lobby.data.run = {};
         lobby.data.kitties = {};
+        ScoreHelper.resetRun(lobby.data);
         publish(lobby.topic, "resetRun", {});
     }
 
@@ -200,13 +203,8 @@ class _GameHandler {
 
         const count = Object.keys(lobby.data.run).length + 1;
 
-        const alivePlayer = Object.values(lobby.data.run).map((player) => {
-            return player.status !== PLAYER_STATUS.Dead;
-        }).length;
-
-        if (alivePlayer === 0 && data.status !== PLAYER_STATUS.Dead) {
-            data.score += SCORE_FIRST;
-            send(ws, "updateScore", { score: data.score });
+        if (data.status === PLAYER_STATUS.Alive) {
+            ScoreHelper.onRunEnd(lobby.data, playerId);
         }
 
         lobby.data.run[playerId] = {
@@ -217,6 +215,7 @@ class _GameHandler {
         };
 
         if (Object.keys(lobby.data.player).length === count) {
+            ScoreHelper.calcScore(lobby.data);
             publish(lobby.topic, "runEnd", lobby.data);
         } else {
             publish(lobby.topic, "runProgress", lobby.data);
@@ -233,6 +232,9 @@ class _GameHandler {
             // kitty was already collected and should be hidden by now
             return;
         }
+
+        // save kitty score to scoreHelper
+        ScoreHelper.collectKitty(lobby.data, playerId);
 
         // this is the first player to collect the kitty
         lobby.data.kitties[data.kittyId] = playerId;

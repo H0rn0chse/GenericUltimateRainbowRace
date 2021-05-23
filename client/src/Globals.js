@@ -14,6 +14,8 @@ export const BUILD_COUNTDOWN = 3;
 export const PRERUN_COUNTDOWN = 1;
 export const RESULTS_COUNTDOWN = 1;
 
+export const LEVEL_TIMEOUT = 60;
+
 export const SCORE_TICK = 0.2;
 export const SCORE_START = 500;
 export const SCORE_COIN = 200;
@@ -22,6 +24,7 @@ export const SCORE_FIRST = 100;
 export const PLAYER_STATUS = {
     Alive: "Alive",
     Dead: "Dead",
+    Idle: "Idle",
 };
 
 export const PHASES = {

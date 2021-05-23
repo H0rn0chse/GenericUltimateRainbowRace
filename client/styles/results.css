@@ -23,7 +23,7 @@
     grid-auto-rows: 1.5em;
     gap: 10px;
     grid-auto-flow: row;
-    grid-template-columns: 30px 220px 50px 100px 100px;
+    grid-template-columns: 30px 220px 50px 50px 160px;
     margin-left: 5em;
 }
 
