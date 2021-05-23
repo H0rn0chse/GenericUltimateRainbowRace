@@ -103,12 +103,7 @@ export class MainScene extends BaseScene {
 
         const flag = this.add.flag(this.blockMap.getEndPoint());
 
-        this.kittyGroup = this.physics.add.group({
-            allowGravity: false,
-            runChildUpdate: true,
-        });
-        // TODO Add kitties
-        // this.kittyGroup.add.kitty();
+        this.kittyGroup = this.addGroup.kitty(this.tileMaps.getObjects("Kitties"));
 
         // ================== collision / overlap ==================
         // player collision
@@ -117,7 +112,7 @@ export class MainScene extends BaseScene {
             block.onPlayerCollision?.(player);
         });
         this.physics.add.overlap(this.player, this.kittyGroup, (player, kitty) => {
-            kitty.onCollect(player);
+            this.kittyGroup.collectKitty(player, kitty);
         });
         // bullet collision
         this.physics.add.overlap(this.player, this.bulletGroup, (player, bullet) => {
@@ -154,6 +149,7 @@ export class MainScene extends BaseScene {
     resetScene () {
         const spawnPoint = this.blockMap.getSpawnPoint();
         this.player.reset(spawnPoint);
+        this.kittyGroup.resetKitties();
     }
 
     update (time, delta) {

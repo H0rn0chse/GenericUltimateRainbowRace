@@ -57,6 +57,8 @@ class _GameManager {
             { channel: "pickBlock", handler: this.onPickBlock },
             { channel: "fillInv", handler: this.onFillInv },
             { channel: "resetRun", handler: this.onResetRun },
+            { channel: "kittyCollected", handler: this.onKittyCollected },
+            { channel: "hideKitty", handler: this.onHideKitty },
         ];
 
         PhaseBus.on(PHASES.Colors, this.onColors, this);
@@ -64,6 +66,10 @@ class _GameManager {
     }
 
     // ========================================== Game logic & handler =============================================
+
+    collectKitty (kittyId) {
+        send("collectKitty", { kittyId });
+    }
 
     endRun (status) {
         ScoreManager.stopTimer();
@@ -152,6 +158,16 @@ class _GameManager {
     }
 
     // ========================================== Websocket handler =============================================
+
+    onKittyCollected (data) {
+        GameBus.emit("kittyCollected", data.kittyId);
+    }
+
+    onHideKitty (data) {
+        if (data.playerId !== getId()) {
+            GameBus.emit("hideKitty", data.kittyId);
+        }
+    }
 
     onFillInv (data) {
         if (data.playerId === getId()) {

@@ -1,13 +1,10 @@
-import { PHASES, STATIC, BLOCK_SIZE } from "../Globals.js";
-import { PhaseBus } from "../EventBus.js";
+import { STATIC, Phaser } from "../Globals.js";
 
-const { Physics } = globalThis.Phaser;
+export class Kitty extends Phaser.Physics.Arcade.Sprite {
+    constructor (scene, x, y, kittyId) {
+        super(scene, x, y, "kitty_00");
 
-export class Kitty extends Physics.Arcade.Sprite {
-    constructor (config) {
-        super(config.scene, config.x, config.y, "kitty_00");
-        this.scene.physics.world.enable([this], STATIC);
-        PhaseBus.on(PHASES.Build, this.resetKitty, this);
+        this.kittyId = kittyId;
 
         this.anims.create({
             key: "kittyNormal",
@@ -22,39 +19,37 @@ export class Kitty extends Physics.Arcade.Sprite {
             repeat: 0,
         });
 
-        this.resetKitty();
+        this.anims.play("kittyNormal");
+
+        this.setOrigin(0);
+
+        this.scene.physics.world.enable([this], STATIC);
+    }
+
+    collect () {
+        this.collected = true;
+        this.anims.play("kittyCollect");
+    }
+
+    hide () {
+        this.setVisible(false);
+        this.body.enable = false;
+    }
+
+    show () {
+        this.setVisible(true);
+        this.body.enable = true;
+    }
+
+    reset () {
+        this.anims.play("kittyNormal");
+        this.collected = false;
+        this.show();
     }
 
     update (delta, time) {
         if (this.collected && !this.anims.isPlaying) {
-            this.body.enable = false;
-            this.setActive(false);
-            this.setVisible(false);
+            this.hide();
         }
-    }
-
-    onCollect (player) {
-        if (!this.collected) {
-            this.collected = true;
-            this.anims.play("kittyCollect");
-
-            // TODO increase score
-            // TODO tell server
-        }
-    }
-
-    resetKitty () {
-        this.collected = false;
-
-        this.anims.play("kittyNormal");
-
-        this.body.enable = true;
-        this.setActive(true);
-        this.setVisible(true);
-    }
-
-    destroy () {
-        super.destroy();
-        PhaseBus.off(PHASES.Build, this.resetKitty, this);
     }
 }

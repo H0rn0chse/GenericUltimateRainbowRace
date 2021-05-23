@@ -20,10 +20,6 @@ export class MainPlugin extends Phaser.Plugins.BasePlugin {
             return this.displayList.add(new Flag(this.scene, pos.x, pos.y));
         });
 
-        pluginManager.registerGameObject("kitty", function (pos) {
-            return this.displayList.add(new Kitty(this.scene, pos.x, pos.y));
-        });
-
         pluginManager.installScenePlugin("addGroup", CustomGroupManager, "addGroup");
         pluginManager.installScenePlugin("tileMaps", TileMaps, "tileMaps");
         pluginManager.installScenePlugin("debug", DebugHelper, "debug");

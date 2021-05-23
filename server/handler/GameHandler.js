@@ -24,6 +24,7 @@ class _GameHandler {
         registerMessageHandler("fillInv", this.onFillInv, this);
         registerMessageHandler("resetRun", this.onResetRun, this);
         registerMessageHandler("runEnd", this.onRunEnd, this);
+        registerMessageHandler("collectKitty", this.onCollectKitty, this);
     }
 
     _getLobbyData (playerId) {
@@ -185,6 +186,7 @@ class _GameHandler {
         }
 
         lobby.data.run = {};
+        lobby.data.kitties = {};
         publish(lobby.topic, "resetRun", {});
     }
 
@@ -218,6 +220,25 @@ class _GameHandler {
         } else {
             publish(lobby.topic, "runProgress", lobby.data);
         }
+    }
+
+    onCollectKitty (ws, data, playerId) {
+        const lobby = this._getLobbyData(playerId);
+        if (!lobby || !lobby.data.kitties || !data.kittyId) {
+            return;
+        }
+
+        if (lobby.data.kitties[data.kittyId]) {
+            // kitty was already collected and should be hidden by now
+            return;
+        }
+
+        // this is the first player to collect the kitty
+        lobby.data.kitties[data.kittyId] = playerId;
+        send(ws, "kittyCollected", data);
+
+        data.playerId = playerId;
+        publish(lobby.topic, "hideKitty", data);
     }
 
     // ================= not bound to events ==================================================
