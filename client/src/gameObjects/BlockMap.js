@@ -192,4 +192,11 @@ export class BlockMap extends Phaser.Physics.Arcade.StaticGroup {
 
         return block;
     }
+
+    destroy () {
+        PhaseBus.off(PHASES.PreRun, this.onBuildPhaseOver, this);
+        GameBus.off("setBlock", this.onSetBlock, this);
+        GameBus.off("updateBlockId", this.onUpdateBlockId, this);
+        GameBus.off("updateBlock", this.onUpdateBlock, this);
+    }
 }

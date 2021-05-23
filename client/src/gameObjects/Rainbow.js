@@ -51,4 +51,9 @@ export class Rainbow extends Phaser.Physics.Arcade.StaticGroup {
         child.visible = true;
         child.setActive(true);
     }
+
+    destroy (...args) {
+        PhaseBus.off(PHASES.Colors, this.onColorChange, this);
+        super.destroy(...args);
+    }
 }

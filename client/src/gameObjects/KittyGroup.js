@@ -52,6 +52,7 @@ export class KittyGroup extends Phaser.Physics.Arcade.StaticGroup {
 
     destroy (...args) {
         GameBus.off("hideKitty", this.onHideKitty, this);
+        GameBus.off("kittyCollected", this.onKittyCollected, this);
         super.destroy(...args);
     }
 }
