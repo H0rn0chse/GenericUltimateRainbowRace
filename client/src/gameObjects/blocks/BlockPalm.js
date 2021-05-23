@@ -1,5 +1,4 @@
 import { Block } from "./Block.js";
-import { Phaser } from "../../Globals.js";
 
 export class BlockPalm extends Block {
     constructor (config) {

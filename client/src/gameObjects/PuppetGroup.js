@@ -19,7 +19,7 @@ export class PuppetGroup extends Phaser.Physics.Arcade.Group {
         if (!puppet) {
             puppet = new Puppet(this.scene, data.avatarId, playerId);
             this.add(puppet, true);
-            puppet.setCollideWorldBounds(true);
+            puppet.setCollideWorldBounds(false);
             puppet.body.setAllowGravity(false);
         }
 

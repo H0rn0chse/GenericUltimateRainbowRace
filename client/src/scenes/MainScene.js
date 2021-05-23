@@ -27,7 +27,7 @@ export class MainScene extends BaseScene {
         this.load.image("kitty_02", "coin/coin_0002.png");
         this.load.spritesheet("gun_slow", "gun_slow.png", { frameWidth: 42, frameHeight: 42 });
         this.load.spritesheet("gun_fast", "gun_fast.png", { frameWidth: 42, frameHeight: 42 });
-        this.load.spritesheet("bullet_big", "bullet_big.png", { frameWidth: 10, frameHeight: 6 });
+        this.load.spritesheet("bullet_big", "bullet_big.png", { frameWidth: 20, frameHeight: 10 });
         this.load.spritesheet("bullet_small", "bullet_small.png", { frameWidth: 10, frameHeight: 6 });
         this.load.image("block_stone", "1_stone.png");
         this.load.image("block_box", "block_box.png");
