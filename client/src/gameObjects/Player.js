@@ -70,10 +70,13 @@ export class Player extends PlayerBase {
     }
 
     die () {
+        if (!GameManager.runEnded) {
+            this.sounds.die.play();
+        }
         if (PhaseManager.isPhase(PHASES.Run)) {
             console.log("Player died!");
             this.isDead = true;
-            this.sounds.die.play();
+
             this.anims.play(`player${this.skinId}Died`, true);
             GameManager.endRun(Status.Dead);
         }
