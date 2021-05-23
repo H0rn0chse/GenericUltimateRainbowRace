@@ -4,13 +4,15 @@ export const BLOCK_SIZE = 42;
 export const BLOCKS_X = 30;
 export const BLOCKS_Y = 13;
 
+export const INVENTORY_SIZE = 6;
+
 export const SCENE_WIDTH = BLOCKS_X * BLOCK_SIZE;
 export const SCENE_HEIGHT = BLOCKS_Y * BLOCK_SIZE;
 
 export const STATIC = 1;
 export const DYNAMIC = 0;
 
-export const BUILD_COUNTDOWN = 3;
+export const BUILD_COUNTDOWN = 6;
 export const PRERUN_COUNTDOWN = 1;
 export const RESULTS_COUNTDOWN = 1;
 

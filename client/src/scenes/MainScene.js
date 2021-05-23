@@ -1,7 +1,7 @@
 import { BlockMap } from "../gameObjects/BlockMap.js";
 import { GameManager } from "../views/GameManager.js";
 import { PhaseManager } from "../PhaseManager.js";
-import { BLOCKS_X, BLOCKS_Y, PHASES, LEVELS } from "../Globals.js";
+import { BLOCKS_X, BLOCKS_Y, PHASES, LEVELS, INVENTORY_SIZE } from "../Globals.js";
 import { createPlayerAnims } from "../PlayerAnimations.js";
 import { GameBus, PhaseBus } from "../EventBus.js";
 import { BaseScene } from "./BaseScene.js";
@@ -191,7 +191,7 @@ export class MainScene extends BaseScene {
 
     onBuild () {
         if (PhaseManager.isHost) {
-            this.blockMap.generateInventory(4);
+            this.blockMap.generateInventory(INVENTORY_SIZE);
         }
     }
 

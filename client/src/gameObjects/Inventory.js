@@ -33,7 +33,7 @@ export class Inventory {
     generateBackground (scene) {
         this.graphics = scene.add.graphics();
         this.graphics.fillStyle(0xffff00, 1);
-        this.graphics.fillRoundedRect(0, 50, 60, 280, { tl: 0, tr: 22, bl: 0, br: 22 });
+        this.graphics.fillRoundedRect(0, 50, 60, 420, { tl: 0, tr: 22, bl: 0, br: 22 });
     }
 
     generateBlocks (blockMap, blockTypes) {
