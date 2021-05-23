@@ -133,4 +133,49 @@ export function createPlayerAnims (anims) {
         frameRate: 0.5,
         repeat: 0,
     });
+
+    anims.create({
+        key: "playerDragonIdle",
+        frames: [{ key: "dragonWalk_00" }],
+        frameRate: 20,
+    });
+
+    anims.create({
+        key: "playerDragonWalk",
+        frames: [{ key: "dragonWalk_00" }, { key: "dragonWalk_01" }, { key: "dragonWalk_02" }],
+        frameRate: 5,
+        repeat: -1,
+    });
+
+    anims.create({
+        key: "playerDragonJumpStart",
+        frames: [{ key: "dragonJump_00" }],
+        frameRate: 2.6,
+        repeat: 0,
+    });
+    anims.create({
+        key: "playerDragonJumping",
+        frames: [{ key: "dragonJump_01" }],
+        frameRate: 1,
+        repeat: -1,
+    });
+    anims.create({
+        key: "playerDragonJumpEnd",
+        frames: [{ key: "dragonJump_02" }],
+        frameRate: 2.6,
+        repeat: 0,
+    });
+    anims.create({
+        key: "playerDragonDash",
+        frames: [{ key: "dragonDash_00" }, { key: "dragonDash_01" }, { key: "dragonDash_02" }, { key: "dragonDash_03" }],
+        frameRate: 8,
+        repeat: -1,
+    });
+
+    anims.create({
+        key: "playerDragonDied",
+        frames: [{ key: "dragonDie_00" }, { key: "dragonDie_01" }],
+        frameRate: 0.5,
+        repeat: 0,
+    });
 }
