@@ -8,9 +8,12 @@ export class BlockSpeed extends Block {
     }
 
     onPlayerCollision (player) {
-        player.impulse.x = 400 * (this.isFlipped() ? -1 : 1);
-        player.body.velocity.y = -500;
+        // If from above
+        if (this.body.top >= player.body.bottom) {
+            player.impulse.x = 400 * (this.isFlipped() ? -1 : 1);
+            player.body.velocity.y = -500;
 
-        this.sound.play();
+            this.sound.play();
+        }
     }
 }
