@@ -22,6 +22,9 @@ export class BlockPalm extends Block {
         this.body.checkCollision.down = false;
         this.body.checkCollision.left = false;
         this.body.checkCollision.right = false;
+
+        this.body.setSize(60, 99);
+        this.body.setOffset(21, 0);
     }
 
     onPlayerCollision (player) {
