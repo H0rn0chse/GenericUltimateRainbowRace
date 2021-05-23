@@ -10,6 +10,8 @@ export class Inventory {
         that = this;
         this.generateBackground(scene);
         PhaseBus.on(PHASES.PreRun, this.onBuildPhaseOver, this);
+
+        scene.events.on("destroy", this.destroy, this);
     }
 
     onBuildPhaseOver (data) {
@@ -90,7 +92,6 @@ export class Inventory {
     }
 
     destroy () {
-        super.destroy();
         PhaseBus.off(PHASES.PreRun, this.onBuildPhaseOver, this);
     }
 }

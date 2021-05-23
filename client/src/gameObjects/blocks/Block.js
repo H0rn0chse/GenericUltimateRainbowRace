@@ -74,8 +74,8 @@ export class Block extends Physics.Arcade.Sprite {
         this.setAlpha(0.7);
     }
 
-    destroy () {
-        super.destroy();
+    destroy (...args) {
         PhaseBus.off(PHASES.Build, this.resetBlock, this);
+        super.destroy(...args);
     }
 }
