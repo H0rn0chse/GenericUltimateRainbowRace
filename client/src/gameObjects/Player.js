@@ -30,7 +30,6 @@ export class Player extends PlayerBase {
         this.walkSoundTime = 200;
         this.curWalkSoundTime = 0.0;
 
-
         // jumping constants
         this.jumpTimeMax = 400.0;
         this.jumpTimeMin = 100.0;

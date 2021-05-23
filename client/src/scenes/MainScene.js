@@ -149,6 +149,7 @@ export class MainScene extends BaseScene {
         createPlayerAnims(this.anims);
         const puppets = this.addGroup.puppet();
         this.player = this.add.player(this.blockMap.getSpawnPoint(), skinId);
+        this.player.setDepth(20);
 
         const flag = this.add.flag(this.blockMap.getEndPoint());
 
