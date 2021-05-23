@@ -64,7 +64,7 @@ export class Player extends PlayerBase {
             walk3: scene.sound.add("walk_3"),
             walk4: scene.sound.add("walk_4"),
         };
-        Object.values((sound) => {
+        Object.values(this.sounds).forEach((sound) => {
             scene.volume.addSound(sound);
         });
     }

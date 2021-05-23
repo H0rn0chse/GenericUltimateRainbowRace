@@ -27,6 +27,7 @@ export class BlockPalm extends Block {
         this.body.setOffset(21, 0);
 
         this.sound = this.scene.sound.add("block_bounce");
+        this.scene.volume.addSound(this.sound);
     }
 
     onPlayerCollision (player) {

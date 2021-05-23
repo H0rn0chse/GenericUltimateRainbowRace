@@ -5,6 +5,7 @@ export class BlockSpeed extends Block {
         super(config, "block_speed");
 
         this.sound = this.scene.sound.add("block_bounce");
+        this.scene.volume.addSound(this.sound);
     }
 
     onPlayerCollision (player) {

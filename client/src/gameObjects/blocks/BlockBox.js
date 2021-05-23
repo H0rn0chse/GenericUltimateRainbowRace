@@ -5,6 +5,7 @@ export class BlockBox extends Block {
         super(config, "block_box");
 
         this.sound = this.scene.sound.add("block_break");
+        this.scene.volume.addSound(this.sound);
     }
 
     onPlayerCollision (player) {
