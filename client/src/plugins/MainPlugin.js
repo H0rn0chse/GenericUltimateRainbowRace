@@ -6,6 +6,7 @@ import { DebugHelper } from "../scenePlugins/DebugHelper.js";
 import { VolumeMixer } from "../scenePlugins/VolumeMixer.js";
 import { TiledPlugin } from "../scenePlugins/TiledPlugin.js";
 import { Flag } from "../gameObjects/Flag.js";
+import { Kitty } from "../gameObjects/Kitty.js";
 
 export class MainPlugin extends Phaser.Plugins.BasePlugin {
     constructor (pluginManager) {
@@ -17,6 +18,10 @@ export class MainPlugin extends Phaser.Plugins.BasePlugin {
 
         pluginManager.registerGameObject("flag", function (pos) {
             return this.displayList.add(new Flag(this.scene, pos.x, pos.y));
+        });
+
+        pluginManager.registerGameObject("kitty", function (pos) {
+            return this.displayList.add(new Kitty(this.scene, pos.x, pos.y));
         });
 
         pluginManager.installScenePlugin("addGroup", CustomGroupManager, "addGroup");

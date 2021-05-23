@@ -22,6 +22,9 @@ export class MainScene extends BaseScene {
 
         this.load.setPath("assets/blocks");
         this.load.spritesheet("flag", "flag.png", { frameWidth: 42, frameHeight: 42 });
+        this.load.image("kitty_00", "coin/coin_0000.png");
+        this.load.image("kitty_01", "coin/coin_0001.png");
+        this.load.image("kitty_02", "coin/coin_0002.png");
         this.load.spritesheet("gun_slow", "gun_slow.png", { frameWidth: 42, frameHeight: 42 });
         this.load.spritesheet("gun_fast", "gun_fast.png", { frameWidth: 42, frameHeight: 42 });
         this.load.spritesheet("bullet_big", "bullet_big.png", { frameWidth: 10, frameHeight: 6 });
@@ -99,11 +102,21 @@ export class MainScene extends BaseScene {
 
         const flag = this.add.flag(this.blockMap.getEndPoint());
 
+        this.kittyGroup = this.physics.add.group({
+            allowGravity: false,
+            runChildUpdate: true,
+        });
+        // TODO Add kitties
+        // this.kittyGroup.add.kitty();
+
         // ================== collision / overlap ==================
         // player collision
         this.physics.add.collider(this.player, terrain);
         this.physics.add.collider(this.player, this.blockMap, (player, block) => {
             block.onPlayerCollision?.(player);
+        });
+        this.physics.add.overlap(this.player, this.kittyGroup, (player, kitty) => {
+            kitty.onCollect(player);
         });
         // bullet collision
         this.physics.add.overlap(this.player, this.bulletGroup, (player, bullet) => {
