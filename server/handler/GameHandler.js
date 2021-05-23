@@ -2,7 +2,7 @@ import { LobbyManager } from "../LobbyManager.js";
 import { PlayerManager } from "../PlayerManager.js";
 import { OverviewHandler } from "./OverviewHandler.js";
 import { publish, registerMessageHandler, send, unsubscribe } from "../socket.js";
-import { PLAYER_STATUS, SCORE_FIRST } from "../../client/src/Globals.js";
+import { INVENTORY_SIZE, PLAYER_STATUS, SCORE_FIRST } from "../../client/src/Globals.js";
 import { guid } from "../../client/src/utils.js";
 import { ScoreHelper } from "./ScoreHelper.js";
 
@@ -164,7 +164,7 @@ class _GameHandler {
 
         const blockCount = Object.keys(lobby.data.blocks).length;
         const playerCount = Object.keys(lobby.data.player).length;
-        if (blockCount === playerCount) {
+        if (blockCount === playerCount || blockCount >= INVENTORY_SIZE) {
             publish(lobby.topic, "allBlocksSet", { playerId: lobby.data.host });
         }
     }
