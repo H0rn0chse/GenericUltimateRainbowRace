@@ -12,6 +12,7 @@ class _LobbyManager {
             id: this.count,
             running: false,
             maxSize: MAXIMUM_LOBBY_SIZE,
+            blocks: {},
             player: {},
             run: {},
             items: {},

@@ -154,11 +154,19 @@ class _GameHandler {
             return;
         }
 
+        lobby.data.blocks[playerId] = true;
+
         data.playerId = playerId;
         data.clientBlockId = data.blockId;
         data.blockId = guid();
 
         publish(lobby.topic, "setBlock", data);
+
+        const blockCount = Object.keys(lobby.data.blocks).length;
+        const playerCount = Object.keys(lobby.data.player).length;
+        if (blockCount === playerCount) {
+            publish(lobby.topic, "allBlocksSet", { playerId: lobby.data.host });
+        }
     }
 
     onSetPhase (ws, data, playerId) {
@@ -190,6 +198,7 @@ class _GameHandler {
 
         lobby.data.run = {};
         lobby.data.kitties = {};
+        lobby.data.blocks = {};
         ScoreHelper.resetRun(lobby.data);
         publish(lobby.topic, "resetRun", {});
     }

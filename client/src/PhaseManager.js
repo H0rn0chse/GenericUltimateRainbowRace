@@ -12,6 +12,7 @@ class _PhaseManager {
         addEventListener("setCountdown", this.onSetCountdown, this);
         addEventListener("runProgress", this.onRunProgress, this);
         addEventListener("runEnd", this.onRunEnd, this);
+        addEventListener("allBlocksSet", this.onAllBlocksSet, this);
 
         this.currentPhase = PHASES.Initial;
 
@@ -127,6 +128,10 @@ class _PhaseManager {
     onSetCountdown (data) {
         const seconds = data.seconds ? `&nbsp;&nbsp;${data.seconds}` : "";
         this.countdown.innerHTML = seconds;
+    }
+
+    onAllBlocksSet (data) {
+        this.remainingSeconds = 1;
     }
 }
 
