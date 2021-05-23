@@ -56,6 +56,7 @@ export class BlockMap extends Phaser.Physics.Arcade.StaticGroup {
         PhaseBus.on(PHASES.PreRun, this.onBuildPhaseOver, this);
         GameBus.on("setBlock", this.onSetBlock, this);
         GameBus.on("updateBlockId", this.onUpdateBlockId, this);
+        GameBus.on("updateBlock", this.onUpdateBlock, this);
     }
 
     onBuildPhaseOver () {
@@ -75,6 +76,14 @@ export class BlockMap extends Phaser.Physics.Arcade.StaticGroup {
         const block = this.getMatching("blockId", clientBlockId)[0];
         if (block) {
             block.blockId = blockId;
+        }
+    }
+
+    onUpdateBlock (data) {
+        const { blockId } = data;
+        const block = this.getMatching("blockId", blockId)[0];
+        if (block && block.onUpdateBlock) {
+            block.onUpdateBlock(data);
         }
     }
 

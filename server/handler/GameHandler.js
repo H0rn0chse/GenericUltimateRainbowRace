@@ -25,6 +25,7 @@ class _GameHandler {
         registerMessageHandler("resetRun", this.onResetRun, this);
         registerMessageHandler("runEnd", this.onRunEnd, this);
         registerMessageHandler("collectKitty", this.onCollectKitty, this);
+        registerMessageHandler("updateBlock", this.onUpdateBlock, this);
     }
 
     _getLobbyData (playerId) {
@@ -239,6 +240,17 @@ class _GameHandler {
 
         data.playerId = playerId;
         publish(lobby.topic, "hideKitty", data);
+    }
+
+    onUpdateBlock (ws, data, playerId) {
+        const lobby = this._getLobbyData(playerId);
+
+        if (!lobby || !lobby.data.run) {
+            return;
+        }
+
+        data.playerId = playerId;
+        publish(lobby.topic, "updateBlock", data);
     }
 
     // ================= not bound to events ==================================================

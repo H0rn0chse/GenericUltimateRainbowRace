@@ -31,13 +31,8 @@ export class BlockPalm extends Block {
         // If from above
         if (this.body.top >= player.body.bottom) {
             player.body.velocity.y = -500;
-            this.performAction(); // TODO tell server instead
-        }
-    }
-
-    update () {
-        if (!this.anims.isPlaying) {
-            this.anims.play("palmNormal");
+            // update block on server and local block
+            this.updateBlock({}, true);
         }
     }
 
@@ -45,7 +40,13 @@ export class BlockPalm extends Block {
         this.anims.play("palmNormal");
     }
 
-    performAction () {
+    onUpdateBlock () {
         this.anims.play("palmJump");
+    }
+
+    update () {
+        if (!this.anims.isPlaying) {
+            this.anims.play("palmNormal");
+        }
     }
 }
