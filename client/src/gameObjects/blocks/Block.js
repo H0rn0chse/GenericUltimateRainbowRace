@@ -60,4 +60,8 @@ export class Block extends Physics.Arcade.Sprite {
         this.setTint(0xff0000);
         this.setAlpha(0.7);
     }
+
+    destroy () {
+        PhaseBus.off(PHASES.Build, this.resetBlock, this);
+    }
 }

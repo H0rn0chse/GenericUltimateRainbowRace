@@ -31,12 +31,13 @@ export class Inventory {
     }
 
     generateBackground (scene) {
-        const graphics = scene.add.graphics();
-        graphics.fillStyle(0xffff00, 1);
-        graphics.fillRoundedRect(0, 50, 60, 280, { tl: 0, tr: 22, bl: 0, br: 22 });
+        this.graphics = scene.add.graphics();
+        this.graphics.fillStyle(0xffff00, 1);
+        this.graphics.fillRoundedRect(0, 50, 60, 280, { tl: 0, tr: 22, bl: 0, br: 22 });
     }
 
     generateBlocks (blockMap, blockTypes) {
+        this.graphics.visible = true;
         let c = 0;
         blockTypes.forEach((type) => {
             const x = 30;
@@ -60,6 +61,7 @@ export class Inventory {
         blocks.forEach((block) => {
             block.destroy();
         });
+        this.graphics.visible = false;
     }
 
     selectOneBlock (blockChoice, blockMap) {
@@ -89,6 +91,6 @@ export class Inventory {
     }
 
     destroy () {
-        // TODO unbind PhaseManager
+        PhaseBus.off(PHASES.PreRun, this.onBuildPhaseOver, this);
     }
 }
