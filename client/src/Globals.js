@@ -30,7 +30,7 @@ export const PLAYER_STATUS = {
 };
 
 export const PHASES = {
-    Initial: "Intial",
+    Initial: "Initial",
     PreRun: "PreRun",
     Run: "Run",
     Results: "Results",
@@ -39,11 +39,11 @@ export const PHASES = {
 };
 
 export const PHASE_TEXTS = {
-    Initial: "Intial Setup",
+    Initial: "",
     PreRun: "Countdown",
     Run: "Run!",
     Results: "Results",
-    Colors: "Switching Colors",
+    Colors: "",
     Build: "Place your Block",
 };
 
