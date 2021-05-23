@@ -105,8 +105,15 @@ export class MainScene extends BaseScene {
         this.physics.add.collider(this.player, this.blockMap, (player, block) => {
             block.onPlayerCollision?.(player);
         });
+        // bullet collision
         this.physics.add.overlap(this.player, this.bulletGroup, (player, bullet) => {
-            bullet.onPlayerHit?.(player);
+            bullet.onPlayerHit(player);
+        });
+        this.physics.add.overlap(this.bulletGroup, terrain, (bullet, obstacle) => {
+            bullet.onObstacleHit(obstacle);
+        });
+        this.physics.add.overlap(this.bulletGroup, this.blockMap, (bullet, obstacle) => {
+            bullet.onObstacleHit(obstacle);
         });
         // puppet collision
         this.physics.add.collider(puppets, terrain);

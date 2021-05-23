@@ -86,7 +86,7 @@ class BlockGun extends Block {
     fire () {
         const bullet = this.bullets.get();
         if (bullet) {
-            bullet.fire(this.x, this.y, this.isFlipped());
+            bullet.fire(this, this.x, this.y, this.isFlipped());
         }
     }
 }
