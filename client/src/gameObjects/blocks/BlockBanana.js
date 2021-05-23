@@ -12,7 +12,7 @@ export class BlockBanana extends Block {
         const sign = player.flipX ? -1 : 1;
         player.body.setVelocityX(400 * sign);
 
-        this.performAction();
+        this.performAction(); // TODO tell server instead
     }
 
     performAction () {

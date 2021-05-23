@@ -27,6 +27,10 @@ export class Block extends Physics.Arcade.Sprite {
         // to be implemented by the specific block
     }
 
+    performAction () {
+        // to be implemented by the specific block
+    }
+
     resetBlock () {
         // to be implemented by the specific block
     }
