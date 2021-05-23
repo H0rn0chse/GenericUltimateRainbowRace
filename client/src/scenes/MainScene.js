@@ -109,7 +109,7 @@ export class MainScene extends BaseScene {
         this.tileMaps.init(levelId);
         const terrain = this.tiled.layer(this.tileMaps.createLayer("Terrain"));
         // this.debug.addLayer("Terrain", terrain);
-        const bulletGroup = this.physics.add.group({
+        this.bulletGroup = this.physics.add.group({
             allowGravity: false,
             runChildUpdate: true,
         });
@@ -135,13 +135,13 @@ export class MainScene extends BaseScene {
         });
         this.physics.add.overlap(this.player, flag, flag.onPlayerOverlap, null, flag);
         // bullet collision
-        this.physics.add.overlap(this.player, bulletGroup, (player, bullet) => {
+        this.physics.add.overlap(this.player, this.bulletGroup, (player, bullet) => {
             bullet.onPlayerHit(player);
         });
-        this.physics.add.overlap(bulletGroup, terrain, (bullet, obstacle) => {
+        this.physics.add.overlap(this.bulletGroup, terrain, (bullet, obstacle) => {
             bullet.onObstacleHit(obstacle);
         });
-        this.physics.add.overlap(bulletGroup, this.blockMap, (bullet, obstacle) => {
+        this.physics.add.overlap(this.bulletGroup, this.blockMap, (bullet, obstacle) => {
             bullet.onObstacleHit(obstacle);
         });
         // puppet collision
