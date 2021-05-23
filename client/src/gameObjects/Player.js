@@ -47,6 +47,7 @@ export class Player extends PlayerBase {
         this.hasDashed = false;
         this.curDashTime = 0;
         this.curDeathTime = 0;
+        this.disableTime = 0;
     }
 
     die () {
@@ -72,6 +73,7 @@ export class Player extends PlayerBase {
         this.isCurDashing = false;
         this.hasDashed = false;
         this.wasDashKeyUp = true;
+        this.disableTime = 0;
         this.clearTint();
     }
 
@@ -80,6 +82,10 @@ export class Player extends PlayerBase {
             && this.body.left < BLOCK_SIZE * BLOCKS_X
             && this.body.bottom > 0
             && this.body.top < BLOCK_SIZE * BLOCKS_Y;
+    }
+
+    disableControlsFor (disableTime) {
+        this.disableTime = disableTime;
     }
 
     update (time, delta) {
@@ -97,6 +103,11 @@ export class Player extends PlayerBase {
         // only allow user input during run phase
         if (!PhaseManager.isPhase(PHASES.Run)) {
             this.anims.play(`player${this.skinId}Idle`);
+            return;
+        }
+
+        this.disableTime -= delta;
+        if (this.disableTime > 0) {
             return;
         }
 

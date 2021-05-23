@@ -34,6 +34,7 @@ export class MainScene extends BaseScene {
         this.load.image("block_speed", "block_speed.png");
         this.load.image("block_pillar", "pillar.png");
         this.load.image("block_spike", "stachel.png");
+        this.load.image("block_banana", "Banana.png");
 
         this.load.setPath("assets/tilemap");
         this.load.image("atlas", "atlas.png");
