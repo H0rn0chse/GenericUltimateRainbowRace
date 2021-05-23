@@ -11,9 +11,13 @@ export class BlockPillar extends Block {
     onPlayerCollision (player) {
         // If from above
         if (this.body.top >= player.body.bottom) {
-            this.y += this.fallSpeed;
-            this.body.updateFromGameObject();
+            this.performAction(); // TODO tell server instead
         }
+    }
+
+    performAction () {
+        this.y += this.fallSpeed;
+        this.body.updateFromGameObject();
     }
 
     resetBlock () {

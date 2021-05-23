@@ -1,15 +1,18 @@
 import { Block } from "./Block.js";
 
-export class BlockBox extends Block {
+export class BlockBanana extends Block {
     constructor (config) {
-        super(config, "block_box");
+        super(config, "block_banana");
+        this.disableTime = 1500;
     }
 
     onPlayerCollision (player) {
-        // If from below
-        if (player.body.top >= this.body.bottom) {
-            this.performAction(); // TODO tell server instead
-        }
+        player.disableControlsFor(this.disableTime);
+
+        const sign = player.flipX ? -1 : 1;
+        player.body.setVelocityX(400 * sign);
+
+        this.performAction(); // TODO tell server instead
     }
 
     performAction () {

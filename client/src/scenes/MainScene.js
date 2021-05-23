@@ -27,13 +27,16 @@ export class MainScene extends BaseScene {
         this.load.image("kitty_02", "coin/coin_0002.png");
         this.load.spritesheet("gun_slow", "gun_slow.png", { frameWidth: 42, frameHeight: 42 });
         this.load.spritesheet("gun_fast", "gun_fast.png", { frameWidth: 42, frameHeight: 42 });
-        this.load.spritesheet("bullet_big", "bullet_big.png", { frameWidth: 10, frameHeight: 6 });
+        this.load.spritesheet("bullet_big", "bullet_big.png", { frameWidth: 20, frameHeight: 10 });
         this.load.spritesheet("bullet_small", "bullet_small.png", { frameWidth: 10, frameHeight: 6 });
         this.load.image("block_stone", "1_stone.png");
         this.load.image("block_box", "block_box.png");
         this.load.image("block_speed", "block_speed.png");
         this.load.image("block_pillar", "pillar.png");
         this.load.image("block_spike", "stachel.png");
+        this.load.image("block_banana", "Banana.png");
+        this.load.image("block_palm_00", "palm/palm_0000.png");
+        this.load.image("block_palm_01", "palm/palm_0001.png");
 
         this.load.setPath("assets/tilemap");
         this.load.image("atlas", "atlas.png");
