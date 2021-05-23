@@ -9,7 +9,7 @@ export class Kitty extends Phaser.Physics.Arcade.Sprite {
         this.anims.create({
             key: "kittyNormal",
             frames: [{ key: "kitty_00" }, { key: "kitty_01" }],
-            frameRate: 0.7,
+            frameRate: 1.2,
             repeat: -1,
         });
         this.anims.create({

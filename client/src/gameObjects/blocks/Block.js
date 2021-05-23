@@ -48,6 +48,7 @@ export class Block extends Physics.Arcade.Sprite {
         this._isPreview = isPreview;
         this.setActive(!isPreview);
         this.body.enable = !isPreview;
+        this.setDepth(isPreview ? 101 : 0);
     }
 
     scaleToFitBlockSize () {
