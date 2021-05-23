@@ -25,6 +25,8 @@ export class BlockPalm extends Block {
 
         this.body.setSize(60, 99);
         this.body.setOffset(21, 0);
+
+        this.sound = this.scene.sound.add("block_bounce");
     }
 
     onPlayerCollision (player) {
@@ -33,6 +35,8 @@ export class BlockPalm extends Block {
             player.body.velocity.y = -500;
             // update block on server and local block
             this.updateBlock({}, true);
+
+            this.sound.play();
         }
     }
 

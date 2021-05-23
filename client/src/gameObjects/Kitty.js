@@ -24,11 +24,24 @@ export class Kitty extends Phaser.Physics.Arcade.Sprite {
         this.setOrigin(0);
 
         this.scene.physics.world.enable([this], STATIC);
+
+        this.sounds = [];
+        for (let i = 0; i <= 11; i++) {
+            const sound = scene.sound.add(`kitty_collect_${i}`);
+            this.sounds[i] = sound;
+            scene.volume.addSound(sound);
+        }
+    }
+
+    _getRandomSound () {
+        const index = Math.floor(Math.random() * 12);
+        return this.sounds[index];
     }
 
     collect () {
         this.collected = true;
         this.anims.play("kittyCollect");
+        this._getRandomSound().play();
     }
 
     hide () {

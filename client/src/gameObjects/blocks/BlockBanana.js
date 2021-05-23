@@ -5,6 +5,8 @@ export class BlockBanana extends Block {
         super(config, "block_banana");
         this.disableTime = 1500;
         this.body.setSize(26, 26);
+
+        this.sound = this.scene.sound.add("block_slip");
     }
 
     onPlayerCollision (player) {
@@ -12,6 +14,8 @@ export class BlockBanana extends Block {
 
         const sign = player.flipX ? -1 : 1;
         player.body.setVelocityX(400 * sign);
+
+        this.sound.play();
 
         // update block on server and local block
         this.updateBlock({}, true);

@@ -89,12 +89,42 @@ export class MainScene extends BaseScene {
         for (let i = 0; i <= 1; i++) {
             this.load.image(`dragonDie_0${i}`, `dragonDie_000${i}.png`);
         }
+
+        this.load.setPath("assets/sound");
+        this.load.audio("theme", "theme.ogg");
+        this.load.audio("loose", "loose.ogg");
+        this.load.audio("win", "win.ogg");
+        this.load.audio("dash", "dash.ogg");
+        this.load.audio("jump", "jump.ogg");
+
+        this.load.audio("block_break", "block_break.ogg");
+        this.load.audio("block_bounce", "block_bounce.ogg");
+        this.load.audio("block_slip", "block_slip.ogg");
+
+        this.load.setPath("assets/sound/walk");
+        for (let i = 0; i <= 4; i++) {
+            this.load.audio(`walk_${i}`, `footstep_grass_00${i}.ogg`);
+        }
+
+        // this.load.setPath("assets/sound/countdown");
+        // for (let i = 1; i <= 10; i++) {
+        //     this.load.audio(`count${i}`, `${i}.ogg`);
+        // }
+
+        this.load.setPath("assets/sound/kitty");
+        for (let i = 1; i <= 12; i++) {
+            this.load.audio(`kitty_collect_${i - 1}`, `powerUp${i}.ogg`);
+        }
     }
 
     create () {
         super.create();
         const { instanceConfig } = this.game;
         const { levelId, skinId } = instanceConfig;
+
+        const theme = this.sound.add("theme");
+        this.volume.addMusic(theme);
+        theme.play({ loop: true });
 
         this.physics.pause();
         this.scale.displaySize.setAspectRatio(BLOCKS_X / BLOCKS_Y);

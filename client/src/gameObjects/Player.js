@@ -27,6 +27,10 @@ export class Player extends PlayerBase {
         this.walkSpeedMax = 180;
         this.stopAccel = 0.9;
 
+        this.walkSoundTime = 200;
+        this.curWalkSoundTime = 0.0;
+
+
         // jumping constants
         this.jumpTimeMax = 400.0;
         this.jumpTimeMin = 100.0;
@@ -48,13 +52,28 @@ export class Player extends PlayerBase {
         this.curDashTime = 0;
         this.curDeathTime = 0;
         this.disableTime = 0;
+
+        this.sounds = {
+            die: scene.sound.add("loose"),
+            win: scene.sound.add("win"),
+            dash: scene.sound.add("dash"),
+            jump: scene.sound.add("jump"),
+            walk0: scene.sound.add("walk_0"),
+            walk1: scene.sound.add("walk_1"),
+            walk2: scene.sound.add("walk_2"),
+            walk3: scene.sound.add("walk_3"),
+            walk4: scene.sound.add("walk_4"),
+        };
+        Object.values((sound) => {
+            scene.volume.addSound(sound);
+        });
     }
 
     die () {
         if (PhaseManager.isPhase(PHASES.Run)) {
             console.log("Player died!");
             this.isDead = true;
-
+            this.sounds.die.play();
             this.anims.play(`player${this.skinId}Died`, true);
             GameManager.endRun(Status.Dead);
         }
@@ -125,6 +144,7 @@ export class Player extends PlayerBase {
         }
         if (this.animState === `player${this.skinId}JumpStart` && !this.anims.isPlaying) {
             this.animState = `player${this.skinId}Jumping`;
+            this.sounds.jump.play();
         }
         if (this.cursor.up.isDown || this.keys.W.isDown) {
             // Start jump
@@ -158,6 +178,7 @@ export class Player extends PlayerBase {
             this.wasDashKeyUp = false;
             this.curWalkSpeed = (this.flipX ? -1 : 1) * (this.dashSpeed);
             this.animState = `player${this.skinId}Dash`;
+            this.sounds.dash.play();
         }
         // End dash
         if (this.isCurDashing && this.curDashTime > this.dashTime) {
@@ -182,6 +203,15 @@ export class Player extends PlayerBase {
                 if (Math.abs(this.curWalkSpeed) < this.eps) {
                     this.curWalkSpeed = 0;
                 }
+            }
+        }
+
+        // Walk sound
+        if (ctrlDir !== 0 && this.body.onFloor()) {
+            this.curWalkSoundTime += delta;
+            if (this.curWalkSoundTime >= this.walkSoundTime) {
+                this.curWalkSoundTime -= this.walkSoundTime;
+                this._getRandomWalkSound().play();
             }
         }
 
@@ -211,5 +241,14 @@ export class Player extends PlayerBase {
 
         this.impulse.x *= 0.95;
         this.impulse.y *= 0.95;
+    }
+
+    _getRandomWalkSound () {
+        const index = Math.floor(Math.random() * 5);
+        return this.sounds[`walk${index}`];
+    }
+
+    onFlagTouched () {
+        this.sounds.win.play();
     }
 }
