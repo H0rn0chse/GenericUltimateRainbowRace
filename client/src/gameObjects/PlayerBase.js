@@ -9,9 +9,6 @@ export class PlayerBase extends Phaser.Physics.Arcade.Sprite {
 
         this.setSize(45, 50);
         this.setOffset(15, 5);
-
-        // Might be overwritten by a group
-        this.setCollideWorldBounds(true);
     }
 
     getData () {

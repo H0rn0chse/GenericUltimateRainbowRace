@@ -1,4 +1,4 @@
-import { Phaser, PHASES } from "../Globals.js";
+import { Phaser, PHASES, BLOCKS_X, BLOCKS_Y, BLOCK_SIZE } from "../Globals.js";
 import { PhaseManager } from "../PhaseManager.js";
 import { Status, GameManager } from "../views/GameManager.js";
 import { PlayerBase } from "./PlayerBase.js";
@@ -75,6 +75,13 @@ export class Player extends PlayerBase {
         this.clearTint();
     }
 
+    isInBounds () {
+        return this.body.right > 0
+            && this.body.left < BLOCK_SIZE * BLOCKS_X
+            && this.body.bottom > 0
+            && this.body.top < BLOCK_SIZE * BLOCKS_Y;
+    }
+
     update (time, delta) {
         super.update(time, delta);
 
@@ -91,6 +98,10 @@ export class Player extends PlayerBase {
         if (!PhaseManager.isPhase(PHASES.Run)) {
             this.anims.play(`player${this.skinId}Idle`);
             return;
+        }
+
+        if (!this.isInBounds()) {
+            this.die();
         }
 
         // Jump
