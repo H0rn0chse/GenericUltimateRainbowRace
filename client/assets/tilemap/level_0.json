@@ -18,6 +18,50 @@
         }, 
         {
          "draworder":"topdown",
+         "id":5,
+         "name":"Kitties",
+         "objects":[
+                {
+                 "height":42,
+                 "id":7,
+                 "name":"",
+                 "rotation":0,
+                 "type":"",
+                 "visible":true,
+                 "width":42,
+                 "x":714,
+                 "y":252
+                }, 
+                {
+                 "height":42,
+                 "id":8,
+                 "name":"",
+                 "rotation":0,
+                 "type":"",
+                 "visible":true,
+                 "width":42,
+                 "x":588,
+                 "y":252
+                }, 
+                {
+                 "height":42,
+                 "id":10,
+                 "name":"",
+                 "rotation":0,
+                 "type":"",
+                 "visible":true,
+                 "width":42,
+                 "x":1050,
+                 "y":378
+                }],
+         "opacity":1,
+         "type":"objectgroup",
+         "visible":true,
+         "x":0,
+         "y":0
+        }, 
+        {
+         "draworder":"topdown",
          "id":3,
          "name":"Spawn",
          "objects":[
@@ -62,8 +106,8 @@
          "x":0,
          "y":0
         }],
- "nextlayerid":5,
- "nextobjectid":7,
+ "nextlayerid":6,
+ "nextobjectid":11,
  "orientation":"orthogonal",
  "renderorder":"right-down",
  "tiledversion":"1.6.0",

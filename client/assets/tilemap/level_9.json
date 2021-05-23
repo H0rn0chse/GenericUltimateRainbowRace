@@ -26,6 +26,105 @@
         }, 
         {
          "draworder":"topdown",
+         "id":6,
+         "name":"Kitties",
+         "objects":[
+                {
+                 "height":42,
+                 "id":5,
+                 "name":"",
+                 "rotation":0,
+                 "type":"",
+                 "visible":true,
+                 "width":42,
+                 "x":126,
+                 "y":42
+                }, 
+                {
+                 "height":42,
+                 "id":6,
+                 "name":"",
+                 "rotation":0,
+                 "type":"",
+                 "visible":true,
+                 "width":42,
+                 "x":252,
+                 "y":42
+                }, 
+                {
+                 "height":42,
+                 "id":7,
+                 "name":"",
+                 "rotation":0,
+                 "type":"",
+                 "visible":true,
+                 "width":42,
+                 "x":966,
+                 "y":42
+                }, 
+                {
+                 "height":42,
+                 "id":8,
+                 "name":"",
+                 "rotation":0,
+                 "type":"",
+                 "visible":true,
+                 "width":42,
+                 "x":1092,
+                 "y":42
+                }, 
+                {
+                 "height":42,
+                 "id":10,
+                 "name":"",
+                 "rotation":0,
+                 "type":"",
+                 "visible":true,
+                 "width":42,
+                 "x":840,
+                 "y":420
+                }, 
+                {
+                 "height":42,
+                 "id":11,
+                 "name":"",
+                 "rotation":0,
+                 "type":"",
+                 "visible":true,
+                 "width":42,
+                 "x":378,
+                 "y":420
+                }, 
+                {
+                 "height":42,
+                 "id":12,
+                 "name":"",
+                 "rotation":0,
+                 "type":"",
+                 "visible":true,
+                 "width":42,
+                 "x":504,
+                 "y":252
+                }, 
+                {
+                 "height":42,
+                 "id":13,
+                 "name":"",
+                 "rotation":0,
+                 "type":"",
+                 "visible":true,
+                 "width":42,
+                 "x":714,
+                 "y":252
+                }],
+         "opacity":1,
+         "type":"objectgroup",
+         "visible":true,
+         "x":0,
+         "y":0
+        }, 
+        {
+         "draworder":"topdown",
          "id":3,
          "name":"Spawn",
          "objects":[
@@ -70,8 +169,8 @@
          "x":0,
          "y":0
         }],
- "nextlayerid":6,
- "nextobjectid":5,
+ "nextlayerid":7,
+ "nextobjectid":14,
  "orientation":"orthogonal",
  "renderorder":"right-down",
  "tiledversion":"1.6.0",
