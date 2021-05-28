@@ -1,7 +1,5 @@
 @font-face {
-    font-family: 'OlivesFont';
-    src: url('../fonts/OlivesFont.ttf') format('truetype');
-  }    font-family: 'Roboto';
+    font-family: 'Roboto';
     font-weight: 400;
     src: url('../fonts/Roboto/Roboto-Regular.ttf') format('truetype');
 }

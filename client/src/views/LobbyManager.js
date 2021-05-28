@@ -1,15 +1,15 @@
 import { addEventListener, removeEventListener, ready, send, getId, getName, setName } from "../socket.js";
 import { ViewManager } from "../ViewManager.js";
-import { AvatarSelect } from "../domElements/AvatarSelect.js";
 import { LobbyEntry } from "../domElements/LobbyEntry.js";
-import { LobbyBus } from "../EventBus.js";
 import { LEVELS } from "../Globals.js";
 
 class _LobbyManager {
     constructor () {
-        this.container = document.querySelector("#lobby");
+        this.container = document.querySelector("#sectionLobby");
+        this.containerLevelSettings = document.querySelector("#sectionLevelSettings");
+
         this.title = document.querySelector("#lobbyName");
-        this.listNode = document.querySelector("#lobbyList");
+        this.listNode = document.querySelector("#lobbyPlayerList");
 
         this.startBtn = document.querySelector("#lobbyStart");
         this.startBtn.addEventListener("click", (evt) => {
@@ -19,14 +19,6 @@ class _LobbyManager {
         const leaveBtn = document.querySelector("#lobbyLeave");
         leaveBtn.addEventListener("click", (evt) => {
             this.leaveLobby();
-        });
-
-        this.usernameInput = document.querySelector("#lobbyUsername");
-        this.usernameInput.addEventListener("change", (evt) => {
-            if (this.usernameInput.value) {
-                setName(this.usernameInput.value);
-                send("usernameUpdate", { name: this.usernameInput.value });
-            }
         });
 
         this.levelPreview = document.querySelector("#levelPreview");
@@ -42,12 +34,7 @@ class _LobbyManager {
         });
 
         this.isHost = false;
-        this.usernameInput.value = getName();
         this.playerList = {};
-
-        const avatarSelectNode = document.querySelector("#avatarSelect");
-        this.avatarSelect = new AvatarSelect(avatarSelectNode);
-        LobbyBus.on("selectAvatar", this.onSelectAvatar, this);
 
         this.gameHandler = [
             { channel: "playerUpdated", handler: this.onPlayerUpdated },
@@ -87,14 +74,6 @@ class _LobbyManager {
         this.title.innerText = "";
         this.playerList = {};
         this.listNode.innerHTML = "";
-        this.avatarSelect.reset();
-    }
-
-    // ========================================== Phase / EventBus handler =============================================
-
-    onSelectAvatar (avatarId) {
-        this.avatarSelect.select(avatarId);
-        send("avatarUpdate", { avatarId });
     }
 
     // ========================================== Websocket handler =============================================
@@ -164,14 +143,15 @@ class _LobbyManager {
 
     show () {
         this.startListen();
-        this.container.style.display = "";
-        this.usernameInput.value = getName();
+        this.container.classList.remove("section--hidden");
+        this.containerLevelSettings.classList.remove("section--hidden");
     }
 
     hide () {
         this.resetLobby();
         this.stopListen();
-        this.container.style.display = "none";
+        this.container.classList.add("section--hidden");
+        this.containerLevelSettings.classList.add("section--hidden");
     }
 
     stopListen () {

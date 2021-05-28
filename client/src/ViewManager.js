@@ -1,4 +1,5 @@
 import { OverviewManager } from "./views/OverviewManager.js";
+import { UserManager } from "./views/UserManager.js";
 import { GameManager } from "./views/GameManager.js";
 import { LobbyManager } from "./views/LobbyManager.js";
 
@@ -12,6 +13,7 @@ class _ViewManager {
     constructor () {
         this.hidden = {
             OverviewManager: false,
+            UserManager: false,
             GameManager: true,
             LobbyManager: true,
         };
@@ -32,6 +34,10 @@ class _ViewManager {
             LobbyManager.hide();
             this.hidden.LobbyManager = true;
         }
+        if (this.hidden.UserManager) {
+            UserManager.show();
+            this.hidden.UserManager = false;
+        }
     }
 
     showLobby () {
@@ -49,6 +55,10 @@ class _ViewManager {
             OverviewManager.hide();
             this.hidden.OverviewManager = true;
         }
+        if (this.hidden.UserManager) {
+            UserManager.show();
+            this.hidden.UserManager = false;
+        }
     }
 
     showGame () {
@@ -65,6 +75,10 @@ class _ViewManager {
         if (!this.hidden.OverviewManager) {
             OverviewManager.hide();
             this.hidden.OverviewManager = true;
+        }
+        if (!this.hidden.UserManager) {
+            UserManager.hide();
+            this.hidden.UserManager = true;
         }
     }
 }

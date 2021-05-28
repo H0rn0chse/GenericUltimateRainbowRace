@@ -5,13 +5,11 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Generic Ultimate Rainbow Race</title>
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/picnic@6.5.4/picnic.min.css">
-    <script src="https://cdn.jsdelivr.net/npm/feather-icons/dist/feather.min.js"></script>
+    <link rel="stylesheet" href="./styles/central.css">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/phaser/3.54.0/phaser.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/lodash@4.17.21/lodash.min.js"></script>
     <!--The following tags need to be kept in sync with the wqebpack entry file-->
     <link rel="icon" href="./assets/GurrIcon.png" type="image/x-icon">
-    <link rel="stylesheet" href="./styles/main.css">
     <script type="module">
         import { openSocket } from "./src/socket.js";
         import { ViewManager } from "./src/ViewManager.js";
@@ -32,100 +30,170 @@
     </script>
 </head>
 <body>
-    <div id="content">
-        <div id="header" class="header flexRow">
+    <div class="wrapper">
+        <header>
             <img src="./assets/GurrIcon.png">
             <h1>Generic Ultimate Rainbow Race</h1>
-            <img src="./assets/GurrIcon.png">
+            <button class="button--slim"><i class="icon icon--help"></i></button>
+            <button class="button--slim"><i class="icon icon--settings"></i></button>
+        </header>
+
+        <div id="gameOverlay" style="display: none;">
+            <div id="phaseTitle"></div>
+            <div id="phaseCountdown"></div>
+
+            <div id="gameSettingsShow"></div>
+            <div id="gameSettingsHide"></div>
+
+            <div id="debugCbx"></div>
+            <input id="musicVolume" type="range" min="0" max="100" value="20">
+            <input id="soundVolume" type="range" min="0" max="100" value="70">
+
+            <div id="lobbyName"></div>
+
+            <div id="gameResults"></div>
+            <div id="gameResultsList"></div>
+            <div id="gameBack"></div>
+            <div id="gameNext"></div>
+            <div id="gameQuit"></div>
         </div>
-        <div id="overview" class="mainContent flexRow">
-            <div class="overviewColumn">
-                <div class="flexRow">
-                    <h2 class="overviewHeader">Open Lobbies</h2>
-                    <input id="overviewUsername" type="text" placeholder="Username">
-                </div>
-                <div id="overviewList" class="flexColumn overviewContent scrollContainer"></div>
-                <div id="createOverviewRow" class="flexRow overviewFooter">
-                    Create your own Game <input id="overviewName" type="text" placeholder="Name" maxlength="32">
-                    <button id="createOverview">Create</button>
-                </div>
-            </div>
-            <div class="overviewColumn flexColumn" style="align-items: center;justify-content: center;">
-                <!--We might add other stuff here-->
-                <button id="debugGame">Join Debug Game (Solo)</button>
-            </div>
-        </div>
-        <div id="lobby" class="mainContent flexRow" style="display: none;">
-            <div class="lobbyColumn">
-                <div class="flexRow">
-                    <h2 id="lobbyName">Lobby Title</h2>
-                    <input id="lobbyUsername" type="text" placeholder="Username">
-                </div>
-                <button id="lobbyLeave">Leave Lobby</button>
-                <div id="lobbyList"></div>
-                <div id="lobbyFooter">
-                    <button id="lobbyStart">start Game</button>
-                </div>
-            </div>
-            <div id="lobbyDetails" class="lobbyColumn">
-                <div id="avatarSelect" class="flexRow">
-                </div>
-                <div id="lobbyLevel" class="flexColumn">
-                    <select id="levelSelect">
-                    </select>
-                    <img id="levelPreview">
-                </div>
-            </div>
-        </div>
-        <div id="game" class="mainContent" style="display: none;">
-            <div id="gameInfo" class="flexRow unselectable">
-                <h2 id=phaseTitle></h2>
-                <h2 id=phaseCountdown></h2>
-            </div>
+
+        <div id="game" style="display: none;">
             <div id="gameArea">
             </div>
-            <div id="gameSettings" class="flexColumn">
-                <button id="gameSettingsShow">Settings</button>
-                <button id="gameSettingsHide" class="hidden">Hide</button>
-                <div id="gameSettingsCollapsible" class="flexColumn hidden">
-                    <label class="flexRow">
-                        <input id="debugCbx" type="checkbox">
-                        <span class="checkable">Debug</span>
-                    </label>
-                    <span>Music Volume</span>
-                    <input id="musicVolume" type="range" min="0" max="100" value="20">
-                    <span>Sound Volume</span>
-                    <input id="soundVolume" type="range" min="0" max="100" value="70">
-                </div>
+        </div>
+
+        <div class="content">
+            <div class="content__left">
+                <section id="sectionOverview">
+                    <div class="section__header">
+                        <h2>Lobbies</h2>
+                    </div>
+                    <div id="overviewLobbyList" class="list list--hr">
+                        <!--
+                        <div class="row">
+                            <div class="cell--fill text--invert">Lobby A</div>
+                            <div class="cell--aside"><button>Join</button></div>
+                        </div>
+                        <div class="row">
+                            <div class="cell--fill text--invert">Lobby B</div>
+                            <div class="cell--aside"><button>Join</button></div>
+                        </div>
+                        <div class="row">
+                            <div class="cell--fill text--invert">Lobby C</div>
+                            <div class="cell--aside"><button>Join</button></div>
+                        </div>
+                        <div class="row">
+                            <div class="cell--fill text--invert">Lobby D</div>
+                            <div class="cell--aside"><button>Join</button></div>
+                        </div> -->
+                    </div>
+                    <div class="list">
+                        <div class="row">
+                            <div class="text--invert">
+                                Create
+                            </div>
+                            <div class="cell--fill">
+                                <input id="overviewLobbyName" type="text" placeholder="Lobbyname" maxlength="32">
+                            </div>
+                            <div class="cell--aside">
+                                <button id="overviewCreateLobby">OK</button>
+                            </div>
+                            <div class="cell--aside">
+                                <button id="overviewDebug">Solo</button>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <section id="sectionLobby" class="section--hidden">
+                    <div class="section__header">
+                        <h2>Lobby</h2>
+                    </div>
+                    <div id="lobbyPlayerList" class="list list--hr">
+                        <!-- <div class="row">
+                            <div class="cell--icon"><i class="icon icon--host"></i></div>
+                            <div><div class="avatarImage avatarImage--small" style="background-position: 0px 0px"></div></div>
+                            <div class="cell--fill text--invert">Simplicitis</div>
+                            <div class="text--invert">(You)</div>
+                            <div class="cell--aside"><button>Kick</button></div>
+                        </div>
+                        <div class="row">
+                            <div class="cell--icon"></div>
+                            <div><div class="avatarImage avatarImage--small" style="background-position: 0px 0px"></div></div>
+                            <div class="cell--fill text--invert">H0rn0chse</div>
+                            <div class="text--invert"></div>
+                            <div class="cell--aside"><button>Join</button></div>
+                        </div>
+                        <div class="row">
+                            <div class="cell--icon"></div>
+                            <div><div class="avatarImage avatarImage--small" style="background-position: 0px 0px"></div></div>
+                            <div class="cell--fill text--invert">Kirschdrache</div>
+                            <div class="text--invert"></div>
+                            <div class="cell--aside"><button>Join</button></div>
+                        </div> -->
+                    </div>
+                    <div class="list">
+                        <div class="row row--spaced">
+                            <button id="lobbyLeave">Leave Lobby</button>
+                            <button id="lobbyStart">Start Game</button>
+                        </div>
+                    </div>
+                </section>
             </div>
-            <div id="gameStats" class="flexRow unselectable">
-                <h3>Time</h3>
-                <h3 id="score">0</h3>
-            </div>
-            <div id="gameResults" class="flexColumn">
-                <h2>Results</h2>
-                <div id="gameResultsList"></div>
-                <div class="flexRow buttonRow">
-                    <button id="gameBack">Back to Lobby</button>
-                    <button id="gameNext">Next Game</button>
-                    <button id="gameQuit">Quit</button>
-                </div>
+
+            <div class="content__right">
+                <section id="sectionUser">
+                    <div class="section__header">
+                        <h2>User</h2>
+                    </div>
+                    <div class="list">
+                        <div class="row">
+                            <input id="overviewUsername" type="text" placeholder="Username" spellcheck="false">
+                        </div>
+                    </div>
+                    <div class="list">
+                        <div id="avatarSelect" class="row row--spaced">
+                            <!-- <button class="button--slim">
+                                <div class="avatarImage" style="background-position: 0px 0px"></div>
+                            </button>
+                            <button class="button--slim">
+                                <div class="avatarImage" style="background-position: -60px 0px"></div>
+                            </button>
+                            <button class="button--slim">
+                                <div class="avatarImage" style="background-position: -120px 0px"></div>
+                            </button>
+                            <button class="button--slim">
+                                <div class="avatarImage" style="background-position: -180px 0px"></div>
+                            </button> -->
+                        </div>
+                    </div>
+                </section>
+
+                <section id="sectionLevelSettings" class="section--hidden">
+                    <div class="section__header">
+                        <h2>Level</h2>
+                    </div>
+                    <div class="list">
+                        <div class="row">
+                            <button class="button--slim"><i class="icon icon--left"></i></button>
+                            <div class="cell--fill">
+                                <select id="levelSelect">
+                                    <!-- <option value="0">Level 0</option>
+                                    <option value="1">Level 1</option> -->
+                                </select>
+                            </div>
+                            <button class="button--slim"><i class="icon icon--right"></i></button>
+                        </div>
+                    </div>
+                    <div class="list">
+                        <div class="levelSelect__preview">
+                            <img id="levelPreview" src="./assets/preview/level_0.png">
+                        </div>
+                    </div>
+                </section>
             </div>
         </div>
     </div>
-    <div id="logoff" class="flexColumn" style="display: none;">
-        <img src="./assets/Fail.png">
-        <div class="flexRow">
-            Your Connection was closed due to Inactivity<br>
-            Please reload the Page
-        </div>
-    </div>
-    <script
-        data-label="Check out the GitHub repository!"
-        data-href="https://github.com/H0rn0chse/GenericUltimateRainbowRace"
-        data-target="_blank"
-        src="https://unpkg.com/github-corners@latest/dist/embed.min.js">
-    </script>
-    <div id="acknowledgements" title="Acknowledgements"></div>
 </body>
 </html>

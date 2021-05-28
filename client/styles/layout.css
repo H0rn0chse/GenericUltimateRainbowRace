@@ -51,17 +51,3 @@ header button {
 }
 
 /* ########################################################################## */
-
-section {
-    display: none;
-}
-
-.screen--lobbies .section--lobbies,
-.screen--lobbies .section--user {
-    display: block;
-}
-.screen--lobby .section--lobby,
-.screen--lobby .section--user,
-.screen--lobby .section--level {
-    display: block;
-}

@@ -14,9 +14,16 @@ export class AvatarSelect {
 
     _addImages () {
         const avatars = AvatarManager.getAllAvatars();
+        let isFirst = true;
+
         avatars.forEach((avatar) => {
             avatar.setParent(this.container);
             this.images[avatar.id] = avatar;
+
+            if (isFirst) {
+                this.select(avatar.id);
+                isFirst = false;
+            }
         });
     }
 

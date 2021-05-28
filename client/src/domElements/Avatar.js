@@ -4,25 +4,18 @@ export class Avatar {
     constructor (imageData) {
         this.id = imageData.filename;
 
-        this.node = document.createElement("div");
-        this.node.classList.add("avatar");
+        this.node = document.createElement("button");
+        this.node.classList.add("button--slim");
 
         this.image = document.createElement("div");
         this.image.classList.add("avatarImage");
         this.node.appendChild(this.image);
 
-        this.image.style.width = `${imageData.frame.w}px`;
-        this.image.style.height = `${imageData.frame.h}px`;
         this.image.style.backgroundPosition = `-${imageData.frame.x}px -${imageData.frame.y}px`;
 
-        this.image.addEventListener("click", (evt) => {
+        this.node.addEventListener("click", (evt) => {
             LobbyBus.emit("selectAvatar", this.id);
         });
-
-        this.selected = document.createElement("div");
-        this.selected.classList.add("selected");
-        this.selected.style.display = "none";
-        this.node.appendChild(this.selected);
     }
 
     setParent (domRef) {
@@ -31,9 +24,9 @@ export class Avatar {
 
     select (shouldSelect = true) {
         if (shouldSelect) {
-            this.selected.style.display = "";
+            this.node.classList.add("button--active");
         } else {
-            this.selected.style.display = "none";
+            this.node.classList.remove("button--active");
         }
     }
 

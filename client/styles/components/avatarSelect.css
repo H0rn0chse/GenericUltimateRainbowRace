@@ -3,6 +3,11 @@
 .avatarImage {
     background-image: url(../../assets/atlas/animals_round.png);
     transform-origin: center;
-    height: 60px;
-    width: 60px;
+    height: var(--size-avatar);
+    width: var(--size-avatar);
+}
+
+.avatarImage.avatarImage--small {
+    margin: calc(var(--size-avatar) / -2 + 1em);
+    transform: scale(0.75);
 }

@@ -6,30 +6,7 @@ body, h1, h2, button, input, select, .list--hr .row::after, .text--invert {
     background-repeat: repeat;
 }
 
-header {
-    background-color: var(--col-trans-dark-weak);
-}
-
-section {
-    position: relative;
-}
-
-section::before, section::after {
-    content: "";
-    position: absolute;
-    top: 0; right: 0; bottom: 0; left: 0;
-}
-section::before {
-    z-index: -2;
-
-    background: #FFF url(../../assets/gradient.png) no-repeat;
-    background-size: contain;
-    background-attachment: fixed;
-    background-repeat: repeat;
-}
-section::after {
-    z-index: -1;
-
+header, section {
     background-color: var(--col-trans-dark-weak);
 }
 
@@ -67,7 +44,7 @@ button {
     transform-origin: center;
     transform: translateY(0);
 }
-button:active {
+button:active, .button--active {
     box-shadow: rgba(0, 0, 0, 0.3) 0px 2px 8px 0px,
                 rgba(0, 0, 0, 0.3) 0px 0px 4px 0px,
                 rgba(0, 0, 0, 0.6) 0px -1px 2px 0px,

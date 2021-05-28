@@ -1,31 +1,23 @@
-import { addEventListener, removeEventListener, send, ready, getName, setName } from "../socket.js";
+import { addEventListener, removeEventListener, send, ready } from "../socket.js";
 import { LobbyManager } from "./LobbyManager.js";
 import { OverviewEntry } from "../domElements/OverviewEntry.js";
 
 class _OverviewManager {
     constructor () {
-        this.container = document.querySelector("#overview");
-        this.listNode = document.querySelector("#overviewList");
-        this.name = document.querySelector("#overviewName");
+        this.container = document.querySelector("#sectionOverview");
+        this.listNode = document.querySelector("#overviewLobbyList");
+        this.name = document.querySelector("#overviewLobbyName");
 
-        const createButton = document.querySelector("#createOverview");
+        const createButton = document.querySelector("#overviewCreateLobby");
         createButton.addEventListener("click", (evt) => {
             this.createLobby();
         });
 
-        const debugButton = document.querySelector("#debugGame");
+        const debugButton = document.querySelector("#overviewDebug");
         debugButton.addEventListener("click", (evt) => {
             this.name.value = "debugGame";
             this.createLobby();
             LobbyManager.startLobby();
-        });
-
-        this.usernameInput = document.querySelector("#overviewUsername");
-        this.usernameInput.addEventListener("change", (evt) => {
-            if (this.usernameInput.value) {
-                setName(this.usernameInput.value);
-                send("userNameUpdate", { name: this.usernameInput.value });
-            }
         });
 
         this.gameHandler = [
@@ -34,7 +26,6 @@ class _OverviewManager {
         ];
 
         // initial state
-        this.usernameInput.value = getName();
         this.lobbyList = {};
         ready().then(() => {
             this.startListen();
@@ -100,14 +91,13 @@ class _OverviewManager {
 
     show () {
         this.startListen();
-        this.container.style.display = "";
-        this.usernameInput.value = getName();
+        this.container.classList.remove("section--hidden");
     }
 
     hide () {
         this.resetList();
         this.stopListen();
-        this.container.style.display = "none";
+        this.container.classList.add("section--hidden");
     }
 
     stopListen () {
