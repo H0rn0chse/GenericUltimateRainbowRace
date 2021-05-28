@@ -50,15 +50,16 @@ class _GameManager {
         });
 
         this.gameHandler = [
-            { channel: "setBlock", handler: this.onSetBlock },
             { channel: "playerUpdate", handler: this.onPlayerUpdate },
             { channel: "playerRemoved", handler: this.onPlayerRemoved },
             { channel: "closeGame", handler: this.onCloseGame },
-            { channel: "pickBlock", handler: this.onPickBlock },
-            { channel: "fillInv", handler: this.onFillInv },
             { channel: "resetRun", handler: this.onResetRun },
             { channel: "kittyCollected", handler: this.onKittyCollected },
             { channel: "hideKitty", handler: this.onHideKitty },
+            // inventory & blocks
+            { channel: "fillInventory", handler: this.onFillInventory },
+            { channel: "selectBlock", handler: this.onSelectBlock },
+            { channel: "placeBlock", handler: this.onPlaceBlock },
             { channel: "updateBlock", handler: this.onUpdateBlock },
         ];
 
@@ -89,40 +90,30 @@ class _GameManager {
         }
     }
 
-    _updatePlayer (data) {
-        send("playerUpdate", data);
+    fillInventory (data) {
+        GameBus.emit("fillInventory", data);
+        send("fillInventory", data);
+    }
+
+    selectBlock (blockId) {
+        const data = {
+            blockId,
+        };
+        GameBus.emit("selectBlock", data);
+        send("selectBlock", data);
+    }
+
+    placeBlock (data) {
+        GameBus.emit("placeBlock", data);
+        send("placeBlock", data);
     }
 
     updateBlock (data) {
         send("updateBlock", data);
     }
 
-    setBlock (x, y, blockType, flipX, blockId) {
-        const data = {
-            pos: {
-                x,
-                y,
-            },
-            blockType,
-            flipX,
-            blockId,
-        };
-        send("setBlock", data);
-    }
-
-    sendInv (types) {
-        const data = {
-            types,
-        };
-        send("fillInv", data);
-    }
-
-    sendBlockChoice (block) {
-        const data = {
-            block,
-        };
-        console.log(`send${block}`);
-        send("pickBlock", data);
+    _updatePlayer (data) {
+        send("playerUpdate", data);
     }
 
     nextGame () {
@@ -163,6 +154,30 @@ class _GameManager {
 
     // ========================================== Websocket handler =============================================
 
+    onFillInventory (data) {
+        if (data.playerId !== getId()) {
+            GameBus.emit("fillInventory", data);
+        }
+    }
+
+    onSelectBlock (data) {
+        if (data.playerId !== getId()) {
+            GameBus.emit("selectBlock", data);
+        }
+    }
+
+    onPlaceBlock (data) {
+        if (data.playerId !== getId()) {
+            GameBus.emit("placeBlock", data);
+        }
+    }
+
+    onUpdateBlock (data) {
+        if (data.playerId !== getId()) {
+            GameBus.emit("updateBlock", data);
+        }
+    }
+
     onKittyCollected (data) {
         GameBus.emit("kittyCollected", data.kittyId);
     }
@@ -173,33 +188,11 @@ class _GameManager {
         }
     }
 
-    onFillInv (data) {
-        if (data.playerId === getId()) {
-            return;
-        }
-        this.instance.fillInv(data.types);
-    }
-
-    onPickBlock (data) {
-        if (data.playerId === getId()) {
-            return;
-        }
-        console.log(data.block);
-        this.instance.removeInventoryBlock(data.block);
-    }
-
     onPlayerUpdate (data) {
         if (data.id === getId()) {
             return;
         }
         GameBus.emit("playerUpdated", data.id, data);
-    }
-
-    onSetBlock (data) {
-        if (data.playerId === getId()) {
-            GameBus.emit("updateBlockId", data);
-        }
-        GameBus.emit("setBlock", data);
     }
 
     onJoinGame (data) {
@@ -229,12 +222,6 @@ class _GameManager {
 
     onResetRun () {
         this.runEnded = false;
-    }
-
-    onUpdateBlock (data) {
-        if (data.playerId !== getId()) {
-            GameBus.emit("updateBlock", data);
-        }
     }
 
     // ========================================== Basic Manager Interface =============================================

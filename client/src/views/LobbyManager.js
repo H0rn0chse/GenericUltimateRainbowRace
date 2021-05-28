@@ -66,7 +66,6 @@ class _LobbyManager {
     }
 
     selectLevel (levelId) {
-        console.log("selecting a level", levelId);
         send("selectLevel", { levelId });
     }
 

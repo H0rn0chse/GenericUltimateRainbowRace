@@ -24,12 +24,10 @@ export class KittyGroup extends Phaser.Physics.Arcade.StaticGroup {
         if (!kitty.collected) {
             kitty.collected = true;
             GameManager.collectKitty(kitty.kittyId);
-            console.log("collectInGroup: ", kitty.kittyId);
         }
     }
 
     onKittyCollected (kittyId) {
-        console.log("collectFromBusInGroup: ", kittyId);
         const kitty = this.getMatching("kittyId", kittyId)[0];
         if (kitty) {
             kitty.collect();

@@ -90,14 +90,13 @@ class _PhaseManager {
     }
 
     onRunProgress (data) {
-        console.log(data);
+        // console.log(data);
     }
 
     onRunEnd (data) {
         if (!this.isHost) {
             return;
         }
-        ScoreManager.stopTimer();
 
         setTimeout(() => {
             data.phase = PHASES.Results;
