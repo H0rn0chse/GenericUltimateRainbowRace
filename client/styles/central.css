@@ -1,16 +1,15 @@
 @import "vars.css";
 @import "fonts.css";
 @import "layout.css";
-@import "components/flex.css";
-@import "components/translucent.css";
-@import "components/section.css";
-@import "components/input.css";
-@import "components/list.css";
-@import "components/icon.css";
-@import "components/avatarSelect.css";
-@import "components/levelSelect.css";
-@import "components/window.css";
-@import "components/game.css";
+@import "translucent.css";
+@import "section.css";
+@import "input.css";
+@import "list.css";
+@import "icon.css";
+@import "avatarSelect.css";
+@import "levelSelect.css";
+@import "window.css";
+@import "game.css";
 
 * {
     box-sizing: border-box;

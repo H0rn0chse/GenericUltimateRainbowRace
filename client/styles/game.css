@@ -1,58 +1,42 @@
-#game {
-    background-color: var(--game-bg);
-    position: relative;
+.game {
+    position: absolute;
+    top: var(--size-header);
+    right: 0; bottom: 0; left: 0;
+
+    background-color: var(--col-trans-dark-strong);
 }
 
-#gameResults {
+.gameOverlay {
+    height: 100%;
+
     position: absolute;
-    width: 25em;
-    height: 30em;
-    background: white;
-    justify-content: flex-start;
+    top: 0; right: 0; bottom: 0; left: 0;
+
+    display: flex;
+    flex-direction: column;
     align-items: center;
+    justify-content: center;
+
+    pointer-events: none;
+
+    text-align: center;
+}
+.phaseTitle {
+    font-size: 3em;
+    height: 1em;
+}
+.phaseCountdown {
+    font-size: 5em;
+    height: 1em;
 }
 
 #gameResultsList {
     width: 100%;
     height: 100%;
     align-items: center;
-}
-
-
-.resultRow > div {
-    margin-right: 1em;
-}
-
-#gameStats {
-    position: absolute;
-    top: 0;
-    left: 0;
-}
-#gameSettings {
-    position: absolute;
-    top: .6em;
-    right: 0;
-}
-#gameSettingsCollapsible {
-    border: solid var(--settings-border);
-    background-color: var(--settings-bg);
-    border-radius: 0.5em;
-    padding: 0.2em 0.4em
-}
-body .hidden {
-    display: none;
-}
-#gameInfo {
-    position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-    justify-content: center;
-}
-#score {
-    padding: 0 12px;
-}
-
-.unselectable {
-    pointer-events: none;
+    display: grid;
+    grid-auto-rows: 1.5em;
+    gap: 10px;
+    grid-auto-flow: row;
+    grid-template-columns: 30px 220px 50px 50px auto;
 }
