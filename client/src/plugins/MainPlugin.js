@@ -6,7 +6,7 @@ import { DebugHelper } from "../scenePlugins/DebugHelper.js";
 import { VolumeMixer } from "../scenePlugins/VolumeMixer.js";
 import { TiledPlugin } from "../scenePlugins/TiledPlugin.js";
 import { Flag } from "../gameObjects/Flag.js";
-import { Kitty } from "../gameObjects/Kitty.js";
+import { BlockFactory } from "../scenePlugins/BlockFactory.js";
 
 export class MainPlugin extends Phaser.Plugins.BasePlugin {
     constructor (pluginManager) {
@@ -25,6 +25,7 @@ export class MainPlugin extends Phaser.Plugins.BasePlugin {
         pluginManager.installScenePlugin("debug", DebugHelper, "debug");
         pluginManager.installScenePlugin("volume", VolumeMixer, "volume");
         pluginManager.installScenePlugin("tiled", TiledPlugin, "tiled");
+        pluginManager.installScenePlugin("factory", BlockFactory, "factory");
     }
 
     destroy () {
@@ -33,6 +34,7 @@ export class MainPlugin extends Phaser.Plugins.BasePlugin {
         this.pluginManager.removeScenePlugin("debug");
         this.pluginManager.removeScenePlugin("volume");
         this.pluginManager.removeScenePlugin("tiled");
+        this.pluginManager.removeScenePlugin("factory");
 
         super.destroy();
     }

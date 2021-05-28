@@ -2,8 +2,7 @@ import { LobbyManager } from "../LobbyManager.js";
 import { PlayerManager } from "../PlayerManager.js";
 import { OverviewHandler } from "./OverviewHandler.js";
 import { publish, registerMessageHandler, send, unsubscribe } from "../socket.js";
-import { INVENTORY_SIZE, PLAYER_STATUS, SCORE_FIRST } from "../../client/src/Globals.js";
-import { guid } from "../../client/src/utils.js";
+import { INVENTORY_SIZE, PLAYER_STATUS } from "../../client/src/Globals.js";
 import { ScoreHelper } from "./ScoreHelper.js";
 
 class _GameHandler {
@@ -18,15 +17,17 @@ class _GameHandler {
             Here comes game logic listener...
         */
         registerMessageHandler("playerReady", this.onPlayerReady, this);
-        registerMessageHandler("setBlock", this.onSetBlock, this);
         registerMessageHandler("setPhase", this.onSetPhase, this);
         registerMessageHandler("setCountdown", this.onSetCountdown, this);
-        registerMessageHandler("pickBlock", this.onPickBlock, this);
-        registerMessageHandler("fillInv", this.onFillInv, this);
         registerMessageHandler("resetRun", this.onResetRun, this);
         registerMessageHandler("runEnd", this.onRunEnd, this);
         registerMessageHandler("collectKitty", this.onCollectKitty, this);
+
+        // inventory & blocks
         registerMessageHandler("updateBlock", this.onUpdateBlock, this);
+        registerMessageHandler("selectBlock", this.onSelectBlock, this);
+        registerMessageHandler("fillInventory", this.onFillInventory, this);
+        registerMessageHandler("placeBlock", this.onPlaceBlock, this);
     }
 
     _getLobbyData (playerId) {
@@ -123,7 +124,7 @@ class _GameHandler {
         }
     }
 
-    onFillInv (ws, data, playerId) {
+    onFillInventory (ws, data, playerId) {
         const lobby = this._getLobbyData(playerId);
 
         if (!lobby) {
@@ -132,10 +133,10 @@ class _GameHandler {
 
         data.playerId = playerId;
 
-        publish(lobby.topic, "fillInv", data);
+        publish(lobby.topic, "fillInventory", data);
     }
 
-    onPickBlock (ws, data, playerId) {
+    onSelectBlock (ws, data, playerId) {
         const lobby = this._getLobbyData(playerId);
 
         if (!lobby) {
@@ -144,10 +145,10 @@ class _GameHandler {
 
         data.playerId = playerId;
 
-        publish(lobby.topic, "pickBlock", data);
+        publish(lobby.topic, "selectBlock", data);
     }
 
-    onSetBlock (ws, data, playerId) {
+    onPlaceBlock (ws, data, playerId) {
         const lobby = this._getLobbyData(playerId);
 
         if (!lobby) {
@@ -157,10 +158,8 @@ class _GameHandler {
         lobby.data.blocks[playerId] = true;
 
         data.playerId = playerId;
-        data.clientBlockId = data.blockId;
-        data.blockId = guid();
 
-        publish(lobby.topic, "setBlock", data);
+        publish(lobby.topic, "placeBlock", data);
 
         const blockCount = Object.keys(lobby.data.blocks).length;
         const playerCount = Object.keys(lobby.data.player).length;

@@ -1,16 +1,14 @@
-import { BlockMap } from "../gameObjects/BlockMap.js";
 import { GameManager } from "../views/GameManager.js";
 import { PhaseManager } from "../PhaseManager.js";
-import { BLOCKS_X, BLOCKS_Y, PHASES, LEVELS, INVENTORY_SIZE } from "../Globals.js";
+import { BLOCKS_X, BLOCKS_Y, PHASES, LEVELS } from "../Globals.js";
 import { createPlayerAnims } from "../PlayerAnimations.js";
-import { GameBus, PhaseBus } from "../EventBus.js";
+import { GameBus } from "../EventBus.js";
 import { BaseScene } from "./BaseScene.js";
 
 export class MainScene extends BaseScene {
     constructor (createDeferred) {
         super();
         this.createDeferred = createDeferred;
-        PhaseBus.on(PHASES.Build, this.onBuild, this);
         globalThis.GameScene = this;
     }
 
@@ -138,27 +136,34 @@ export class MainScene extends BaseScene {
 
         this.tileMaps.init(levelId);
         const terrain = this.tiled.layer(this.tileMaps.createLayer("Terrain"));
-        // this.debug.addLayer("Terrain", terrain);
+
         this.bulletGroup = this.physics.add.group({
             allowGravity: false,
             runChildUpdate: true,
         });
 
-        this.blockMap = this.add.existing(new BlockMap(this.physics.world, this, 0));
+        this.blocks = this.addGroup.blocks();
+        const inventory = this.addGroup.inv();
 
         createPlayerAnims(this.anims);
         const puppets = this.addGroup.puppet();
-        this.player = this.add.player(this.blockMap.getSpawnPoint(), skinId);
+
+        this.spawn = this.tileMaps.getObjects("Spawn")[0];
+        this.spawn.y -= 30;
+
+        this.player = this.add.player(this.spawn, skinId);
         this.player.setDepth(20);
 
-        const flag = this.add.flag(this.blockMap.getEndPoint());
+        const flag = this.add.flag(this.tileMaps.getObjects("Goal")[0]);
 
         this.kittyGroup = this.addGroup.kitty(this.tileMaps.getObjects("Kitties"));
 
         // ================== collision / overlap ==================
+        // placement collsion
+        inventory.addDropOverlap(this.blocks);
         // player collision
         this.physics.add.collider(this.player, terrain);
-        this.physics.add.collider(this.player, this.blockMap, (player, block) => {
+        this.physics.add.collider(this.player, this.blocks, (player, block) => {
             block.onPlayerCollision?.(player);
         });
         this.physics.add.overlap(this.player, this.kittyGroup, (player, kitty) => {
@@ -172,33 +177,18 @@ export class MainScene extends BaseScene {
         this.physics.add.overlap(this.bulletGroup, terrain, (bullet, obstacle) => {
             bullet.onObstacleHit(obstacle);
         });
-        this.physics.add.overlap(this.bulletGroup, this.blockMap, (bullet, obstacle) => {
+        this.physics.add.overlap(this.bulletGroup, this.blocks, (bullet, obstacle) => {
             bullet.onObstacleHit(obstacle);
         });
         // puppet collision
         this.physics.add.collider(puppets, terrain);
-        this.physics.add.collider(puppets, this.blockMap);
+        this.physics.add.collider(puppets, this.blocks);
 
         GameBus.emit("sceneReady");
     }
 
-    removeInventoryBlock (block) {
-        this.blockMap.removeInventoryBlock(block);
-    }
-
-    fillInv (blockTypes) {
-        this.blockMap.fillInv(blockTypes);
-    }
-
-    onBuild () {
-        if (PhaseManager.isHost) {
-            this.blockMap.generateInventory(INVENTORY_SIZE);
-        }
-    }
-
     resetScene () {
-        const spawnPoint = this.blockMap.getSpawnPoint();
-        this.player.reset(spawnPoint);
+        this.player.reset(this.spawn);
         this.kittyGroup.resetKitties();
     }
 
@@ -214,6 +204,6 @@ export class MainScene extends BaseScene {
     }
 
     destroy () {
-        PhaseBus.off(PHASES.Build, this.onBuild, this);
+        // cleanup
     }
 }

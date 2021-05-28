@@ -97,7 +97,6 @@ class _PhaseManager {
         if (!this.isHost) {
             return;
         }
-        ScoreManager.stopTimer();
 
         setTimeout(() => {
             data.phase = PHASES.Results;

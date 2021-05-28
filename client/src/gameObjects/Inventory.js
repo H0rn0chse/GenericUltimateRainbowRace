@@ -1,99 +1,200 @@
-import { PhaseBus } from "../EventBus.js";
-import { PHASES } from "../Globals.js";
+import { Phaser, PHASES, INVENTORY_SIZE } from "../Globals.js";
+import { PhaseBus, GameBus } from "../EventBus.js";
+import { GameManager } from "../views/GameManager.js";
 import { PhaseManager } from "../PhaseManager.js";
+import { guid } from "../utils.js";
 
-const blocks = [];
-let that;
-
-export class Inventory {
+export class Inventory extends Phaser.Physics.Arcade.StaticGroup {
     constructor (scene) {
-        that = this;
-        this.generateBackground(scene);
-        PhaseBus.on(PHASES.PreRun, this.onBuildPhaseOver, this);
+        const { world } = scene.physics;
+        super(world, scene);
 
-        scene.events.on("destroy", this.destroy, this);
+        this.draggedBlock = null;
+        this.graphics = this._generateBackground();
+
+        scene.input.on(Phaser.Input.Events.POINTER_UP, this.onPointerUp, this);
+        scene.input.on(Phaser.Input.Events.POINTER_MOVE, this.onPointerMove, this);
+        scene.input.keyboard.on("keydown-R", this.onBlockFlip, this);
+
+        GameBus.on("fillInventory", this.onFillInventory, this);
+        GameBus.on("selectBlock", this.onSelectBlock, this);
+        PhaseBus.on(PHASES.Colors, this.onColors, this);
+        PhaseBus.on(PHASES.PreRun, this.onPreRun, this);
+
+        this.overlapElements = new Map();
     }
 
-    onBuildPhaseOver (data) {
-        this.disableInventory();
+    addDropOverlap (element) {
+        this.overlapElements.set(element, element);
     }
 
-    fillInventoryRandom (blockMap, blockTypes, count) {
-        const blockIds = Object.keys(blockTypes);
-        const blockCount = blockIds.length;
-        const inputTypes = [];
-
-        for (let i = 0; i < count; i++) {
-            const randomBlockId = blockIds[this.getRandomInt(blockCount)];
-            inputTypes.push(randomBlockId);
-        }
-
-        blockMap.sendInv(inputTypes);
-        this.generateBlocks(blockMap, inputTypes);
+    clearInventory () {
+        this.children.each((block) => {
+            this.remove(block, true, true);
+        });
     }
 
-    generateBackground (scene) {
-        this.graphics = scene.add.graphics();
-        this.graphics.fillStyle(0xffd000, 1);
-        this.graphics.setDepth(100);
-        this.graphics.fillRoundedRect(0, 50, 60, 420, { tl: 0, tr: 22, bl: 0, br: 22 });
-        this.graphics.alpha = 0.8;
-    }
+    generateInventory () {
+        const { factory } = this.scene;
+        const data = [];
 
-    generateBlocks (blockMap, blockTypes) {
-        this.graphics.visible = true;
-        let c = 0;
-        blockTypes.forEach((type) => {
-            const x = 30;
-            const y = 100 + c * 60;
-            const newBlock = blockMap.createBlock(x, y, type);
-            newBlock.setIsPreview(true);
-            newBlock.scaleToFitBlockSize();
-            blocks.push(newBlock);
-            c += 1;
-            newBlock.setInteractive();
-            newBlock.on("pointerdown", (pointer) => {
-                if (PhaseManager.isPhase(PHASES.Build)) {
-                    blockMap.setDraggingBlock(x, y, type);
-                    that.selectOneBlock(newBlock, blockMap);
-                }
+        for (let index = 0; index < INVENTORY_SIZE; index++) {
+            const pos = {
+                x: 30,
+                y: 100 + index * 60,
+            };
+
+            const blockId = guid();
+            const blockType = factory.getRandomBlockType();
+
+            data.push({
+                type: blockType,
+                blockId,
+                pos,
             });
+        }
+        return data;
+    }
+
+    onFillInventory (data) {
+        this.reset();
+        const { factory } = this.scene;
+
+        data.forEach((blockData) => {
+            const { type, blockId, pos } = blockData;
+            const block = factory.createBlock(type, blockId, pos);
+
+            block.setPreview(true);
+            block.scaleToFitBlockSize();
+
+            block.setInteractive();
+            block.on("pointerdown", this.onPointerDown.bind(this, block));
+
+            this.add(block, true);
         });
     }
 
-    disableInventory () {
-        blocks.forEach((block) => {
-            block.destroy();
-        });
+    onSelectBlock (data) {
+        const { blockId } = data;
+        const block = this.getMatching("blockId", blockId)[0];
+        if (block) {
+            this.remove(block, true, true);
+        }
+    }
+
+    onBlockFlip () {
+        if (this.draggedBlock) {
+            this.draggedBlock.flipBlock();
+        }
+    }
+
+    onPointerDown (block, pointer) {
+        block.resetScale();
+        this.draggedBlock = block;
+        this.remove(block);
+
+        GameManager.selectBlock(block.blockId);
+        this.clearInventory();
+        this.hide();
+    }
+
+    onPointerMove (pointer) {
+        if (this.draggedBlock) {
+            this.draggedBlock.setPosition(pointer.worldX, pointer.worldY);
+            this.draggedBlock.refreshBody();
+
+            if (this._canPlaceBlockAt(this.draggedBlock)) {
+                this.draggedBlock.setHighlightCanPlace();
+            } else {
+                this.draggedBlock.setHighlightCannotPlace();
+            }
+        }
+    }
+
+    onPointerUp (pointer) {
+        if (this.draggedBlock) {
+            this.draggedBlock.setPosition(pointer.worldX, pointer.worldY);
+            this.draggedBlock.refreshBody();
+
+            if (this._canPlaceBlockAt(this.draggedBlock)) {
+                const blockData = this._getBlockData(this.draggedBlock);
+
+                GameManager.placeBlock(blockData);
+            }
+
+            this.reset();
+            this.hide();
+        }
+    }
+
+    onColors () {
+        if (PhaseManager.isHost) {
+            const data = this.generateInventory();
+            GameManager.fillInventory(data);
+        }
+    }
+
+    onPreRun () {
+        this.reset();
+        this.hide();
+    }
+
+    _canPlaceBlockAt (block) {
+        const { scene } = this;
+        const { world } = scene.physics;
+
+        const overlapList = Array.from(this.overlapElements.values());
+
+        return !world.overlap(block, [this, ...overlapList]);
+    }
+
+    _getBlockData (block) {
+        const pos = {
+            x: Math.round(block.x, 0),
+            y: Math.round(block.y, 0),
+        };
+        return {
+            blockType: block.type,
+            blockId: block.blockId,
+            flipX: block.isFlipped(),
+            pos,
+        };
+    }
+
+    _generateBackground () {
+        const { scene } = this;
+        const graphics = scene.add.graphics();
+        graphics.fillStyle(0xffd000, 1);
+        graphics.setDepth(100);
+        graphics.fillRoundedRect(0, 50, 60, 420, { tl: 0, tr: 22, bl: 0, br: 22 });
+        graphics.alpha = 0.8;
+        return graphics;
+    }
+
+    show () {
+        this.graphics.visible = true;
+    }
+
+    hide () {
         this.graphics.visible = false;
     }
 
-    selectOneBlock (blockChoice, blockMap) {
-        let c = 0;
-        blocks.forEach((block) => {
-            if (blockChoice === block) {
-                blockMap.sendBlockChoice(c);
-            }
-            c += 1;
-        });
-        this.disableInventory();
-    }
-
-    disableOneBlock (blockNr) {
-        let c = 0;
-        blocks.forEach((block) => {
-            if (c === blockNr) {
-                block.destroy();
-            }
-            c += 1;
-        });
-    }
-
-    getRandomInt (max) {
-        return Math.floor(Math.random() * Math.floor(max));
+    reset () {
+        this.clearInventory();
+        if (this.draggedBlock) {
+            this.draggedBlock.destroy();
+            this.draggedBlock = null;
+        }
+        this.show();
     }
 
     destroy () {
-        PhaseBus.off(PHASES.PreRun, this.onBuildPhaseOver, this);
+        this.overlapElements.clear();
+        this.reset();
+
+        GameBus.off("fillInventory", this.onFillInventory, this);
+        GameBus.off("selectBlock", this.onSelectBlock, this);
+        PhaseBus.off(PHASES.Colors, this.onColors, this);
+        PhaseBus.off(PHASES.PreRun, this.onPreRun, this);
     }
 }

@@ -39,14 +39,6 @@ export class GameInstance {
         return this.game.scene.getScenes()[0];
     }
 
-    removeInventoryBlock (block) {
-        this._getMainScene()?.removeInventoryBlock(block);
-    }
-
-    fillInv (blockTypes) {
-        this._getMainScene()?.fillInv(blockTypes);
-    }
-
     resetMainScene () {
         this._getMainScene()?.resetScene();
     }
