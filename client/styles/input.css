@@ -37,6 +37,10 @@ input, select {
     color: rgba(0,0,0, 0.3);
     opacity: 1;
 }
+::-moz-focus-inner {
+    padding-inline: 0;
+    border: 0 none;
+}
 
 select {
     -moz-appearance: none;

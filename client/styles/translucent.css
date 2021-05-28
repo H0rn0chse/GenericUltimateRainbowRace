@@ -40,9 +40,9 @@ button {
                 rgba(0, 0, 0, 0.6) 0px 1px 2px 0px,
                 rgba(255, 255, 255, 0.3) 0px 0px 0px 1px inset,
                 var(--col-trans-dark-weak) 0px 0px 0px 1000px inset;
-    transition: box-shadow var(--time-sm), transform var(--time-sm), background-color var(--time-sm);
-    transform-origin: center;
-    transform: translateY(0);
+    transition: box-shadow var(--time-sm), top var(--time-sm), background-color var(--time-sm);
+    position: relative;
+    top: 0;
 }
 button:active:enabled, .button--active {
     box-shadow: rgba(0, 0, 0, 0.3) 0px 2px 8px 0px,
@@ -50,7 +50,7 @@ button:active:enabled, .button--active {
                 rgba(0, 0, 0, 0.6) 0px -1px 2px 0px,
                 rgba(255, 255, 255, 0.6) 0px 0px 1px 1px inset,
                 transparent 0px 0px 0px 1000px inset;
-    transform: translateY(2px);
+    top: 2px;
     background-color: transparent;
 }
 input, select {
