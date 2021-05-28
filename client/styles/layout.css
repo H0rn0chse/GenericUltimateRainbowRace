@@ -1,0 +1,67 @@
+
+/* ########################################################################## */
+html {
+    height: 100%;
+}
+body {
+    height: 100%;
+}
+
+.wrapper {
+    height: 100%;
+}
+
+/* ########################################################################## */
+header {
+    padding: 0 var(--space-xl);
+    height: var(--size-header);
+
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+}
+
+header img {
+    display: block;
+    height: 100%;
+    margin-right: var(--space-md);
+}
+header h1 {
+    flex-grow: 1;
+}
+header button {
+    margin-left: var(--space-sm);
+}
+/* ########################################################################## */
+
+.content {
+    padding: var(--space-lg) var(--space-xl);
+    display: flex;
+    flex-direction: row;
+}
+.content > * {
+    flex-grow: 1;
+    width: 50%;
+}
+.content__left {
+    margin-right: var(--space-lg);
+}
+.content__right {
+
+}
+
+/* ########################################################################## */
+
+section {
+    display: none;
+}
+
+.screen--lobbies .section--lobbies,
+.screen--lobbies .section--user {
+    display: block;
+}
+.screen--lobby .section--lobby,
+.screen--lobby .section--user,
+.screen--lobby .section--level {
+    display: block;
+}

@@ -1,0 +1,30 @@
+
+.icon {
+    display: block;
+    background-image: url(../../assets/icons.png);
+    height: var(--size-icon);
+    width: var(--size-icon);
+    margin: var(--space-icon);
+    background-size: calc(var(--num-icons) * var(--size-icon)) var(--size-icon);
+
+    opacity: 0.7;
+}
+
+.icon--settings {
+    background-position: calc(-0 * var(--size-icon)) 0;
+}
+.icon--help {
+    background-position: calc(-1 * var(--size-icon)) 0;
+}
+.icon--left {
+    background-position: calc(-2 * var(--size-icon)) 0;
+}
+.icon--right {
+    background-position: calc(-3 * var(--size-icon)) 0;
+}
+.icon--down {
+    background-position: calc(-4 * var(--size-icon)) 0;
+}
+.icon--host {
+    background-position: calc(-5 * var(--size-icon)) 0;
+}

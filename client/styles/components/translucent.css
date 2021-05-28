@@ -1,0 +1,103 @@
+
+body, h1, h2, button, input, select, .list--hr .row::after, .text--invert {
+    background: #FFF url(../../assets/gradient.png) no-repeat;
+    background-size: contain;
+    background-attachment: fixed;
+    background-repeat: repeat;
+}
+
+header {
+    background-color: var(--col-trans-dark-weak);
+}
+
+section {
+    position: relative;
+}
+
+section::before, section::after {
+    content: "";
+    position: absolute;
+    top: 0; right: 0; bottom: 0; left: 0;
+}
+section::before {
+    z-index: -2;
+
+    background: #FFF url(../../assets/gradient.png) no-repeat;
+    background-size: contain;
+    background-attachment: fixed;
+    background-repeat: repeat;
+}
+section::after {
+    z-index: -1;
+
+    background-color: var(--col-trans-dark-weak);
+}
+
+body::after {
+    content: "";
+    position: fixed;
+    z-index: -1;
+    top: 0; right: 0; bottom: 0; left: 0;
+    background-color: var(--col-trans-dark);
+}
+
+.content {
+    min-height: calc(100vh - var(--size-header));
+}
+
+header {
+    box-shadow: rgba(0, 0, 0, 0.2) 0px 12px 28px 0px,
+                rgba(0, 0, 0, 0.2) 0px 2px 4px 0px,
+                rgba(0, 0, 0, 0.6) 0px 1px 2px 0px;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+section {
+    box-shadow: rgba(0, 0, 0, 0.2) 0px 12px 28px 0px,
+                rgba(0, 0, 0, 0.2) 0px 2px 4px 0px,
+                rgba(0, 0, 0, 0.6) 0px 1px 2px 0px,
+                rgba(255, 255, 255, 0.1) 0px 0px 0px 1px inset;
+}
+button {
+    box-shadow: rgba(0, 0, 0, 0.3) 0px 4px 8px 0px,
+                rgba(0, 0, 0, 0.3) 0px 2px 4px 0px,
+                rgba(0, 0, 0, 0.6) 0px 1px 2px 0px,
+                rgba(255, 255, 255, 0.3) 0px 0px 0px 1px inset,
+                var(--col-trans-dark-weak) 0px 0px 0px 1000px inset;
+    transition: box-shadow var(--time-sm), transform var(--time-sm), background-color var(--time-sm);
+    transform-origin: center;
+    transform: translateY(0);
+}
+button:active {
+    box-shadow: rgba(0, 0, 0, 0.3) 0px 2px 8px 0px,
+                rgba(0, 0, 0, 0.3) 0px 0px 4px 0px,
+                rgba(0, 0, 0, 0.6) 0px -1px 2px 0px,
+                rgba(255, 255, 255, 0.6) 0px 0px 1px 1px inset,
+                transparent 0px 0px 0px 1000px inset;
+    transform: translateY(2px);
+    background-color: transparent;
+}
+input, select {
+    box-shadow: rgba(0, 0, 0, 0.3) 0px 4px 8px 0px,
+                rgba(0, 0, 0, 0.3) 0px 2px 4px 0px,
+                rgba(0, 0, 0, 0.6) 0px 1px 2px 0px,
+                rgba(255, 255, 255, 0.05) 0px 0px 0px 1px inset,
+                var(--col-trans-dark-weak) 0px 0px 0px 1000px inset;
+}
+@keyframes bgShift {
+    from {background-position-x: 0px;}
+    to {background-position-x: 100vw;}
+}
+button:hover,
+input:focus {
+    animation-name: bgShift;
+    animation-duration: 2s;
+    animation-iteration-count: infinite;
+    animation-timing-function: linear;
+}
+
+
+h1, h2, .text--invert {
+    -webkit-text-fill-color: transparent;
+    -webkit-background-clip: text;
+    color: #FFF;
+}

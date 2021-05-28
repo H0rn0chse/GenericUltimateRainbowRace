@@ -1,0 +1,21 @@
+
+.levelSelect__select {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+
+    margin-bottom: var(--space-md);
+}
+
+.levelSelect__select > * {
+    margin-right: var(--space-sm);
+}
+.levelSelect__select > *:last-child {
+    margin-right: 0;
+}
+
+.levelSelect__preview img {
+    display: block;
+    margin: auto;
+    height: 150px;
+}

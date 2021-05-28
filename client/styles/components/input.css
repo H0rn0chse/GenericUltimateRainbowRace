@@ -1,0 +1,39 @@
+button, input, select {
+    font: inherit;
+    font-family: 'Sigmar_One', Fallback, sans-serif;
+
+    line-height: 2;
+    display: block;
+    outline: none;
+
+    color: rgba(0,0,0, 0.65);
+    padding: var(--space-xs) var(--space-sm);
+
+    border-radius: var(--border-radius-sm);
+    border: 0 none;
+}
+
+button {
+    cursor: pointer;
+}
+
+button.button--slim  {
+    padding-left: var(--space-xs);
+    padding-right: var(--space-xs);
+}
+
+input, select {
+    width: 100%;
+    cursor: text;
+}
+
+::placeholder {
+    color: rgba(0,0,0, 0.3);
+    opacity: 1;
+}
+
+select {
+    -moz-appearance: none;
+    -webkit-appearance: none;
+    appearance: none;
+}

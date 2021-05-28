@@ -1,4 +1,33 @@
 @font-face {
     font-family: 'OlivesFont';
     src: url('../fonts/OlivesFont.ttf') format('truetype');
-  }
+  }    font-family: 'Roboto';
+    font-weight: 400;
+    src: url('../fonts/Roboto/Roboto-Regular.ttf') format('truetype');
+}
+@font-face {
+    font-family: 'Roboto';
+    font-weight: 700;
+    src: url('../fonts/Roboto/Roboto-Black.ttf') format('truetype');
+}
+
+body {
+    font-family: 'Roboto', Fallback, sans-serif;
+    font-weight: 700;
+    font-size: 14pt;
+    color: #FFFFFF;
+}
+
+h1, h2, h3 {
+    font-family: 'Roboto', Fallback, sans-serif;
+    text-transform: uppercase;
+}
+
+h1 {
+    font-size: 2.4em;
+}
+h2 {
+    font-size: 2em;
+    text-align: center;
+    letter-spacing: 0.1em;
+}

@@ -1,0 +1,26 @@
+:root {
+    --col-trans-dark: rgba(0,0,0,0.5);
+    --col-trans-dark-strong: rgba(0,0,0,0.6);
+    --col-trans-dark-stronger: rgba(0,0,0,0.7);
+    --col-trans-dark-weak: rgba(0,0,0,0.3);
+    --col-trans-bright: rgba(255,255,255,0.1);
+
+    --size-header: 4.8em;
+    --size-aside: 4em;
+    --space-xl: 4.8em;
+    --space-lg: 2.4em;
+    --space-md: 1.4em;
+    --space-sm: 0.7em;
+    --space-xs: 0.2em;
+
+    --border-radius-lg: 0.6em;
+    --border-radius-md: 0.4em;
+    --border-radius-sm: 0.2em;
+
+    --num-icons: 6;
+    --size-icon-total: 2em;
+    --space-icon: 0.2em;
+    --size-icon: calc(var(--size-icon-total) - 2 * var(--space-icon));
+
+    --time-sm: 0.2s;
+}

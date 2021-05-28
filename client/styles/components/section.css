@@ -1,0 +1,16 @@
+
+section {
+    border-radius: var(--border-radius-lg);
+    padding: var(--space-md);
+    margin-bottom: var(--space-lg);
+    overflow: hidden;
+}
+
+.section__header {
+    margin-top: calc(-1 * var(--space-md));
+    padding: var(--space-sm) 0;
+}
+
+section:last-of-type {
+    margin-bottom: 0;
+}

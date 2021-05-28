@@ -1,0 +1,27 @@
+@import "vars.css";
+@import "fonts.css";
+@import "layout.css";
+@import "components/flex.css";
+@import "components/translucent.css";
+@import "components/section.css";
+@import "components/input.css";
+@import "components/list.css";
+@import "components/icon.css";
+@import "components/avatarSelect.css";
+@import "components/levelSelect.css";
+
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+/*
+    Workaround for bug in Firefox
+*/
+@-moz-document url-prefix() {
+    option {
+        font-weight: normal !important;
+        font-size: medium !important;
+    }
+}
