@@ -38,10 +38,7 @@
             <button class="button--slim"><i class="icon icon--settings"></i></button>
         </header>
 
-        <div id="gameOverlay" style="display: none;">
-            <div id="phaseTitle"></div>
-            <div id="phaseCountdown"></div>
-
+        <div id="htmlElementOfBrokenDreams" style="display: none;">
             <div id="gameSettingsShow"></div>
             <div id="gameSettingsHide"></div>
 
@@ -51,15 +48,30 @@
 
             <div id="lobbyName"></div>
 
-            <div id="gameResults"></div>
-            <div id="gameResultsList"></div>
-            <div id="gameBack"></div>
-            <div id="gameNext"></div>
-            <div id="gameQuit"></div>
+            <div id="gameCountdown"></div>
         </div>
 
-        <div id="game" style="display: none;">
+        <div class="game" id="game" style="display: none">
             <div id="gameArea">
+            </div>
+            <div class="gameOverlay text--invert">
+                <div id="phaseTitle" class="phaseTitle"></div>
+                <div id="phaseCountdown" class="phaseCountdown"></div>
+            </div>
+            <div id="gameResults" class="windowContainer windowContainer--hidden">
+                <div class="window">
+                    <div class="window__content">
+                        <h2>Results</h2>
+                        <div id="gameResultsList" class="list text--invert"></div>
+                        <div class="list">
+                            <div class="row row--spaced">
+                                <button id="gameBack">Back to Lobby</button>
+                                <button id="gameNext">Next Game</button>
+                                <button id="gameQuit">Quit</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
 

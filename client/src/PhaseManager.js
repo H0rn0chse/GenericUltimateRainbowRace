@@ -126,7 +126,7 @@ class _PhaseManager {
     }
 
     onSetCountdown (data) {
-        const seconds = data.seconds ? `&nbsp;&nbsp;${data.seconds}` : "";
+        const seconds = data.seconds ? data.seconds : "";
         this.countdown.innerHTML = seconds;
     }
 

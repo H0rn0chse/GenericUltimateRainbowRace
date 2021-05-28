@@ -10,7 +10,7 @@ class _ResultsManager {
         this.backBtn = document.querySelector("#gameBack");
         this.nextBtn = document.querySelector("#gameNext");
         this.quitBtn = document.querySelector("#gameQuit");
-        this.results.style.display = "none";
+        this.hide();
 
         this.backBtn.addEventListener("click", (evt) => {
             GameManager.stopGame();
@@ -26,6 +26,14 @@ class _ResultsManager {
 
         PhaseBus.on(PHASES.Results, this.onResults, this);
         PhaseBus.on(PHASES.Colors, this.onColors, this);
+    }
+
+    show () {
+        this.results.classList.remove("windowContainer--hidden");
+    }
+
+    hide () {
+        this.results.classList.add("windowContainer--hidden");
     }
 
     // ========================================== Manager handler =============================================
@@ -71,16 +79,16 @@ class _ResultsManager {
             this.addResultRow(entryData, playerData, index + 1);
         });
 
-        this.results.style.display = "";
-
         const isHost = data.host === getId();
 
         this.nextBtn.disabled = !isHost;
         this.backBtn.disabled = !isHost;
+
+        this.show();
     }
 
     onColors () {
-        this.results.style.display = "none";
+        this.hide();
     }
 
     // ========================================== Websocket handler =============================================

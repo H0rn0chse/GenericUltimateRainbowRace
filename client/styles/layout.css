@@ -1,13 +1,6 @@
 
 /* ########################################################################## */
-html {
-    height: 100%;
-}
-body {
-    height: 100%;
-}
-
-.wrapper {
+html, body, .wrapper {
     height: 100%;
 }
 
@@ -35,6 +28,7 @@ header button {
 /* ########################################################################## */
 
 .content {
+    min-height: calc(100vh - var(--size-header));
     padding: var(--space-lg) var(--space-xl);
     display: flex;
     flex-direction: row;
@@ -51,3 +45,7 @@ header button {
 }
 
 /* ########################################################################## */
+
+.wrapper {
+    position: relative;
+}

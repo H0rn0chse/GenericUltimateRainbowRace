@@ -9,6 +9,8 @@
 @import "components/icon.css";
 @import "components/avatarSelect.css";
 @import "components/levelSelect.css";
+@import "components/window.css";
+@import "components/game.css";
 
 * {
     box-sizing: border-box;

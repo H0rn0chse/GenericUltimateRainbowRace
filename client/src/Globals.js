@@ -13,7 +13,7 @@ export const STATIC = 1;
 export const DYNAMIC = 0;
 
 export const BUILD_COUNTDOWN = 6;
-export const PRERUN_COUNTDOWN = 1;
+export const PRERUN_COUNTDOWN = 2;
 export const RESULTS_COUNTDOWN = 1;
 
 export const LEVEL_TIMEOUT = 60;
@@ -40,11 +40,11 @@ export const PHASES = {
 
 export const PHASE_TEXTS = {
     Initial: "",
-    PreRun: "Countdown",
-    Run: "Run!",
-    Results: "Results",
+    PreRun: "Get ready...",
+    Run: "",
+    Results: "",
     Colors: "",
-    Build: "Place your Block",
+    Build: "Place your block!",
 };
 
 export const LEVELS = {

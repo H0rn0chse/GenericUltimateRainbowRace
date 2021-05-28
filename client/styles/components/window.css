@@ -1,0 +1,30 @@
+
+.windowContainer {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+
+    height: 100%;
+
+    position: absolute;
+    top: 0; right: 0; bottom: 0; left: 0;
+}
+
+.windowContainer.windowContainer--hidden {
+    display: none;
+}
+
+.window {
+    border-radius: var(--border-radius-lg);
+    overflow: hidden;
+}
+
+.window__content {
+    padding: var(--space-md) var(--space-lg);
+    background-color: var(--col-trans-dark-strong);
+}
+
+.window__content h2 {
+    margin-bottom: var(--space-sm);
+}

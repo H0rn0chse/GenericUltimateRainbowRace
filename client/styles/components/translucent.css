@@ -1,5 +1,5 @@
 
-body, h1, h2, button, input, select, .list--hr .row::after, .text--invert {
+body, h1, h2, button, input, select, .list--hr .row::after, .text--invert, .window {
     background: #FFF url(../../assets/gradient.png) no-repeat;
     background-size: contain;
     background-attachment: fixed;
@@ -10,6 +10,10 @@ header, section {
     background-color: var(--col-trans-dark-weak);
 }
 
+.gameHeader {
+    background-color: var(--col-trans-dark);
+}
+
 body::after {
     content: "";
     position: fixed;
@@ -18,17 +22,13 @@ body::after {
     background-color: var(--col-trans-dark);
 }
 
-.content {
-    min-height: calc(100vh - var(--size-header));
-}
-
-header {
+header, .gameHeader {
     box-shadow: rgba(0, 0, 0, 0.2) 0px 12px 28px 0px,
                 rgba(0, 0, 0, 0.2) 0px 2px 4px 0px,
                 rgba(0, 0, 0, 0.6) 0px 1px 2px 0px;
     border-bottom: 1px solid rgba(255, 255, 255, 0.1);
 }
-section {
+section, .window {
     box-shadow: rgba(0, 0, 0, 0.2) 0px 12px 28px 0px,
                 rgba(0, 0, 0, 0.2) 0px 2px 4px 0px,
                 rgba(0, 0, 0, 0.6) 0px 1px 2px 0px,
@@ -65,7 +65,9 @@ input, select {
     to {background-position-x: 100vw;}
 }
 button:hover,
-input:focus {
+input:focus
+/* .phaseCountdown,
+.phaseTitle */ {
     animation-name: bgShift;
     animation-duration: 2s;
     animation-iteration-count: infinite;

@@ -6,7 +6,7 @@ import { GameManager } from "./GameManager.js";
 class _ScoreManager {
     constructor () {
         this.container = document.querySelector("#gameStats");
-        this.text = document.querySelector("#score");
+        this.text = document.querySelector("#gameCountdown");
 
         this.timeLeft = 0;
         this.running = false;

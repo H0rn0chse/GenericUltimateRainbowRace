@@ -5,15 +5,16 @@
     --col-trans-dark-weak: rgba(0,0,0,0.3);
     --col-trans-bright: rgba(255,255,255,0.1);
 
-    --size-header: 4.8em;
-    --size-aside: 4em;
-    --size-avatar: 60px;
-
     --space-xl: 4.8em;
     --space-lg: 2.4em;
     --space-md: 1.4em;
     --space-sm: 0.7em;
     --space-xs: 0.2em;
+
+    --size-header: 4.8em;
+    --size-gameHeader: calc(2em + 2 * var(--space-sm));
+    --size-aside: 4em;
+    --size-avatar: 60px;
 
     --border-radius-lg: 0.6em;
     --border-radius-md: 0.4em;
