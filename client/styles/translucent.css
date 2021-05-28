@@ -1,6 +1,6 @@
 
 body, h1, h2, button, input, select, .list--hr .row::after, .text--invert, .window {
-    background: #FFF url(../../assets/gradient.png) no-repeat;
+    background: #FFF url(../assets/gradient.png) no-repeat;
     background-size: contain;
     background-attachment: fixed;
     background-repeat: repeat;

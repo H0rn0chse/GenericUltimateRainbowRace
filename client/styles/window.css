@@ -22,7 +22,9 @@
 
 .window__content {
     padding: var(--space-md) var(--space-lg);
-    background-color: var(--col-trans-dark-strong);
+    background: var(--col-trans-dark-strong) url("../assets/Logocorns/unicornWin.png") no-repeat;
+    background-size: contain;
+    background-position: center;
 }
 
 .window__content h2 {

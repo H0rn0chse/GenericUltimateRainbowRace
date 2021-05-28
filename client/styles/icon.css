@@ -1,7 +1,7 @@
 
 .icon {
     display: block;
-    background-image: url(../../assets/icons.png);
+    background-image: url(../assets/icons.png);
     height: var(--size-icon);
     width: var(--size-icon);
     margin: var(--space-icon);
