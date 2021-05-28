@@ -1,5 +1,5 @@
 
-body, h1, h2, button, input, select, .list--hr .row::after, .text--invert, .window {
+body, h1, h2, h3, button, input, select, .list--hr .row::after, .text--invert, .window {
     background: #FFF url(../assets/gradient.png) no-repeat;
     background-size: contain;
     background-attachment: fixed;
@@ -75,7 +75,7 @@ input:focus
 }
 
 
-h1, h2, .text--invert {
+h1, h2, h3, .text--invert {
     -webkit-text-fill-color: transparent;
     -webkit-background-clip: text;
     color: #FFF;
