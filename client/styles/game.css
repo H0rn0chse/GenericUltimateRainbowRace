@@ -29,6 +29,15 @@
     font-size: 5em;
     height: 1em;
 }
+#gameCountdown {
+    position: absolute;
+    text-align: left;
+    top: var(--space-sm);
+    left: var(--space-sm);
+    font-size: 2em;
+
+    pointer-events: none;
+}
 
 #gameResultsList {
     width: 100%;
