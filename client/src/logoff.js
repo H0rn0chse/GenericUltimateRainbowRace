@@ -35,7 +35,7 @@ function doTimeout (wasReset) {
 export function logoff () {
     logoffDone = true;
     const element = document.querySelector("#logoff");
-    element.style.display = "flex";
+    element.style.display = "";
 }
 
 export function shouldCloseConnection () {

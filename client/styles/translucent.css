@@ -1,5 +1,5 @@
 
-body, h1, h2, h3, button, input, select, .list--hr .row::after, .text--invert, .window {
+body, h1, h2, h3, button, input, select, .list--hr .row::after, .text--invert, .window, #logoff {
     background: #FFF url(../assets/gradient.png) no-repeat;
     background-size: contain;
     background-attachment: fixed;
@@ -12,6 +12,10 @@ header, section {
 
 .gameHeader {
     background-color: var(--col-trans-dark);
+}
+
+#logoff > div {
+    background-color: var(--col-trans-dark-strong);
 }
 
 body::after {
