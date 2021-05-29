@@ -1,7 +1,7 @@
 
 
 .avatarImage {
-    background-image: url(../../assets/atlas/animals_round.png);
+    background-image: url(../assets/atlas/animals_round.png);
     transform-origin: center;
     height: var(--size-avatar);
     width: var(--size-avatar);
