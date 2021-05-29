@@ -33,6 +33,15 @@ class _LobbyManager {
             this.selectLevel(this.levelSelect.value);
         });
 
+        const levelSelectPrev = document.querySelector("#levelSelectPrev");
+        const levelSelectNext = document.querySelector("#levelSelectNext");
+        levelSelectPrev.addEventListener("click", (evt) => {
+            this.levelSelect.selectedIndex = Math.max(this.levelSelect.selectedIndex - 1, 0);
+        });
+        levelSelectNext.addEventListener("click", (evt) => {
+            this.levelSelect.selectedIndex = Math.min(this.levelSelect.selectedIndex + 1, this.levelSelect.length - 1);
+        });
+
         this.isHost = false;
         this.playerList = {};
 

@@ -20,6 +20,7 @@ class _OverviewManager {
             LobbyManager.startLobby();
         });
 
+        this.name.value = "";
         this.name.addEventListener("keydown", (evt) => {
             if (evt.key === "Enter") {
                 this.createLobby();

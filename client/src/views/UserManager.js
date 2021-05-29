@@ -7,6 +7,7 @@ class _UserManager {
         this.container = document.querySelector("#sectionUser");
 
         this.usernameInput = document.querySelector("#overviewUsername");
+        this.usernameInput.value = "";
         this.usernameInput.addEventListener("change", (evt) => {
             if (this.usernameInput.value) {
                 setName(this.usernameInput.value);
