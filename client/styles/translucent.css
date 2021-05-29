@@ -82,5 +82,9 @@ input:focus
 h1, h2, h3, .text--invert {
     -webkit-text-fill-color: transparent;
     -webkit-background-clip: text;
+    /*
+    Unfortunately, buggy in combination with background-attachment: fixed in Firefox
+    https://css-tricks.com/how-to-do-knockout-text/
+    */
     color: #FFF;
 }

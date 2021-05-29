@@ -12,9 +12,25 @@
 body {
     font-family: 'Roboto', Fallback, sans-serif;
     font-weight: 700;
-    font-size: 14pt;
+    font-size: 16pt;
     color: #FFFFFF;
 }
+
+@media (max-width: 1330px) { body { font-size: 15pt; } }
+@media (max-width: 1250px) { body { font-size: 14pt; } }
+@media (max-width: 1160px) { body { font-size: 13pt; } }
+@media (max-width: 1090px) { body { font-size: 12pt; } }
+@media (max-width: 1000px) { body { font-size: 11pt; } }
+@media (max-width:  920px) { body { font-size: 10pt; } }
+@media (max-width:  830px) { body { font-size:  9pt; } }
+@media (max-width:  760px) { body { font-size:  8pt; } }
+@media (max-width:  670px) { body { font-size:  7pt; } }
+@media (max-width:  590px) { body { font-size:  6pt; } }
+@media (max-width:  510px) { body { font-size:  5pt; } }
+@media (max-width:  420px) { body { font-size:  4pt; } }
+@media (max-width:  340px) { body { font-size:  3pt; } }
+@media (max-width:  250px) { body { font-size:  2pt; } }
+@media (max-width:  170px) { body { font-size:  1pt; } }
 
 h1, h2, h3 {
     font-family: 'Roboto', Fallback, sans-serif;

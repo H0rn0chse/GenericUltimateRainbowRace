@@ -28,9 +28,17 @@
     flex-direction: row;
     align-items: center;
     margin-bottom: var(--space-sm);
+    margin-right: calc(-1 * var(--space-sm));
 }
 .row--spaced {
     justify-content: space-between;
+}
+.row--flow {
+    flex-wrap: wrap;
+    margin-bottom: 0;
+}
+.row--flow > * {
+    margin-bottom: var(--space-sm);
 }
 .row:last-of-type {
     margin-bottom: 0;
@@ -38,9 +46,9 @@
 .row > * {
     margin-right: var(--space-sm);
 }
-.row > *:last-child {
+/* .row > *:last-child {
     margin-right: 0;
-}
+} */
 
 .cell--fill {
     flex-grow: 1;
