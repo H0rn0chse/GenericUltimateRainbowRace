@@ -1,3 +1,4 @@
+import { LobbyHandler } from "./handler/LobbyHandler.js";
 import { registerMessageHandler } from "./socket.js";
 
 class _PlayerManager {
@@ -7,11 +8,21 @@ class _PlayerManager {
     }
 
     init () {
-        registerMessageHandler("userNameUpdate", this.onUserNameUpdate, this);
+        registerMessageHandler("updateUserData", this.onUpdateUserData, this);
     }
 
-    onUserNameUpdate (ws, data, playerId) {
-        this.setProperty(playerId, "name", data.name);
+    onUpdateUserData (ws, data, playerId) {
+        if (data.name) {
+            this.setProperty(playerId, "name", data.name);
+        }
+        if (data.avatar) {
+            this.setProperty(playerId, "avatar", data.avatar);
+        }
+        const playerData = {
+            name: this.getProperty(playerId, "name"),
+            avatar: this.getProperty(playerId, "avatar"),
+        };
+        LobbyHandler.onUpdateUserData(ws, playerData, playerId);
     }
 
     addPlayer () {

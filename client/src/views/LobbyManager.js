@@ -1,4 +1,4 @@
-import { addEventListener, removeEventListener, ready, send, getId, getName, setName } from "../socket.js";
+import { addEventListener, removeEventListener, ready, send, getId } from "../socket.js";
 import { ViewManager } from "../ViewManager.js";
 import { LobbyEntry } from "../domElements/LobbyEntry.js";
 import { LEVELS } from "../Globals.js";

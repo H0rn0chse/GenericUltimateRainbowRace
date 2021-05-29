@@ -17,8 +17,19 @@ class _LobbyHandler {
         registerMessageHandler("close", this.onLeaveLobby, this);
 
         registerMessageHandler("selectLevel", this.onSelectLevel, this);
-        registerMessageHandler("usernameUpdate", this.onUsernameUpdate, this);
-        registerMessageHandler("avatarUpdate", this.onAvatarUpdate, this);
+    }
+
+    _isLobbyOpen (lobbyData) {
+        // lobby was already destroyed
+        if (!lobbyData) {
+            return false;
+        }
+
+        // only handle open lobbies
+        if (lobbyData.running) {
+            return false;
+        }
+        return true;
     }
 
     onCreateLobby (ws, data, playerId) {
@@ -37,7 +48,7 @@ class _LobbyHandler {
         const lobbyId = data.id;
         const lobbyData = LobbyManager.getLobbyData(lobbyId);
 
-        if (!lobbyData) {
+        if (!this._isLobbyOpen(lobbyData)) {
             return;
         }
 
@@ -58,6 +69,7 @@ class _LobbyHandler {
         const playerData = {
             id: playerId,
             name: PlayerManager.getProperty(playerId, "name") || "unknown",
+            avatarId: PlayerManager.getProperty(playerId, "avatar") || null,
         };
         lobbyData.player[playerId] = playerData;
 
@@ -75,13 +87,7 @@ class _LobbyHandler {
         const lobbyId = PlayerManager.getProperty(playerId, "lobby");
         const lobbyData = LobbyManager.getLobbyData(lobbyId);
 
-        // lobby was already destroyed
-        if (!lobbyData) {
-            return;
-        }
-
-        // only handle open lobbies
-        if (lobbyData.running) {
+        if (!this._isLobbyOpen(lobbyData)) {
             return;
         }
 
@@ -148,69 +154,11 @@ class _LobbyHandler {
         GameHandler.onJoinGame(ws, data, playerId);
     }
 
-    onUsernameUpdate (ws, data, playerId) {
-        const lobbyId = PlayerManager.getProperty(playerId, "lobby");
-        const lobbyData = LobbyManager.getLobbyData(lobbyId);
-
-        // lobby was already destroyed
-        if (!lobbyData) {
-            return;
-        }
-
-        // only handle open lobbies
-        if (lobbyData.running) {
-            return;
-        }
-
-        // update lobbyData
-        lobbyData.player[playerId].name = data.name;
-
-        const playerData = {
-            id: playerId,
-            name: data.name,
-            avatarId: lobbyData.player[playerId].avatarId,
-        };
-        const topic = `lobby-${lobbyId}`;
-        publish(topic, "playerUpdated", playerData);
-    }
-
-    onAvatarUpdate (ws, data, playerId) {
-        const lobbyId = PlayerManager.getProperty(playerId, "lobby");
-        const lobbyData = LobbyManager.getLobbyData(lobbyId);
-
-        // lobby was already destroyed
-        if (!lobbyData) {
-            return;
-        }
-
-        // only handle open lobbies
-        if (lobbyData.running) {
-            return;
-        }
-
-        // update lobbyData
-        lobbyData.player[playerId].avatarId = data.avatarId;
-
-        const playerData = {
-            id: playerId,
-            name: lobbyData.player[playerId].name,
-            avatarId: data.avatarId,
-        };
-        const topic = `lobby-${lobbyId}`;
-        publish(topic, "playerUpdated", playerData);
-    }
-
     onSelectLevel (ws, data, playerId) {
         const lobbyId = PlayerManager.getProperty(playerId, "lobby");
         const lobbyData = LobbyManager.getLobbyData(lobbyId);
 
-        // lobby was already destroyed
-        if (!lobbyData) {
-            return;
-        }
-
-        // only handle open lobbies
-        if (lobbyData.running) {
+        if (!this._isLobbyOpen(lobbyData)) {
             return;
         }
 
@@ -218,6 +166,29 @@ class _LobbyHandler {
 
         const topic = `lobby-${lobbyId}`;
         publish(topic, "levelUpdated", data);
+    }
+
+    // ================= not bound to events ==================================================
+
+    onUpdateUserData (ws, data, playerId) {
+        const lobbyId = PlayerManager.getProperty(playerId, "lobby");
+        const lobbyData = LobbyManager.getLobbyData(lobbyId);
+
+        if (!this._isLobbyOpen(lobbyData)) {
+            return;
+        }
+
+        // update lobbyData
+        lobbyData.player[playerId].name = data.name;
+        lobbyData.player[playerId].avatarId = data.avatar;
+
+        const playerData = {
+            id: playerId,
+            name: data.name,
+            avatarId: data.avatar,
+        };
+        const topic = `lobby-${lobbyId}`;
+        publish(topic, "playerUpdated", playerData);
     }
 }
 
