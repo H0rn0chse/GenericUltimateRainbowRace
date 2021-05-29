@@ -13,13 +13,17 @@ button, input, select {
     border: 0 none;
 }
 
-button {
+button, select {
     cursor: pointer;
 }
+input {
+    cursor: text;
+}
 
-button:disabled {
+button:disabled,
+select:disabled {
     cursor: not-allowed;
-    opacity: 0.6;
+    opacity: 0.4;
 }
 
 button.button--slim  {
@@ -30,7 +34,6 @@ button.button--slim  {
 
 input, select {
     width: 100%;
-    cursor: text;
 }
 
 ::placeholder {
@@ -42,6 +45,9 @@ input, select {
     border: 0 none;
 }
 
+input {
+    user-select: none;
+}
 select {
     -moz-appearance: none;
     -webkit-appearance: none;

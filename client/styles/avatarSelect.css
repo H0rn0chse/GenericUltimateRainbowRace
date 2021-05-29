@@ -12,7 +12,7 @@
     transform: scale(0.75);
 }
 
-@media (max-width: 780px) {
+@media (max-width: 1000px) {
     .avatarImage {
         margin: calc(-1 * (1/8) * var(--size-avatar));
         transform: scale(0.75);
@@ -23,7 +23,7 @@
     }
 }
 
-@media (max-width: 540px) {
+@media (max-width: 760px) {
     .avatarImage {
         margin: calc(-1 * (2/8) * var(--size-avatar));
         transform: scale(0.5);

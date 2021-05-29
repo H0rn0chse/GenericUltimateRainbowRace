@@ -33,12 +33,12 @@ class _LobbyManager {
             this.selectLevel(this.levelSelect.value);
         });
 
-        const levelSelectPrev = document.querySelector("#levelSelectPrev");
-        const levelSelectNext = document.querySelector("#levelSelectNext");
-        levelSelectPrev.addEventListener("click", (evt) => {
+        this.levelSelectPrev = document.querySelector("#levelSelectPrev");
+        this.levelSelectNext = document.querySelector("#levelSelectNext");
+        this.levelSelectPrev.addEventListener("click", (evt) => {
             this.levelSelect.selectedIndex = Math.max(this.levelSelect.selectedIndex - 1, 0);
         });
-        levelSelectNext.addEventListener("click", (evt) => {
+        this.levelSelectNext.addEventListener("click", (evt) => {
             this.levelSelect.selectedIndex = Math.min(this.levelSelect.selectedIndex + 1, this.levelSelect.length - 1);
         });
 
@@ -136,6 +136,8 @@ class _LobbyManager {
         this.title.innerText = data.name;
         this.startBtn.disabled = !this.isHost;
         this.levelSelect.disabled = !this.isHost;
+        this.levelSelectPrev.disabled = !this.isHost;
+        this.levelSelectNext.disabled = !this.isHost;
 
         this.levelSelect.value = data.levelId;
         this.levelPreview.src = LEVELS[data.levelId].preview;
