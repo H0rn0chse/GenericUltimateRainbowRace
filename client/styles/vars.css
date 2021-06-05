@@ -20,10 +20,11 @@
     --border-radius-md: 0.4em;
     --border-radius-sm: 0.2em;
 
-    --num-icons: 6;
+    --num-icons: 7;
     --size-icon-total: 2em;
     --space-icon: 0.2em;
     --size-icon: calc(var(--size-icon-total) - 2 * var(--space-icon));
 
     --time-sm: 0.2s;
+    --time-md: 0.4s;
 }

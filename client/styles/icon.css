@@ -28,3 +28,6 @@
 .icon--host {
     background-position: calc(-5 * var(--size-icon)) 0;
 }
+.icon--close {
+    background-position: calc(-6 * var(--size-icon)) 0;
+}
