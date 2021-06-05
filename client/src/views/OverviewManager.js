@@ -44,6 +44,12 @@ class _OverviewManager {
     createLobby () {
         if (this.name.value) {
             send("createLobby", { name: this.name.value });
+        } else {
+            // Resetting CSS animation each time
+            // https://css-tricks.com/restart-css-animation/
+            this.name.classList.remove("invalid");
+            void this.name.offsetWidth;
+            this.name.classList.add("invalid");
         }
     }
 

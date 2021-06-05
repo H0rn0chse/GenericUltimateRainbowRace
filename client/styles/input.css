@@ -102,3 +102,15 @@ input[type="range"]::-webkit-slider-thumb {
     background-color: var(--col-trans-dark);
     border-radius: var(--border-radius-sm);
 }
+
+
+@keyframes shake {
+  10%, 90% { left: -1px; }
+  20%, 80% { left: 2px; }
+  30%, 50%, 70% { left: -4px; }
+  40%, 60% { left: 4px; }
+}
+.invalid {
+    position: relative;
+    animation: shake 1s 1;
+}
