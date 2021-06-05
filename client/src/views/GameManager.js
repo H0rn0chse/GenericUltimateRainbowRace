@@ -143,6 +143,7 @@ class _GameManager {
 
     onSceneReady () {
         send("playerReady", {});
+        DebugBus.emit("setDebug", this.debugCbx.checked);
     }
 
     // ========================================== Websocket handler =============================================
