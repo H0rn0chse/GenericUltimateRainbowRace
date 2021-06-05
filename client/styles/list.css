@@ -59,6 +59,12 @@
 .cell--icon {
     width: var(--size-icon-total);
 }
+.cell--iconDouble {
+    width: calc(2*var(--size-icon-total));
+}
+.cell--iconDouble > * {
+    float: left;
+}
 .cell--aside > * {
     width: 100%;
 }

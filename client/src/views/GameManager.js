@@ -26,6 +26,11 @@ class _GameManager {
             document.querySelector("#collapsibleSettings .collapsible__btnToggle"),
             document.querySelector("#collapsibleSettings .collapsible__black"),
         );
+        this.collapsibleHelp = new CollapsibleManager(
+            document.querySelector("#collapsibleHelp"),
+            document.querySelector("#collapsibleHelp .collapsible__btnToggle"),
+            document.querySelector("#collapsibleHelp .collapsible__black"),
+        );
 
         this.debugCbx = document.querySelector("#debugCbx");
         this.debugCbx.addEventListener("change", (evt) => {

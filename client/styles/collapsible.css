@@ -18,6 +18,8 @@
     top: 100%;
     margin-top: 2px;
     right: var(--space-xl);
+
+    max-width: calc(100vw - 2 * var(--space-xl));
 }
 .collapsible__icon {
 

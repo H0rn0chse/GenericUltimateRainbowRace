@@ -40,3 +40,8 @@
 .window__content h2 {
     margin-bottom: var(--space-sm);
 }
+
+.window__content h3 {
+    margin-top: var(--space-sm);
+    margin-bottom: var(--space-xs);
+}
