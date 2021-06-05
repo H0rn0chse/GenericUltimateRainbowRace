@@ -20,7 +20,7 @@
     --border-radius-md: 0.4em;
     --border-radius-sm: 0.2em;
 
-    --num-icons: 7;
+    --num-icons: 14;
     --size-icon-total: 2em;
     --space-icon: 0.2em;
     --size-icon: calc(var(--size-icon-total) - 2 * var(--space-icon));
