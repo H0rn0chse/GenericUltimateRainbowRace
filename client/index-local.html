@@ -27,17 +27,47 @@
             <img src="./assets/GurrIcon.png">
             <h1>Generic Ultimate Rainbow Race</h1>
             <button class="button--slim"><i class="icon icon--help"></i></button>
-            <button class="button--slim"><i class="icon icon--settings"></i></button>
+            <div id="collapsibleSettings" class="collapsible">
+                <button class="button--slim collapsible__btnToggle">
+                    <i class="icon icon--settings collapsible__icon collapsible__icon--show"></i>
+                    <i class="icon icon--close collapsible__icon collapsible__icon--hide"></i>
+                </button>
+                <div class="collapsible__black"></div>
+                <div class="collapsible__content">
+                    <div class="window window--topLess">
+                        <div class="window__content">
+                            <h2>Settings</h3>
+                            <div class="list text--invert">
+                                <div class="row">
+                                    <div class="cell--aside">
+                                        Debug
+                                    </div>
+                                    <div class="cell--fill">
+                                        <input type="checkbox" id="debugCbx">
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="cell--aside">
+                                        Music
+                                    </div>
+                                    <div class="cell--fill">
+                                        <input id="musicVolume" type="range" min="0" max="100" value="20">
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="cell--aside">
+                                        Sound
+                                    </div>
+                                    <div class="cell--fill">
+                                        <input id="soundVolume" type="range" min="0" max="100" value="70">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div
+                </div>
+            </div>
         </header>
-
-        <div id="htmlElementOfBrokenDreams" style="display: none;">
-            <div id="gameSettingsShow"></div>
-            <div id="gameSettingsHide"></div>
-
-            <div id="debugCbx"></div>
-            <input id="musicVolume" type="range" min="0" max="100" value="20">
-            <input id="soundVolume" type="range" min="0" max="100" value="70">
-        </div>
 
         <div class="game" id="game" style="display: none">
             <div id="gameArea"></div>
@@ -47,7 +77,7 @@
                 <div id="phaseCountdown" class="phaseCountdown"></div>
             </div>
             <div id="gameResults" class="windowContainer windowContainer--hidden">
-                <div class="window">
+                <div class="window window--gameResults">
                     <div class="window__content">
                         <h2>Results</h2>
                         <div id="gameResultsList" class="list text--invert"></div>

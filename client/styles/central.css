@@ -9,6 +9,7 @@
 @import "avatarSelect.css";
 @import "levelSelect.css";
 @import "window.css";
+@import "collapsible.css";
 @import "game.css";
 
 * {

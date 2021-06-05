@@ -3,6 +3,7 @@ import { ViewManager } from "../ViewManager.js";
 import { getId, send, addEventListener, removeEventListener, ready } from "../socket.js";
 import { PhaseManager } from "../PhaseManager.js";
 import { AvatarManager } from "../AvatarManager.js";
+import { CollapsibleManager } from "./CollapsibleManager.js";
 import { ScoreManager } from "./ScoreManager.js";
 import { DebugBus, GameBus, PhaseBus } from "../EventBus.js";
 import { PHASES, PLAYER_STATUS, _ } from "../Globals.js";
@@ -20,19 +21,11 @@ class _GameManager {
         this.container = document.querySelector("#game");
         this.instanceContainer = document.querySelector("#gameArea");
 
-        this.settingsBtnShow = document.querySelector("#gameSettingsShow");
-        this.settingsBtnHide = document.querySelector("#gameSettingsHide");
-        this.gameSettingsCollapsible = document.querySelector("#gameSettingsCollapsible");
-        this.settingsBtnShow.addEventListener("click", (evt) => {
-            this.gameSettingsCollapsible.classList.remove("hidden");
-            this.settingsBtnShow.classList.add("hidden");
-            this.settingsBtnHide.classList.remove("hidden");
-        });
-        this.settingsBtnHide.addEventListener("click", (evt) => {
-            this.gameSettingsCollapsible.classList.add("hidden");
-            this.settingsBtnShow.classList.remove("hidden");
-            this.settingsBtnHide.classList.add("hidden");
-        });
+        this.collapsibleSettings = new CollapsibleManager(
+            document.querySelector("#collapsibleSettings"),
+            document.querySelector("#collapsibleSettings .collapsible__btnToggle"),
+            document.querySelector("#collapsibleSettings .collapsible__black"),
+        );
 
         this.debugCbx = document.querySelector("#debugCbx");
         this.debugCbx.addEventListener("change", (evt) => {

@@ -1,0 +1,41 @@
+.collapsible {
+
+}
+
+.collapsible__black {
+    display: none;
+
+    position: fixed;
+    z-index: 99;
+    top: var(--size-header); right: 0; bottom: 0; left: 0;
+    background-color: var(--col-trans-dark);
+}
+.collapsible__content {
+    display: none;
+
+    position: absolute;
+    z-index: 100;
+    top: 100%;
+    margin-top: 2px;
+    right: var(--space-xl);
+}
+.collapsible__icon {
+
+}
+.collapsible__icon--hide {
+    display: none;
+}
+
+
+.collapsible--open .collapsible__black {
+    display: block;
+}
+.collapsible--open .collapsible__content {
+    display: block;
+}
+.collapsible--open .collapsible__icon--hide {
+    display: block;
+}
+.collapsible--open .collapsible__icon--show {
+    display: none;
+}

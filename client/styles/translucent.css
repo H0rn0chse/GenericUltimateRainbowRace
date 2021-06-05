@@ -1,5 +1,9 @@
 
-body, h1, h2, h3, button, input, select, .list--hr .row::after, .text--invert, .window, #logoff {
+body, .text--invert,
+h1, h2, h3,
+button, input, select,
+.list--hr .row::after,
+.window, #logoff {
     background: #FFF url(../assets/gradient.png) no-repeat;
     background-size: contain;
     background-attachment: fixed;
@@ -69,7 +73,9 @@ input, select {
     to {background-position-x: 100vw;}
 }
 button:hover:enabled:not(.button--active),
-input:focus
+input[type="checkbox"]:hover,
+input[type="range"]:hover,
+input[type="text"]:focus
 /* .phaseCountdown,
 .phaseTitle */ {
     animation-name: bgShift;

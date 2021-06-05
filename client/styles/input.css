@@ -1,3 +1,12 @@
+input[type="text"] {
+    user-select: none;
+}
+select, input[type="checkbox"], input[type="range"] {
+    -moz-appearance: none;
+    -webkit-appearance: none;
+    appearance: none;
+}
+
 button, input, select {
     font: inherit;
     font-family: 'Sigmar_One', Fallback, sans-serif;
@@ -13,13 +22,12 @@ button, input, select {
     border: 0 none;
 }
 
-button, select {
+button, select, input[type="checkbox"] {
     cursor: pointer;
 }
-input {
+input[type="text"] {
     cursor: text;
 }
-
 button:disabled,
 select:disabled {
     cursor: not-allowed;
@@ -31,8 +39,7 @@ button.button--slim  {
     padding-right: var(--space-xs);
 }
 
-
-input, select {
+input[type="text"], select {
     width: 100%;
 }
 
@@ -45,11 +52,53 @@ input, select {
     border: 0 none;
 }
 
-input {
-    user-select: none;
+
+input[type="checkbox"] {
+    width: 2em;
+    height: 2em;
+    padding: 0;
+    margin: auto;
+
+    position: relative;
 }
-select {
-    -moz-appearance: none;
-    -webkit-appearance: none;
-    appearance: none;
+
+input[type="checkbox"]::after {
+    content: "";
+    position: absolute;
+    background-color: var(--col-trans-dark);
+    border-radius: var(--border-radius-sm);
+
+    transition: top var(--time-md), right var(--time-md), bottom var(--time-md), left var(--time-md), opacity var(--time-md);
+    top: 1em; right: 1em; bottom: 1em; left: 1em;
+    opacity: 0;
+}
+
+input[type="checkbox"]:checked::after {
+    top: 0.3em; right: 0.3em; bottom: 0.3em; left: 0.3em;
+    opacity: 1;
+}
+
+input[type="range"] {
+    height: 2em;
+}
+input[type="range"]::-moz-range-progress {
+    background-color: transparent;
+}
+input[type="range"]::-moz-range-thumb {
+    width: 1.4em;
+    height: 1.4em;
+    border: 0 none;
+
+    background-color: var(--col-trans-dark);
+    border-radius: var(--border-radius-sm);
+}
+input[type="range"]::-webkit-slider-thumb {
+    -webkit-appearance: none !important;
+
+    width: 1.4em;
+    height: 1.4em;
+    border: 0 none;
+
+    background-color: var(--col-trans-dark);
+    border-radius: var(--border-radius-sm);
 }
