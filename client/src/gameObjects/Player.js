@@ -18,6 +18,7 @@ export class Player extends PlayerBase {
         this.keys.S = scene.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.S);
         this.keys.D = scene.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.D);
         this.keys.Space = scene.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.SPACE);
+        this.keys.Shift = scene.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.SHIFT);
 
         // constants
         this.eps = 10;
@@ -147,7 +148,7 @@ export class Player extends PlayerBase {
             this.animState = `player${this.skinId}Jumping`;
             this.sounds.jump.play();
         }
-        if (this.cursor.up.isDown || this.keys.W.isDown) {
+        if (this.cursor.up.isDown || this.keys.W.isDown || this.keys.Space.isDown) {
             // Start jump
             if (this.body.onFloor()) {
                 this.isCurJumping = true;
@@ -166,7 +167,7 @@ export class Player extends PlayerBase {
 
         // Dash
         this.curDashTime += delta;
-        const isDashKeyDown = (this.cursor.down.isDown || this.keys.S.isDown || this.keys.Space.isDown);
+        const isDashKeyDown = (this.cursor.down.isDown || this.keys.S.isDown || this.keys.Shift.isDown);
         if (!this.wasDashKeyUp && !isDashKeyDown) {
             this.wasDashKeyUp = true;
         }
