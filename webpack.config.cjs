@@ -23,7 +23,7 @@ module.exports = {
         }),
         new HtmlWebpackPlugin({
             template: "client/index-template.html",
-            favicon: "client/assets/favicon32.png",
+            favicon: "client/assets/favicon96.png",
             minify: {
                 collapseWhitespace: false,
             },
