@@ -74,7 +74,8 @@ header button {
     text-align: center;
 }
 #noLobbies img {
-    width: 30%;
+    width: 10vw;
+    height: 10vw;
     display: block;
     margin: 0 auto var(--space-md) auto;
 }
