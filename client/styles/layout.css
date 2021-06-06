@@ -69,3 +69,15 @@ header button {
     width: 50vh;
     margin-bottom: 5vh;
 }
+
+#noLobbies {
+    text-align: center;
+}
+#noLobbies img {
+    width: 30%;
+    display: block;
+    margin: 0 auto var(--space-md) auto;
+}
+#noLobbies.hidden {
+    display: none;
+}

@@ -7,6 +7,7 @@ class _OverviewManager {
         this.container = document.querySelector("#sectionOverview");
         this.listNode = document.querySelector("#overviewLobbyList");
         this.name = document.querySelector("#overviewLobbyName");
+        this.noLobbyIndicator = document.querySelector("#noLobbies");
 
         const createButton = document.querySelector("#overviewCreateLobby");
         createButton.addEventListener("click", (evt) => {
@@ -79,6 +80,7 @@ class _OverviewManager {
 
         this.lobbyList[lobbyId] = entry;
         this.listNode.appendChild(entry.row);
+        this.updateNoLobbyIndicator();
     }
 
     onLobbyRemoved (lobby) {
@@ -89,6 +91,7 @@ class _OverviewManager {
             entry.row.remove();
             delete this.lobbyList[lobbyId];
         }
+        this.updateNoLobbyIndicator();
     }
 
     onLobbyList (data) {
@@ -104,6 +107,7 @@ class _OverviewManager {
 
     show () {
         this.startListen();
+        this.updateNoLobbyIndicator();
         this.container.classList.remove("section--hidden");
     }
 
@@ -128,6 +132,11 @@ class _OverviewManager {
         });
 
         send("subscribeOverview");
+    }
+
+    updateNoLobbyIndicator () {
+        const noLobbies = Object.keys(this.lobbyList).length === 0;
+        this.noLobbyIndicator.classList.toggle("hidden", !noLobbies);
     }
 }
 
