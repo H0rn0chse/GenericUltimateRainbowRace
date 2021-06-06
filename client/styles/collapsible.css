@@ -3,16 +3,12 @@
 }
 
 .collapsible__black {
-    display: none;
-
     position: fixed;
     z-index: 99;
     top: var(--size-header); right: 0; bottom: 0; left: 0;
     background-color: var(--col-trans-dark);
 }
 .collapsible__content {
-    display: none;
-
     position: absolute;
     z-index: 100;
     top: 100%;
@@ -21,23 +17,26 @@
 
     max-width: calc(100vw - 2 * var(--space-xl));
 }
-.collapsible__icon {
 
-}
 .collapsible__icon--hide {
-    display: none;
+    position: absolute;
+    top: var(--space-xs);
+    left: var(--space-xs);
 }
 
-
-.collapsible--open .collapsible__black {
-    display: block;
-}
-.collapsible--open .collapsible__content {
-    display: block;
-}
-.collapsible--open .collapsible__icon--hide {
-    display: block;
-}
+.collapsible__content,
+.collapsible__black,
+.collapsible__icon--hide,
 .collapsible--open .collapsible__icon--show {
-    display: none;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity var(--time-md) ease-in-out;
+}
+.collapsible--open .collapsible__content,
+.collapsible--open .collapsible__black,
+.collapsible--open .collapsible__icon--hide,
+.collapsible__icon--show {
+    opacity: 1;
+    pointer-events: auto;
+    transition: opacity var(--time-md) ease-in-out;
 }
