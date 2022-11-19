@@ -14,5 +14,5 @@ Move and jump using the arrow keys, press R to rotate blocks.
 As a starting point, we used the [Node game template](https://github.com/H0rn0chse/node-game-template) developed by [H0rn0chse](https://github.com/H0rn0chse).
 To start the game locally, check out the README for a guide.
 
-### Future Goals
+## Future Goals
 We're working to improve the gameply. You can find our latest release [here](https://gurr-preview.onrender.com/)
