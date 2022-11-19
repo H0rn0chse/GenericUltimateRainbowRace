@@ -1,7 +1,7 @@
 # GenericUltimateRainbowRace
 
 A small browser-based multiplayer game developed during a 48h gamejam organized by [Produktivkeller](https://produktivkeller.com/).
-The game can be played [for free here](https://generic-ultimate-rainbow-race.herokuapp.com/)!
+The game can be played [for free here](https://gurr.onrender.com/)!
 
 ![Generic Ultimate Rainbow Race](https://raw.githubusercontent.com/H0rn0chse/GenericUltimateRainbowRace/main/docu/game.png "Generic Ultimate Rainbow Race")
 
@@ -13,3 +13,6 @@ Move and jump using the arrow keys, press R to rotate blocks.
 ## Local Setup
 As a starting point, we used the [Node game template](https://github.com/H0rn0chse/node-game-template) developed by [H0rn0chse](https://github.com/H0rn0chse).
 To start the game locally, check out the README for a guide.
+
+### Future Goals
+We're working to improve the gameply. You can find our latest release [here](https://gurr-preview.onrender.com/)
